@@ -23,5 +23,79 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
+		
+		<dependency>
+            <groupId>org.jooq</groupId>
+            <artifactId>jooq</artifactId>
+        </dependency>
 	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>generate</id>
+			<build>
+				<plugins>
+					<!--plugin> <artifactId>maven-compiler-plugin</artifactId> <executions> 
+						<execution> <id>generate-jooq-utils</id> <phase>generate-sources</phase> 
+						<goals> <goal>compile</goal> </goals> <inherited>false</inherited> <configuration> 
+						<includes> <inclue>sample/jooq/util/**</inclue> </includes> </configuration> 
+						</execution> </executions> </plugin> <plugin> <groupId>org.codehaus.mojo</groupId> 
+						<artifactId>sql-maven-plugin</artifactId> <version>1.5</version> <executions> 
+						<execution> <phase>generate-sources</phase> <goals> <goal>execute</goal> 
+						</goals> </execution> </executions> <dependencies> <dependency> <groupId>com.h2database</groupId> 
+						<artifactId>h2</artifactId> <version>${h2.version}</version> </dependency> 
+						</dependencies> <configuration> <driver>org.h2.Driver</driver> <url>jdbc:h2:~/springbootjooq</url> 
+						<srcFiles> <srcFile>${basedir}/src/main/resources/reset.sql</srcFile> <srcFile>${basedir}/src/main/resources/schema.sql</srcFile> 
+						</srcFiles> </configuration> </plugin -->
+					<plugin>
+						<groupId>org.jooq</groupId>
+						<artifactId>jooq-codegen-maven</artifactId>
+						<executions>
+							<execution>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+							</execution>
+						</executions>
+						<dependencies>
+							<dependency>
+								<groupId>mysql</groupId>
+								<artifactId>mysql-connector-java</artifactId>
+								<version>6.0.6</version>
+							</dependency>
+						</dependencies>
+						<configuration>
+							<jdbc>
+								<driver>com.mysql.jdbc.Driver</driver>
+								<url>jdbc:mysql://192.168.99.100:3306/quiz?serverTimezone=UTC</url>
+								<user>root</user>
+								<password>PASSWORD</password>
+							</jdbc>
+							<generator>
+								<name>org.jooq.util.DefaultGenerator</name>
+								<database>
+								    <name>org.jooq.util.mysql.MySQLDatabase</name>
+									<includes>.*</includes>
+									<excludes />
+									<inputSchema>quiz</inputSchema>
+								</database>
+								<!--strategy> <name>sample.jooq.util.TangleFreeGeneratorStrategy</name> 
+									</strategy -->
+								<target>
+									<packageName>cn.clubox.jooq.domain</packageName>
+									<directory>${basedir}/gensrc/main/java</directory>
+									<!-- directory>src/main/java</directory -->
+								</target>
+								<generate>
+									<daos>true</daos>
+									<fluentSetters>true</fluentSetters>
+									<records>true</records>
+								</generate>
+							</generator>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

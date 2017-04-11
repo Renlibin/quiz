@@ -10,6 +10,8 @@ import cn.clubox.quiz.service.api.model.Question;
  *
  */
 public interface QuizAnswerSheetProcessor {
+	
+	public String getQuizName();
 
 	public void process(List<Question> questions);
 	

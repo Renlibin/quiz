@@ -6,6 +6,7 @@ public class Question {
 
 	private int    id;
 	private String title;
+	private String image;
     private List<Option> optionList;
     private int selectedOptionKey;
     
@@ -21,7 +22,12 @@ public class Question {
 	public void setTitle(String title) {
 		this.title = title;
 	}
-	
+	public String getImage() {
+		return image;
+	}
+	public void setImage(String image) {
+		this.image = image;
+	}
 	public List<Option> getOptionList() {
 		return optionList;
 	}
@@ -36,7 +42,7 @@ public class Question {
 	}
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", title=" + title + ", optionList=" + optionList + ", selectedOptionKey="
-				+ selectedOptionKey + "]";
+		return "Question [id=" + id + ", title=" + title + ", image=" + image + ", optionList=" + optionList
+				+ ", selectedOptionKey=" + selectedOptionKey + "]";
 	}
 }

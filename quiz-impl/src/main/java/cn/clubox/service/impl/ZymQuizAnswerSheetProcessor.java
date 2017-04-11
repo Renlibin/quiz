@@ -38,5 +38,11 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		//The result of answer sheet should be stored in DB
 	}
 
+	@Override
+	public String getQuizName() {
+		
+		return null;
+	}
+
 }
 

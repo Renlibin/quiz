@@ -6,28 +6,57 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
+import cn.clubox.quiz.service.api.QuizQuestionGenerator;
+import cn.clubox.quiz.service.api.QuizQuestionGenerator.QuizQuestion;
 import cn.clubox.quiz.service.api.model.Option;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuestionsModel;
+import cn.clubox.web.utils.QuizAnswerSheetProcessorFactory;
 import cn.clubox.web.utils.ZYM_ANSWER;
 
 @Controller
-public class QuizController {
+public class QuizController implements InitializingBean {
 
 	private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
+	
+	@Autowired
+	private QuizAnswerSheetProcessorFactory quizAnswerSheetProcessorFactory;
+	
+	@Autowired
+	private List<QuizQuestionGenerator> quizQuestionGeneratorList;
+	
+	private Map<String, List<Question>> questionsMap;
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		
+		logger.info("Start to initialize the questions MAP");
+		
+		for(QuizQuestionGenerator generator : quizQuestionGeneratorList){
+			QuizQuestion quizQuestion = generator.generate();
+			questionsMap.put(quizQuestion.getQuiz(), quizQuestion.getQuestionList());
+		}
+		
+		logger.info("The questions MAP has been initialized");
+	}
 	
 	@GetMapping("/login")
 	public String login() {
 		return "login";
 	}
 	
-	@GetMapping("/zym")
-	public String displayZYM(Map<String, Object> model){
+//	@GetMapping("/zym")
+	@GetMapping("quiz/{quizName}")
+	public String displayZYM(@PathVariable String quizName, Map<String, Object> model){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("display Zhi Ye Mao quiz ......");
@@ -73,8 +102,12 @@ public class QuizController {
 		return "zym";
 	}
 	
-	@PostMapping("/zym")
+//	@GetMapping("zym")
+	@PostMapping("quiz/{quizName}")
 	public String submitZYM(@ModelAttribute QuestionsModel qm, Map<String, Object> model){
+		
+		QuizAnswerSheetProcessor processor = quizAnswerSheetProcessorFactory.getProcessor("");
+		processor.process(qm.getQuestionList());
 		
 		List<Question> qmm = qm.getQuestionList();
 		
@@ -88,6 +121,5 @@ public class QuizController {
 //		}
 		return "index";
 	}
-	
-	
+
 }
