@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserPayment extends TableImpl<UserPaymentRecord> {
 
-    private static final long serialVersionUID = -507372021;
+    private static final long serialVersionUID = 69674016;
 
     /**
      * The reference instance of <code>quiz.user_payment</code>
@@ -115,6 +116,14 @@ public class UserPayment extends TableImpl<UserPaymentRecord> {
      * {@inheritDoc}
      */
     @Override
+    public Identity<UserPaymentRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USER_PAYMENT;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public UniqueKey<UserPaymentRecord> getPrimaryKey() {
         return Keys.KEY_USER_PAYMENT_PRIMARY;
     }
@@ -132,7 +141,7 @@ public class UserPayment extends TableImpl<UserPaymentRecord> {
      */
     @Override
     public List<ForeignKey<UserPaymentRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<UserPaymentRecord, ?>>asList(Keys.USER_PAYMENT_IBFK_1, Keys.FK_USER_PAYMENT_QUIZ_QUIZ_ID);
+        return Arrays.<ForeignKey<UserPaymentRecord, ?>>asList(Keys.FK_USER_PAYMENT_USER_USER_ID, Keys.FK_USER_PAYMENT_QUIZ_QUIZ_ID);
     }
 
     /**

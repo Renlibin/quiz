@@ -4,22 +4,22 @@ import java.util.List;
 
 public class QuestionsModel {
 	
+	private int quizId;
+    private int userId;
+    private String duration;
+    
 	private List<Question> questionList;
 	
-	String quizId;
-    String userId;
-    String duration;
-    
-	public String getQuizId() {
+	public int getQuizId() {
 		return quizId;
 	}
-	public void setQuizId(String quizId) {
+	public void setQuizId(int quizId) {
 		this.quizId = quizId;
 	}
-	public String getUserId() {
+	public int getUserId() {
 		return userId;
 	}
-	public void setUserId(String userId) {
+	public void setUserId(int userId) {
 		this.userId = userId;
 	}
 	public String getDuration() {

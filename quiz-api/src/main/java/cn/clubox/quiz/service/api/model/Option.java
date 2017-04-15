@@ -2,21 +2,21 @@ package cn.clubox.quiz.service.api.model;
 
 public class Option {
 
-	private Integer optionOrderNumber;
+	private short optionOrderNumber;
     private String  optionText;
-    private short   optionValue;
+    private int   optionValue;
     
-	public short getOptionValue() {
+	public int getOptionValue() {
 		return optionValue;
 	}
-	public void setOptionValue(short optionValue) {
+	public void setOptionValue(int optionValue) {
 		this.optionValue = optionValue;
 	}
 	
-	public Integer getOptionOrderNumber() {
+	public short getOptionOrderNumber() {
 		return optionOrderNumber;
 	}
-	public void setOptionOrderNumber(Integer optionOrderNumber) {
+	public void setOptionOrderNumber(short optionOrderNumber) {
 		this.optionOrderNumber = optionOrderNumber;
 	}
 	public String getOptionText() {

@@ -27,7 +27,7 @@
 		   <#list questionModel.questionList as question>
 			    ${question.id} = ${question.title} </br>
 			    
-			    <input type="hidden" id="questionList[${question_index}].id" value="${question.id}" name="questionList[${question_index}].id" />
+			    <input type="hidden" id="questionList[${question_index}].sequenceNumber" value="${question.sequenceNumber}" name="questionList[${question_index}].sequenceNumber" />
 			    <input type="hidden" id="questionList[${question_index}].selectedOptionKey" value="1" name="questionList[${question_index}].selectedOptionKey" />
 			    
 			    <#--

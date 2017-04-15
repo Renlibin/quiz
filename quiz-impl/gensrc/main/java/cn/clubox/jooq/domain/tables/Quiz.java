@@ -14,6 +14,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -34,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz extends TableImpl<QuizRecord> {
 
-    private static final long serialVersionUID = -648059429;
+    private static final long serialVersionUID = 688510054;
 
     /**
      * The reference instance of <code>quiz.quiz</code>
@@ -75,6 +76,11 @@ public class Quiz extends TableImpl<QuizRecord> {
     public final TableField<QuizRecord, Timestamp> STORED = createField("stored", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
 
     /**
+     * The column <code>quiz.quiz.quiz_type</code>.
+     */
+    public final TableField<QuizRecord, String> QUIZ_TYPE = createField("quiz_type", org.jooq.impl.SQLDataType.VARCHAR.length(20).nullable(false), this, "");
+
+    /**
      * Create a <code>quiz.quiz</code> table reference
      */
     public Quiz() {
@@ -102,6 +108,14 @@ public class Quiz extends TableImpl<QuizRecord> {
     @Override
     public Schema getSchema() {
         return cn.clubox.jooq.domain.Quiz.QUIZ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<QuizRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_QUIZ_;
     }
 
     /**

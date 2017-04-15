@@ -15,6 +15,7 @@ import java.util.List;
 import javax.annotation.Generated;
 
 import org.jooq.Field;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -35,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = -1336254562;
+    private static final long serialVersionUID = -733246835;
 
     /**
      * The reference instance of <code>quiz.user</code>
@@ -98,6 +99,14 @@ public class User extends TableImpl<UserRecord> {
     @Override
     public Schema getSchema() {
         return Quiz.QUIZ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<UserRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_USER;
     }
 
     /**

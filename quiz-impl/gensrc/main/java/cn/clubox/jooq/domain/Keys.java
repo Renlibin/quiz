@@ -24,6 +24,7 @@ import cn.clubox.jooq.domain.tables.records.UserSourceRecord;
 import javax.annotation.Generated;
 
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.UniqueKey;
 import org.jooq.impl.AbstractKeys;
 
@@ -46,6 +47,14 @@ public class Keys {
     // IDENTITY definitions
     // -------------------------------------------------------------------------
 
+    public static final Identity<QuizRecord, Integer> IDENTITY_QUIZ_ = Identities0.IDENTITY_QUIZ_;
+    public static final Identity<QuizEngagementRecord, Integer> IDENTITY_QUIZ_ENGAGEMENT = Identities0.IDENTITY_QUIZ_ENGAGEMENT;
+    public static final Identity<QuizEngagementResultRecord, Integer> IDENTITY_QUIZ_ENGAGEMENT_RESULT = Identities0.IDENTITY_QUIZ_ENGAGEMENT_RESULT;
+    public static final Identity<QuizPricingRecord, Integer> IDENTITY_QUIZ_PRICING = Identities0.IDENTITY_QUIZ_PRICING;
+    public static final Identity<QuizQuestionRecord, Integer> IDENTITY_QUIZ_QUESTION = Identities0.IDENTITY_QUIZ_QUESTION;
+    public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
+    public static final Identity<UserPaymentRecord, Integer> IDENTITY_USER_PAYMENT = Identities0.IDENTITY_USER_PAYMENT;
+    public static final Identity<UserSourceRecord, Integer> IDENTITY_USER_SOURCE = Identities0.IDENTITY_USER_SOURCE;
 
     // -------------------------------------------------------------------------
     // UNIQUE and PRIMARY KEY definitions
@@ -66,16 +75,27 @@ public class Keys {
 
     public static final ForeignKey<QuizEngagementRecord, QuizRecord> FK_QUIZ_ENGAGEMENT_QUIZ_QUIZ_ID = ForeignKeys0.FK_QUIZ_ENGAGEMENT_QUIZ_QUIZ_ID;
     public static final ForeignKey<QuizEngagementRecord, UserRecord> FK_QUIZ_ENGAGEMENT_USER_USER_ID = ForeignKeys0.FK_QUIZ_ENGAGEMENT_USER_USER_ID;
-    public static final ForeignKey<QuizEngagementResultRecord, QuizEngagementRecord> FK_QUIZ_ENGAGEMENT_ID = ForeignKeys0.FK_QUIZ_ENGAGEMENT_ID;
+    public static final ForeignKey<QuizEngagementResultRecord, QuizEngagementRecord> FK_QUIZ_ENGAGEMENT_RESULT_QUIZ_ENGAGEMENT_ID = ForeignKeys0.FK_QUIZ_ENGAGEMENT_RESULT_QUIZ_ENGAGEMENT_ID;
     public static final ForeignKey<QuizPricingRecord, QuizRecord> FK_QUIZ_PRICING_QUIZ_QUIZ_ID = ForeignKeys0.FK_QUIZ_PRICING_QUIZ_QUIZ_ID;
     public static final ForeignKey<QuizQuestionRecord, QuizRecord> FK_QUIZ_QUESTION_QUIZ_QUIZ_ID = ForeignKeys0.FK_QUIZ_QUESTION_QUIZ_QUIZ_ID;
-    public static final ForeignKey<UserPaymentRecord, UserRecord> USER_PAYMENT_IBFK_1 = ForeignKeys0.USER_PAYMENT_IBFK_1;
+    public static final ForeignKey<UserPaymentRecord, UserRecord> FK_USER_PAYMENT_USER_USER_ID = ForeignKeys0.FK_USER_PAYMENT_USER_USER_ID;
     public static final ForeignKey<UserPaymentRecord, QuizRecord> FK_USER_PAYMENT_QUIZ_QUIZ_ID = ForeignKeys0.FK_USER_PAYMENT_QUIZ_QUIZ_ID;
     public static final ForeignKey<UserSourceRecord, UserRecord> FK_USER_SOURCE_USER_USER_ID = ForeignKeys0.FK_USER_SOURCE_USER_USER_ID;
 
     // -------------------------------------------------------------------------
     // [#1459] distribute members to avoid static initialisers > 64kb
     // -------------------------------------------------------------------------
+
+    private static class Identities0 extends AbstractKeys {
+        public static Identity<QuizRecord, Integer> IDENTITY_QUIZ_ = createIdentity(Quiz.QUIZ_, Quiz.QUIZ_.ID);
+        public static Identity<QuizEngagementRecord, Integer> IDENTITY_QUIZ_ENGAGEMENT = createIdentity(QuizEngagement.QUIZ_ENGAGEMENT, QuizEngagement.QUIZ_ENGAGEMENT.ID);
+        public static Identity<QuizEngagementResultRecord, Integer> IDENTITY_QUIZ_ENGAGEMENT_RESULT = createIdentity(QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT, QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.ID);
+        public static Identity<QuizPricingRecord, Integer> IDENTITY_QUIZ_PRICING = createIdentity(QuizPricing.QUIZ_PRICING, QuizPricing.QUIZ_PRICING.ID);
+        public static Identity<QuizQuestionRecord, Integer> IDENTITY_QUIZ_QUESTION = createIdentity(QuizQuestion.QUIZ_QUESTION, QuizQuestion.QUIZ_QUESTION.ID);
+        public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
+        public static Identity<UserPaymentRecord, Integer> IDENTITY_USER_PAYMENT = createIdentity(UserPayment.USER_PAYMENT, UserPayment.USER_PAYMENT.ID);
+        public static Identity<UserSourceRecord, Integer> IDENTITY_USER_SOURCE = createIdentity(UserSource.USER_SOURCE, UserSource.USER_SOURCE.ID);
+    }
 
     private static class UniqueKeys0 extends AbstractKeys {
         public static final UniqueKey<QuizRecord> KEY_QUIZ_PRIMARY = createUniqueKey(Quiz.QUIZ_, "KEY_quiz_PRIMARY", Quiz.QUIZ_.ID);
@@ -91,10 +111,10 @@ public class Keys {
     private static class ForeignKeys0 extends AbstractKeys {
         public static final ForeignKey<QuizEngagementRecord, QuizRecord> FK_QUIZ_ENGAGEMENT_QUIZ_QUIZ_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_PRIMARY, QuizEngagement.QUIZ_ENGAGEMENT, "fk_quiz_engagement_quiz_quiz_id", QuizEngagement.QUIZ_ENGAGEMENT.QUIZ_ID);
         public static final ForeignKey<QuizEngagementRecord, UserRecord> FK_QUIZ_ENGAGEMENT_USER_USER_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_USER_PRIMARY, QuizEngagement.QUIZ_ENGAGEMENT, "fk_quiz_engagement_user_user_id", QuizEngagement.QUIZ_ENGAGEMENT.USER_ID);
-        public static final ForeignKey<QuizEngagementResultRecord, QuizEngagementRecord> FK_QUIZ_ENGAGEMENT_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_ENGAGEMENT_PRIMARY, QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT, "fk_quiz_engagement_id", QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.QUIZ_ENGAGEMENT_ID);
+        public static final ForeignKey<QuizEngagementResultRecord, QuizEngagementRecord> FK_QUIZ_ENGAGEMENT_RESULT_QUIZ_ENGAGEMENT_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_ENGAGEMENT_PRIMARY, QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT, "fk_quiz_engagement_result_quiz_engagement_id", QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.QUIZ_ENGAGEMENT_ID);
         public static final ForeignKey<QuizPricingRecord, QuizRecord> FK_QUIZ_PRICING_QUIZ_QUIZ_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_PRIMARY, QuizPricing.QUIZ_PRICING, "fk_quiz_pricing_quiz_quiz_id", QuizPricing.QUIZ_PRICING.QUIZ_ID);
         public static final ForeignKey<QuizQuestionRecord, QuizRecord> FK_QUIZ_QUESTION_QUIZ_QUIZ_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_PRIMARY, QuizQuestion.QUIZ_QUESTION, "fk_quiz_question_quiz_quiz_id", QuizQuestion.QUIZ_QUESTION.QUIZ_ID);
-        public static final ForeignKey<UserPaymentRecord, UserRecord> USER_PAYMENT_IBFK_1 = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_USER_PRIMARY, UserPayment.USER_PAYMENT, "user_payment_ibfk_1", UserPayment.USER_PAYMENT.USER_ID);
+        public static final ForeignKey<UserPaymentRecord, UserRecord> FK_USER_PAYMENT_USER_USER_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_USER_PRIMARY, UserPayment.USER_PAYMENT, "fk_user_payment_user_user_id", UserPayment.USER_PAYMENT.USER_ID);
         public static final ForeignKey<UserPaymentRecord, QuizRecord> FK_USER_PAYMENT_QUIZ_QUIZ_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_QUIZ_PRIMARY, UserPayment.USER_PAYMENT, "fk_user_payment_quiz_quiz_id", UserPayment.USER_PAYMENT.QUIZ_ID);
         public static final ForeignKey<UserSourceRecord, UserRecord> FK_USER_SOURCE_USER_USER_ID = createForeignKey(cn.clubox.jooq.domain.Keys.KEY_USER_PRIMARY, UserSource.USER_SOURCE, "fk_user_source_user_user_id", UserSource.USER_SOURCE.USER_ID);
     }

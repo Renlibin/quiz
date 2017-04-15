@@ -23,13 +23,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz implements Serializable {
 
-    private static final long serialVersionUID = 518085435;
+    private static final long serialVersionUID = 582596908;
 
     private Integer   id;
     private String    title;
     private String    description;
     private String    status;
     private Timestamp stored;
+    private String    quizType;
 
     public Quiz() {}
 
@@ -39,6 +40,7 @@ public class Quiz implements Serializable {
         this.description = value.description;
         this.status = value.status;
         this.stored = value.stored;
+        this.quizType = value.quizType;
     }
 
     public Quiz(
@@ -46,13 +48,15 @@ public class Quiz implements Serializable {
         String    title,
         String    description,
         String    status,
-        Timestamp stored
+        Timestamp stored,
+        String    quizType
     ) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.status = status;
         this.stored = stored;
+        this.quizType = quizType;
     }
 
     public Integer getId() {
@@ -100,6 +104,15 @@ public class Quiz implements Serializable {
         return this;
     }
 
+    public String getQuizType() {
+        return this.quizType;
+    }
+
+    public Quiz setQuizType(String quizType) {
+        this.quizType = quizType;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Quiz (");
@@ -109,6 +122,7 @@ public class Quiz implements Serializable {
         sb.append(", ").append(description);
         sb.append(", ").append(status);
         sb.append(", ").append(stored);
+        sb.append(", ").append(quizType);
 
         sb.append(")");
         return sb.toString();

@@ -23,14 +23,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizQuestion implements Serializable {
 
-    private static final long serialVersionUID = -1691758017;
+    private static final long serialVersionUID = 1757126294;
 
     private Integer   id;
     private Integer   quizId;
     private String    title;
     private Timestamp stored;
     private Timestamp updated;
-    private Integer   sequnceNumber;
+    private Short     sequenceNumber;
 
     public QuizQuestion() {}
 
@@ -40,7 +40,7 @@ public class QuizQuestion implements Serializable {
         this.title = value.title;
         this.stored = value.stored;
         this.updated = value.updated;
-        this.sequnceNumber = value.sequnceNumber;
+        this.sequenceNumber = value.sequenceNumber;
     }
 
     public QuizQuestion(
@@ -49,14 +49,14 @@ public class QuizQuestion implements Serializable {
         String    title,
         Timestamp stored,
         Timestamp updated,
-        Integer   sequnceNumber
+        Short     sequenceNumber
     ) {
         this.id = id;
         this.quizId = quizId;
         this.title = title;
         this.stored = stored;
         this.updated = updated;
-        this.sequnceNumber = sequnceNumber;
+        this.sequenceNumber = sequenceNumber;
     }
 
     public Integer getId() {
@@ -104,12 +104,12 @@ public class QuizQuestion implements Serializable {
         return this;
     }
 
-    public Integer getSequnceNumber() {
-        return this.sequnceNumber;
+    public Short getSequenceNumber() {
+        return this.sequenceNumber;
     }
 
-    public QuizQuestion setSequnceNumber(Integer sequnceNumber) {
-        this.sequnceNumber = sequnceNumber;
+    public QuizQuestion setSequenceNumber(Short sequenceNumber) {
+        this.sequenceNumber = sequenceNumber;
         return this;
     }
 
@@ -122,7 +122,7 @@ public class QuizQuestion implements Serializable {
         sb.append(", ").append(title);
         sb.append(", ").append(stored);
         sb.append(", ").append(updated);
-        sb.append(", ").append(sequnceNumber);
+        sb.append(", ").append(sequenceNumber);
 
         sb.append(")");
         return sb.toString();
