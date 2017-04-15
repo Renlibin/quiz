@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizEngagement extends TableImpl<QuizEngagementRecord> {
 
-    private static final long serialVersionUID = 1407832658;
+    private static final long serialVersionUID = -55689570;
 
     /**
      * The reference instance of <code>quiz.quiz_engagement</code>
@@ -104,6 +105,14 @@ public class QuizEngagement extends TableImpl<QuizEngagementRecord> {
     @Override
     public Schema getSchema() {
         return Quiz.QUIZ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<QuizEngagementRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_QUIZ_ENGAGEMENT;
     }
 
     /**

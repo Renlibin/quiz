@@ -4,12 +4,12 @@ import java.util.List;
 
 public class QuestionsModel {
 	
+	private String quizId;
+    private String userId;
+    private String duration;
+    
 	private List<Question> questionList;
 	
-	String quizId;
-    String userId;
-    String duration;
-    
 	public String getQuizId() {
 		return quizId;
 	}

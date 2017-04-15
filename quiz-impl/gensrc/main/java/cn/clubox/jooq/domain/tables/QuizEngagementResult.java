@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> {
 
-    private static final long serialVersionUID = -399218315;
+    private static final long serialVersionUID = -1627835264;
 
     /**
      * The reference instance of <code>quiz.quiz_engagement_result</code>
@@ -110,6 +111,14 @@ public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> 
      * {@inheritDoc}
      */
     @Override
+    public Identity<QuizEngagementResultRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_QUIZ_ENGAGEMENT_RESULT;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public UniqueKey<QuizEngagementResultRecord> getPrimaryKey() {
         return Keys.KEY_QUIZ_ENGAGEMENT_RESULT_PRIMARY;
     }
@@ -127,7 +136,7 @@ public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> 
      */
     @Override
     public List<ForeignKey<QuizEngagementResultRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<QuizEngagementResultRecord, ?>>asList(Keys.FK_QUIZ_ENGAGEMENT_ID);
+        return Arrays.<ForeignKey<QuizEngagementResultRecord, ?>>asList(Keys.FK_QUIZ_ENGAGEMENT_RESULT_QUIZ_ENGAGEMENT_ID);
     }
 
     /**

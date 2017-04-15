@@ -23,12 +23,55 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
-		
+
 		<dependency>
-            <groupId>org.jooq</groupId>
-            <artifactId>jooq</artifactId>
-        </dependency>
+			<groupId>org.jooq</groupId>
+			<artifactId>jooq</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>6.0.6</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-dbcp2</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-logging</groupId>
+					<artifactId>commons-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 	</dependencies>
+	<build>
+		<!-- resources> <resource> <directory>gensrc/main/java</directory> </resource> 
+			</resources -->
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>gensrc/main/java</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<!--plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
+				</plugin -->
+		</plugins>
+	</build>
 
 	<profiles>
 		<profile>
@@ -65,8 +108,8 @@
 							</dependency>
 						</dependencies>
 						<configuration>
-							<jdbc>
-								<driver>com.mysql.jdbc.Driver</driver>
+						<jdbc>
+								<driver>com.mysql.cj.jdbc.Driver</driver>
 								<url>jdbc:mysql://192.168.99.100:3306/quiz?serverTimezone=UTC</url>
 								<user>root</user>
 								<password>PASSWORD</password>
@@ -74,7 +117,7 @@
 							<generator>
 								<name>org.jooq.util.DefaultGenerator</name>
 								<database>
-								    <name>org.jooq.util.mysql.MySQLDatabase</name>
+									<name>org.jooq.util.mysql.MySQLDatabase</name>
 									<includes>.*</includes>
 									<excludes />
 									<inputSchema>quiz</inputSchema>

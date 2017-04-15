@@ -92,4 +92,11 @@ public class QuizDao extends DAOImpl<QuizRecord, cn.clubox.jooq.domain.tables.po
     public List<cn.clubox.jooq.domain.tables.pojos.Quiz> fetchByStored(Timestamp... values) {
         return fetch(Quiz.QUIZ_.STORED, values);
     }
+
+    /**
+     * Fetch records that have <code>quiz_type IN (values)</code>
+     */
+    public List<cn.clubox.jooq.domain.tables.pojos.Quiz> fetchByQuizType(String... values) {
+        return fetch(Quiz.QUIZ_.QUIZ_TYPE, values);
+    }
 }

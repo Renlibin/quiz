@@ -16,6 +16,7 @@ import javax.annotation.Generated;
 
 import org.jooq.Field;
 import org.jooq.ForeignKey;
+import org.jooq.Identity;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -36,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizQuestion extends TableImpl<QuizQuestionRecord> {
 
-    private static final long serialVersionUID = -514885228;
+    private static final long serialVersionUID = -1196669155;
 
     /**
      * The reference instance of <code>quiz.quiz_question</code>
@@ -77,9 +78,9 @@ public class QuizQuestion extends TableImpl<QuizQuestionRecord> {
     public final TableField<QuizQuestionRecord, Timestamp> UPDATED = createField("updated", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
 
     /**
-     * The column <code>quiz.quiz_question.sequnce_number</code>.
+     * The column <code>quiz.quiz_question.sequence_number</code>.
      */
-    public final TableField<QuizQuestionRecord, Integer> SEQUNCE_NUMBER = createField("sequnce_number", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<QuizQuestionRecord, Short> SEQUENCE_NUMBER = createField("sequence_number", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * Create a <code>quiz.quiz_question</code> table reference
@@ -109,6 +110,14 @@ public class QuizQuestion extends TableImpl<QuizQuestionRecord> {
     @Override
     public Schema getSchema() {
         return Quiz.QUIZ;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Identity<QuizQuestionRecord, Integer> getIdentity() {
+        return Keys.IDENTITY_QUIZ_QUESTION;
     }
 
     /**

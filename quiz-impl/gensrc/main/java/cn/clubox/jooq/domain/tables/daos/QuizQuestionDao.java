@@ -94,9 +94,9 @@ public class QuizQuestionDao extends DAOImpl<QuizQuestionRecord, cn.clubox.jooq.
     }
 
     /**
-     * Fetch records that have <code>sequnce_number IN (values)</code>
+     * Fetch records that have <code>sequence_number IN (values)</code>
      */
-    public List<cn.clubox.jooq.domain.tables.pojos.QuizQuestion> fetchBySequnceNumber(Integer... values) {
-        return fetch(QuizQuestion.QUIZ_QUESTION.SEQUNCE_NUMBER, values);
+    public List<cn.clubox.jooq.domain.tables.pojos.QuizQuestion> fetchBySequenceNumber(Short... values) {
+        return fetch(QuizQuestion.QUIZ_QUESTION.SEQUENCE_NUMBER, values);
     }
 }

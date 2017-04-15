@@ -1,18 +1,20 @@
 package cn.clubox.web.utils;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 
 @Service
-public class QuizAnswerSheetProcessorFactory implements InitializingBean {
+public class QuizAnswerSheetProcessorFactory {
 
 	private static final Logger logger= LoggerFactory.getLogger(QuizAnswerSheetProcessorFactory.class);
 			
@@ -21,8 +23,12 @@ public class QuizAnswerSheetProcessorFactory implements InitializingBean {
 	
 	private Map<String, QuizAnswerSheetProcessor> quizAnswerSheetProcessorMap;
 	
-	@Override
-	public void afterPropertiesSet() throws Exception {
+	@PostConstruct
+	public void init() {
+		
+		logger.info("Initializing QuizAnswerSheetProcessors");
+		
+		quizAnswerSheetProcessorMap = new HashMap<String, QuizAnswerSheetProcessor>();
 		
 		for(QuizAnswerSheetProcessor processor : quizAnswerSheetProcessorList){
 			quizAnswerSheetProcessorMap.put(processor.getQuizName(), processor);
