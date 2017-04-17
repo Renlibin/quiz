@@ -1,6 +1,5 @@
 package cn.clubox.web.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator.QuizQuestion;
-import cn.clubox.quiz.service.api.model.Option;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuestionsModel;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
@@ -79,7 +77,6 @@ public class QuizController {
 		if(logger.isDebugEnabled()){
 			logger.debug("display Zhi Ye Mao quiz ......");
 		}
-		
 		List<Question> questionList = questionsMap.get(quizType);
 		
 		if(questionList == null){

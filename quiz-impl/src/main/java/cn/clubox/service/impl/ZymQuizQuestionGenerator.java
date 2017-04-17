@@ -41,9 +41,6 @@ public class ZymQuizQuestionGenerator implements QuizQuestionGenerator{
 			}
 			
 			Question question = new Question.Builder().sequenceNumber(record.getSequenceNumber()).title(record.getTitle()).optionList(options).build();
-//			question.setId(record.getId());
-//			question.setTitle(record.getTitle());
-//			question.setOptionList(options);
 			questionList.add(question);
 		}
 		

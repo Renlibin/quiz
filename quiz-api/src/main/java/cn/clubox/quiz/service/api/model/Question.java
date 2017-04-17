@@ -24,6 +24,7 @@ public class Question {
 	public short getSequenceNumber() {
 		return sequenceNumber;
 	}
+	
 //	public void setId(short id) {
 //		this.sequenceNumber = id;
 //	}

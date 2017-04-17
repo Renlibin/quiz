@@ -23,7 +23,9 @@ import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuestionsModel;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+
 import cn.clubox.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
+
 import cn.clubox.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.service.impl.dao.QuizEngagementResultDaoExt;
 
@@ -202,6 +204,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		
 		int quizEngagementId = this.persistQuizEngagement(questionModel);
 		this.persistQuizEngagementResult(quizEngagementId, zymScore);
+		
 	}
 
 	@Override
@@ -215,7 +218,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 	private int persistQuizEngagement(QuestionsModel questionModel){
 		
 		if(logger.isDebugEnabled()){
-			logger.debug("");
+			logger.debug("Persisting Quiz Engagement");
 		}
 		
 		QuizEngagement quizEngagement = new QuizEngagement();
