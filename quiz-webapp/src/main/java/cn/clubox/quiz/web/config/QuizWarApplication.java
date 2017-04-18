@@ -2,7 +2,6 @@ package cn.clubox.quiz.web.config;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.dbcp2.BasicDataSource;
 import org.jooq.Configuration;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -40,8 +39,6 @@ public class QuizWarApplication extends SpringBootServletInitializer {
     public DSLContext dsl(org.jooq.Configuration config) {
 		
 		logger.info("SQL dialect is {}",config.dialect().getName());
-        
-		logger.info("Configuration2 is {}", config);
 		
 		return new DefaultDSLContext(config);
     }
@@ -49,18 +46,9 @@ public class QuizWarApplication extends SpringBootServletInitializer {
 	@Bean
 	public Configuration jooqConfig(DataSource dataSource){
 		
-		if(dataSource != null){
-			logger.info("dataSource is {}", dataSource);
-			logger.info("dataSource class name is {}",dataSource.getClass().getName());
-			
-			logger.info("dataSource URL {} ",((BasicDataSource)dataSource).getUrl());
-		}else{
-			logger.warn("DataSource is null");
-		}
-		
 		Configuration config = new DefaultConfiguration().derive(dataSource).derive(SQLDialect.MYSQL);
 
-		logger.info("Configuration1 is {}", config);
+		logger.info("Configuration is {}", config);
 		
 		return config;
 		 
