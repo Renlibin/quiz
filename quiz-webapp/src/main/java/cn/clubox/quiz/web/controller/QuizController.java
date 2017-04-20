@@ -1,7 +1,6 @@
 package cn.clubox.quiz.web.controller;
 
-import java.security.Principal;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +9,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,13 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
-import cn.clubox.quiz.service.api.QuizQuestionGenerator;
-import cn.clubox.quiz.service.api.QuizQuestionGenerator.QuizQuestion;
+import cn.clubox.quiz.service.api.QuizManager;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.QuestionsModel;
+import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
+import cn.clubox.quiz.service.api.model.QuizExtension;
+import cn.clubox.quiz.service.impl.auth.DatabaseUserDetailsService.User;
 import cn.clubox.quiz.web.utils.QuizAnswerSheetProcessorFactory;
-import cn.clubox.quiz.web.utils.ZYM_ANSWER;
 
 @Controller
 public class QuizController {
@@ -34,69 +35,72 @@ public class QuizController {
 	private QuizAnswerSheetProcessorFactory quizAnswerSheetProcessorFactory;
 	
 	@Autowired
-	private List<QuizQuestionGenerator> quizQuestionGeneratorList;
+	private QuizManager quizManager;
 	
-	private Map<String, List<Question>> questionsMap;
+	private Map<String, Quiz> quizMap;
+	private Map<String, List<Question>> questionMap;
 	
 	@PostConstruct
 	public void init() throws Exception {
 		
-		logger.info("Start to initialize the questions MAP");
+		quizMap = quizManager.retrieveAllQuiz();
+		questionMap = quizManager.retrieveAllQuizQuestion();
 		
-		questionsMap = new HashMap<String, List<Question>>();
-		
-		for(QuizQuestionGenerator generator : quizQuestionGeneratorList){
-			QuizQuestion quizQuestion = generator.generate();
-			if(quizQuestion != null){
-				questionsMap.put(quizQuestion.getQuizType(), quizQuestion.getQuestionList());
-			}
-		}
-		
-		logger.info("The questions MAP has been initialized");
 	}
 	
-	@GetMapping("quiz/all")
-	public String showAllQuiz(){
+	@GetMapping("quiz/home")
+	public String showAllQuiz(@AuthenticationPrincipal User user, Map<String, Object> model){
 		
+		int userId = user.getId();
+		List<Quiz> quizList = new ArrayList<>(quizMap.values());
+		List<QuizExtension> quizExtensionList = quizManager.avilableActionDecision(userId, quizList.toArray(new Quiz[quizList.size()]));
 		
-		return "quizs";
+		model.put("quizExtensionList", quizExtensionList);
+		return "index";
 	}
 	
-	@GetMapping("quiz/{quizType}")
-	public String showQuiz(Principal principal, @PathVariable String quizType, Map<String, Object> model){
+	@GetMapping("quiz/{quizType}/engagement")
+	public String showQuiz(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
 		
-		String userName = principal.getName();
-		
-		logger.info("User name is {}", userName);
+		int userId = user.getId();
 		
 		if(QUIZ_TYPE.getByValue(quizType) == null){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
 		
-		if(logger.isDebugEnabled()){
-			logger.debug("display Zhi Ye Mao quiz ......");
-		}
-		List<Question> questionList = questionsMap.get(quizType);
+		Quiz quiz = quizMap.get(quizType);
+		List<Question> questionList = questionMap.get(quizType);
 		
-		if(questionList == null){
+		if(quiz == null || questionList == null){
+			logger.error("Quiz or quiz's questions could not be found!");
 			return "error";
 		}
 		
-		logger.debug("Question size is {}", questionList.size());
+		quiz.setQuestionList(questionList);
 		
-		QuestionsModel qm = new QuestionsModel();
-		qm.setQuestionList(questionList);
+		logger.debug("Quiz question size is ========== {}" + quiz.getQuestionList().size());
 		
-		model.put("questionModel", qm);
-//		model.put("questionMap", questionMap);
-		model.put("zymAnswer", ZYM_ANSWER.values());
+		List<QuizExtension> quizExtensionList = quizManager.avilableActionDecision(userId, quiz);
+		
+		if(quizExtensionList == null || quizExtensionList.isEmpty()){
+			logger.error("Avilable action of the quiz could not be decided!");
+			return "error";
+		}
+		
+		model.put("quiz", quiz);
+//		model.put("zymAnswer", ZYM_ANSWER.values());
 		
 		return "zym";
 	}
 	
-	@PostMapping("quiz/{quizType}")
-	public String submitQuiz(@PathVariable String quizType, @ModelAttribute QuestionsModel qm, Map<String, Object> model){
+	@PostMapping("quiz/{quizType}/engagement")
+	public String submitQuiz(@AuthenticationPrincipal User user, @PathVariable String quizType, 
+			@ModelAttribute QuizAnswerSheet quizAnswerSheet, Map<String, Object> model){
+		
+		quizAnswerSheet.setUserId(user.getId());
+		
+		logger.debug("Duration is {}", quizAnswerSheet.getDuration());
 		
 		if(QUIZ_TYPE.getByValue(quizType) == null){
 			logger.error("The quiz type {} is not exist", quizType);
@@ -105,23 +109,34 @@ public class QuizController {
 		
 		QuizAnswerSheetProcessor processor = quizAnswerSheetProcessorFactory.getProcessor(quizType);
 		
+		logger.info("Processor is {}", processor);
+		
 		if(processor == null){
 			return "error";
 		}
-		logger.info("Processor is {}", processor);
 		
-		processor.process(qm);
+		processor.process(quizAnswerSheet);
 		
-		List<Question> qmm = qm.getQuestionList();
+		return "redirect:/quiz/result";
+	}
+	
+	@GetMapping("quiz/{quizType}/buynow")
+	public String buyNow(){
 		
-		System.out.println("Quiz id = " + qm.getQuizId());
-
-//		Set<Integer> keys = qmm.keySet();
+		return "buyNow";
+	}
+	
+	@GetMapping("quiz/result")
+	public String showResult(){
 		
-//		for(Integer key : qmm.keySet()){
-//			System.out.println("Question = " + qmm.get(key).toString());
-//		}
-		return "index";
+		return "result";
+	}
+	
+	@GetMapping("quiz/myQuiz")
+	public String myQuiz(){
+		
+		
+		return "myQuiz";
 	}
 
 }

@@ -26,6 +26,8 @@ public class QuizAnswerSheetProcessorFactory {
 	@PostConstruct
 	public void init() {
 		
+		System.out.println("Initializing QuizAnswerSheetProcessors ********* ");
+		
 		logger.info("Initializing QuizAnswerSheetProcessors");
 		
 		quizAnswerSheetProcessorMap = new HashMap<String, QuizAnswerSheetProcessor>();
@@ -36,6 +38,8 @@ public class QuizAnswerSheetProcessorFactory {
 	}
 	
 	public QuizAnswerSheetProcessor getProcessor(String quiz){
+		
+		logger.debug("QuizAnswerSheetProcessor keys {}", quizAnswerSheetProcessorMap.keySet());
 		
 		return quizAnswerSheetProcessorMap.get(quiz);
 	}
