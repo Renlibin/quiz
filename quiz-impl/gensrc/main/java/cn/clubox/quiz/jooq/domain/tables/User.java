@@ -36,7 +36,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User extends TableImpl<UserRecord> {
 
-    private static final long serialVersionUID = 579170705;
+    private static final long serialVersionUID = 1380968254;
 
     /**
      * The reference instance of <code>quiz.user</code>
@@ -70,6 +70,26 @@ public class User extends TableImpl<UserRecord> {
      * The column <code>quiz.user.stored</code>.
      */
     public final TableField<UserRecord, Timestamp> STORED = createField("stored", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.user.password</code>.
+     */
+    public final TableField<UserRecord, String> PASSWORD = createField("password", org.jooq.impl.SQLDataType.VARCHAR.length(100).nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.user.nickname</code>.
+     */
+    public final TableField<UserRecord, String> NICKNAME = createField("nickname", org.jooq.impl.SQLDataType.VARCHAR.length(100).nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.user.status</code>.
+     */
+    public final TableField<UserRecord, String> STATUS = createField("status", org.jooq.impl.SQLDataType.CHAR.length(1).nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.user.updated</code>.
+     */
+    public final TableField<UserRecord, Timestamp> UPDATED = createField("updated", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
 
     /**
      * Create a <code>quiz.user</code> table reference

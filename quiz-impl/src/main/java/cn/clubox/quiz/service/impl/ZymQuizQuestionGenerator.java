@@ -29,7 +29,7 @@ public class ZymQuizQuestionGenerator implements QuizQuestionGenerator{
 		logger.info("Generating quiz ZYM's questions");
 		
 		int quizId = 0;
-		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QUIZ_TYPE.zym.value);
+		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QUIZ_TYPE.ZYM.value);
 		List<Question> questionList = new ArrayList<Question>();
 		List<Option> options = this.generateOption();
 		
@@ -44,7 +44,7 @@ public class ZymQuizQuestionGenerator implements QuizQuestionGenerator{
 			questionList.add(question);
 		}
 		
-		QuizQuestion quizQuestion = new QuizQuestion(quizId,QUIZ_TYPE.zym.value, questionList);
+		QuizQuestion quizQuestion = new QuizQuestion(quizId,QUIZ_TYPE.ZYM.value, questionList);
 		return quizQuestion;
 	}
 	

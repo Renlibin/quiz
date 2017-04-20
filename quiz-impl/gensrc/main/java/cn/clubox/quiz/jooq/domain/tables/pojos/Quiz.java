@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz implements Serializable {
 
-    private static final long serialVersionUID = 427813899;
+    private static final long serialVersionUID = -690032069;
 
     private Integer   id;
     private String    title;
@@ -31,6 +31,8 @@ public class Quiz implements Serializable {
     private String    status;
     private Timestamp stored;
     private String    quizType;
+    private String    logoSrc;
+    private String    name;
 
     public Quiz() {}
 
@@ -41,6 +43,8 @@ public class Quiz implements Serializable {
         this.status = value.status;
         this.stored = value.stored;
         this.quizType = value.quizType;
+        this.logoSrc = value.logoSrc;
+        this.name = value.name;
     }
 
     public Quiz(
@@ -49,7 +53,9 @@ public class Quiz implements Serializable {
         String    description,
         String    status,
         Timestamp stored,
-        String    quizType
+        String    quizType,
+        String    logoSrc,
+        String    name
     ) {
         this.id = id;
         this.title = title;
@@ -57,6 +63,8 @@ public class Quiz implements Serializable {
         this.status = status;
         this.stored = stored;
         this.quizType = quizType;
+        this.logoSrc = logoSrc;
+        this.name = name;
     }
 
     public Integer getId() {
@@ -113,6 +121,24 @@ public class Quiz implements Serializable {
         return this;
     }
 
+    public String getLogoSrc() {
+        return this.logoSrc;
+    }
+
+    public Quiz setLogoSrc(String logoSrc) {
+        this.logoSrc = logoSrc;
+        return this;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public Quiz setName(String name) {
+        this.name = name;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Quiz (");
@@ -123,6 +149,8 @@ public class Quiz implements Serializable {
         sb.append(", ").append(status);
         sb.append(", ").append(stored);
         sb.append(", ").append(quizType);
+        sb.append(", ").append(logoSrc);
+        sb.append(", ").append(name);
 
         sb.append(")");
         return sb.toString();

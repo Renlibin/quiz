@@ -87,9 +87,7 @@ public class AESPasswordEncryptor implements PasswordEncryptor {
 
 		AESPasswordEncryptor encryptor = new AESPasswordEncryptor();
 
-		System.out.println(encryptor.decrypt(encryptor.encrypt("Hello World567")));
-		System.out.println(encryptor.decrypt("6ZHgBMslzGb3aevwljd8BA=="));
-		System.out.println(encryptor.decrypt("QbJagApPXvVaAWsCS1Vl+g=="));
+		System.out.println(encryptor.decrypt(encryptor.encrypt("courage123")));
 	}
 
 }

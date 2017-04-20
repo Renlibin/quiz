@@ -85,4 +85,32 @@ public class UserDao extends DAOImpl<UserRecord, cn.clubox.quiz.jooq.domain.tabl
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByStored(Timestamp... values) {
         return fetch(User.USER.STORED, values);
     }
+
+    /**
+     * Fetch records that have <code>password IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByPassword(String... values) {
+        return fetch(User.USER.PASSWORD, values);
+    }
+
+    /**
+     * Fetch records that have <code>nickname IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByNickname(String... values) {
+        return fetch(User.USER.NICKNAME, values);
+    }
+
+    /**
+     * Fetch records that have <code>status IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByStatus(String... values) {
+        return fetch(User.USER.STATUS, values);
+    }
+
+    /**
+     * Fetch records that have <code>updated IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByUpdated(Timestamp... values) {
+        return fetch(User.USER.UPDATED, values);
+    }
 }

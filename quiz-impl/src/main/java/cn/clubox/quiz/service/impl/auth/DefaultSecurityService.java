@@ -24,17 +24,22 @@ public class DefaultSecurityService implements SecurityService {
 	private UserDetailsService userDetailsService;
 
 	@Override
-	public void autoLogin(String username, String password) {
-		
-		/**
-		 * Authentication authentication = new UsernamePasswordAuthenticationToken(user, null,
-    			AuthorityUtils.createAuthorityList("ROLE_USER"));
-			SecurityContextHolder.getContext().setAuthentication(authentication); 
-		 */
+	public void autoLogin(String username) {
 		
 		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("User {} password is {}", username, userDetails.getPassword());
+		}
+		
+//		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
+//				userDetails, password, userDetails.getAuthorities());
+		
 		UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(
-				userDetails, password, userDetails.getAuthorities());
+				userDetails, userDetails.getPassword(), userDetails.getAuthorities());
+		
+		logger.debug("AuthenticationManager class name is {}", authenticationManager.getClass().getName());
+		
 		authenticationManager.authenticate(usernamePasswordAuthenticationToken);
 
 		if (usernamePasswordAuthenticationToken.isAuthenticated()) {

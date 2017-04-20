@@ -99,4 +99,18 @@ public class QuizDao extends DAOImpl<QuizRecord, cn.clubox.quiz.jooq.domain.tabl
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.Quiz> fetchByQuizType(String... values) {
         return fetch(Quiz.QUIZ_.QUIZ_TYPE, values);
     }
+
+    /**
+     * Fetch records that have <code>logo_src IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.Quiz> fetchByLogoSrc(String... values) {
+        return fetch(Quiz.QUIZ_.LOGO_SRC, values);
+    }
+
+    /**
+     * Fetch records that have <code>name IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.Quiz> fetchByName(String... values) {
+        return fetch(Quiz.QUIZ_.NAME, values);
+    }
 }

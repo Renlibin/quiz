@@ -23,6 +23,7 @@ import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuestionsModel;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
@@ -178,14 +179,13 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 	}
 	
 	@Override
-	public void process(QuestionsModel questionModel) {
-		
+	public void process(QuizAnswerSheet quizAnswerSheet) {	
 		if(logger.isDebugEnabled()){
 			logger.debug("Start to process ZYM quiz answer sheet");
 		}
 		
 		ZymScore zymScore = new ZymScore();
-		for(Question question : questionModel.getQuestionList()){
+		for(Question question : quizAnswerSheet.getQuestionList()){
 			
 			//Question id will be used to retrieve score of the question according to the selected option
 			for(ScoringRule scoringRule : scoringRuleList){
@@ -200,7 +200,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			logger.debug("The final score is {}", zymScore.toString());
 		}
 		
-		int quizEngagementId = this.persistQuizEngagement(questionModel);
+		int quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
 		this.persistQuizEngagementResult(quizEngagementId, zymScore);
 		
 	}
@@ -208,21 +208,21 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 	@Override
 	public String getQuizName() {
 		
-		return QUIZ_TYPE.zym.toString();
+		return QUIZ_TYPE.ZYM.value;
 	}
 	
 	/****** private methods ******/
 	
-	private int persistQuizEngagement(QuestionsModel questionModel){
+	private int persistQuizEngagement(QuizAnswerSheet quizAnswerSheet){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("Persisting Quiz Engagement");
 		}
 		
 		QuizEngagement quizEngagement = new QuizEngagement();
-		quizEngagement.setQuizId(questionModel.getQuizId());
-		quizEngagement.setUserId(questionModel.getUserId());
-		quizEngagement.setDuration(questionModel.getDuration());
+		quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
+		quizEngagement.setUserId(quizAnswerSheet.getUserId());
+		quizEngagement.setDuration(quizAnswerSheet.getDuration());
 		quizEngagement.setStored(new Timestamp(new Date().getTime()));
 		
 		int quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
@@ -350,7 +350,6 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 				this.value = value;
 			}
 		}
-		
 		@Override
 		public String toString() {
 			return "ZymScore [tfScore=" + tfScore + ", gmScore=" + gmScore + ", auScore=" + auScore + ", seScore="

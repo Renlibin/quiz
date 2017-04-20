@@ -23,12 +23,16 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 865825944;
+    private static final long serialVersionUID = -210338526;
 
     private Integer   id;
     private String    name;
     private String    portraitSrc;
     private Timestamp stored;
+    private String    password;
+    private String    nickname;
+    private String    status;
+    private Timestamp updated;
 
     public User() {}
 
@@ -37,18 +41,30 @@ public class User implements Serializable {
         this.name = value.name;
         this.portraitSrc = value.portraitSrc;
         this.stored = value.stored;
+        this.password = value.password;
+        this.nickname = value.nickname;
+        this.status = value.status;
+        this.updated = value.updated;
     }
 
     public User(
         Integer   id,
         String    name,
         String    portraitSrc,
-        Timestamp stored
+        Timestamp stored,
+        String    password,
+        String    nickname,
+        String    status,
+        Timestamp updated
     ) {
         this.id = id;
         this.name = name;
         this.portraitSrc = portraitSrc;
         this.stored = stored;
+        this.password = password;
+        this.nickname = nickname;
+        this.status = status;
+        this.updated = updated;
     }
 
     public Integer getId() {
@@ -87,6 +103,42 @@ public class User implements Serializable {
         return this;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public User setPassword(String password) {
+        this.password = password;
+        return this;
+    }
+
+    public String getNickname() {
+        return this.nickname;
+    }
+
+    public User setNickname(String nickname) {
+        this.nickname = nickname;
+        return this;
+    }
+
+    public String getStatus() {
+        return this.status;
+    }
+
+    public User setStatus(String status) {
+        this.status = status;
+        return this;
+    }
+
+    public Timestamp getUpdated() {
+        return this.updated;
+    }
+
+    public User setUpdated(Timestamp updated) {
+        this.updated = updated;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("User (");
@@ -95,6 +147,10 @@ public class User implements Serializable {
         sb.append(", ").append(name);
         sb.append(", ").append(portraitSrc);
         sb.append(", ").append(stored);
+        sb.append(", ").append(password);
+        sb.append(", ").append(nickname);
+        sb.append(", ").append(status);
+        sb.append(", ").append(updated);
 
         sb.append(")");
         return sb.toString();

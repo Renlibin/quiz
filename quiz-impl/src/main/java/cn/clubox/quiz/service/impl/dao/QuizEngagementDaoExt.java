@@ -2,6 +2,7 @@ package cn.clubox.quiz.service.impl.dao;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import org.jooq.DSLContext;
 import org.jooq.Record;
@@ -21,13 +22,13 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 	@Autowired
 	private DSLContext context;
 	
+	private final cn.clubox.quiz.jooq.domain.tables.QuizEngagement quizEngagementTable =  cn.clubox.quiz.jooq.domain.tables.QuizEngagement.QUIZ_ENGAGEMENT;
+	
 	public int insertWithReturning(QuizEngagement quizEngagement){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("Insert quiz engagement");
 		}
-		
-		cn.clubox.quiz.jooq.domain.tables.QuizEngagement quizEngagementTable =  cn.clubox.quiz.jooq.domain.tables.QuizEngagement.QUIZ_ENGAGEMENT;
 		
 		Record record = context.insertInto(quizEngagementTable, quizEngagementTable.QUIZ_ID, quizEngagementTable.USER_ID,
 				quizEngagementTable.DURATION, quizEngagementTable.STORED)
@@ -36,5 +37,13 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 		
 		return record.getValue(quizEngagementTable.ID);
 		
+	}
+	
+	public List<Integer> fetchEngagedQuizId (int userId){
+		
+		List<Integer> quizIdList = context.selectDistinct(quizEngagementTable.QUIZ_ID).from(quizEngagementTable)
+			.where(quizEngagementTable.USER_ID.eq(userId)).fetchInto(Integer.class);
+		
+		return quizIdList;
 	}
 }
