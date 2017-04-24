@@ -12,7 +12,7 @@
 			    <#if quizExtension.quiz.logoSrc??>
 			    	<img src="${quizExtension.quiz.logoSrc}" /> </br>
 			    </#if>
-			    <input type="button" onclick="location.href='${quizExtension.avilableActionTitle}';" value="${quizExtension.avilableActionTitle.value}" / >
+			    <input type="button" onclick="location.href='${quizExtension.doableActionLink}';" value="${quizExtension.doableActionTitle.toString()}" / >
 		   </#list>
 	   </form>
 	</body>

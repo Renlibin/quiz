@@ -11,6 +11,11 @@ public interface QuizAnswerSheetProcessor {
 	
 	public String getQuizName();
 
-	public void process(QuizAnswerSheet quizAnswerSheet);
+	/**
+	 * 
+	 * @param quizAnswerSheet
+	 * @return The quiz engagement id will be returned
+	 */
+	public int process(QuizAnswerSheet quizAnswerSheet);
 	
 }

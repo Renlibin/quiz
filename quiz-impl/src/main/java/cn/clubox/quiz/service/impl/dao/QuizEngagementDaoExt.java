@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
+import static org.jooq.impl.DSL.maxDistinct;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.slf4j.Logger;
@@ -46,4 +47,27 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 		
 		return quizIdList;
 	}
+	
+	public List<Integer> fetchAllDistinctLatestEngagedQuizId(int userId){
+		
+//		List<Integer> engagementIdList = context.select(quizEngagementTable.ID).from(quizEngagementTable).where (
+//				quizEngagementTable.ID.eq(
+//							context.select(DSL.maxDistinct(quizEngagementTable.ID))
+//								.from(quizEngagementTable).where(quizEngagementTable.USER_ID.eq(userId)).groupBy(quizEngagementTable.QUIZ_ID)
+//						)
+//				).fetchInto(Integer.class);
+		
+		
+		List<Integer> quizIdList = context.selectDistinct(quizEngagementTable.QUIZ_ID).from(quizEngagementTable)
+				.where(quizEngagementTable.USER_ID.eq(userId)).fetchInto(Integer.class);
+		
+		return quizIdList;
+	}
+	
+	public int countTotalParticipant(int quizId){
+		
+		return context.selectDistinct(quizEngagementTable.USER_ID).from(quizEngagementTable)
+			.where(quizEngagementTable.QUIZ_ID.eq(quizId)).fetch().size();
+	}
+	
 }

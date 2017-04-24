@@ -21,7 +21,6 @@ import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement;
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.QuestionsModel;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
@@ -179,7 +178,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 	}
 	
 	@Override
-	public void process(QuizAnswerSheet quizAnswerSheet) {	
+	public int process(QuizAnswerSheet quizAnswerSheet) {	
 		if(logger.isDebugEnabled()){
 			logger.debug("Start to process ZYM quiz answer sheet");
 		}
@@ -202,6 +201,8 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		
 		int quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
 		this.persistQuizEngagementResult(quizEngagementId, zymScore);
+		
+		return quizEngagementId;
 		
 	}
 

@@ -4,8 +4,8 @@ public class QuizExtension {
 
 	private Quiz quiz;
 	private int  numberOfParticipant;
-	private QUIZ_AVILABLE_ACTION avilableActionTitle;
-	private String avilableActionLink;
+	private QUIZ_DOABLE_ACTION doableActionTitle;
+	private String doableActionLink;
 
 	public Quiz getQuiz() {
 		return quiz;
@@ -23,29 +23,56 @@ public class QuizExtension {
 		this.numberOfParticipant = numberOfParticipant;
 	}
 
-	public QUIZ_AVILABLE_ACTION getAvilableActionTitle() {
-		return avilableActionTitle;
+	public QUIZ_DOABLE_ACTION getDoableActionTitle() {
+		return doableActionTitle;
 	}
 
-	public void setAvilableActionTitle(QUIZ_AVILABLE_ACTION avilableActionTitle) {
-		this.avilableActionTitle = avilableActionTitle;
+	public void setDoableActionTitle(QUIZ_DOABLE_ACTION doableActionTitle) {
+		this.doableActionTitle = doableActionTitle;
 	}
 
-	public String getAvilableActionLink() {
-		return avilableActionLink;
+	public String getDoableActionLink() {
+		return doableActionLink;
 	}
 
-	public void setAvilableActionLink(String avilableActionLink) {
-		this.avilableActionLink = avilableActionLink;
+	public void setDoableActionLink(String doableActionLink) {
+		this.doableActionLink = doableActionLink;
 	}
 
-	public enum QUIZ_AVILABLE_ACTION {
+	public enum QUIZ_DOABLE_ACTION {
 
-		ENGAGEMENT("开始答题"), PAYNOW("立即购买"), SHOWRESULT("查看结果");
+		ENGAGEMENT("engagement"){
+			@Override
+			public String toString(){
+				return "开始答题";
+			}
+		},
+		BUYNOW("buynow"){
+			@Override
+			public String toString(){
+				return "立即购买";
+			}
+		}, 
+		PAYNOW("paynow"){
+			@Override
+			public String toString(){
+				return "立即购买";
+			}
+		},
+		SHOWRESULT("result"){
+			@Override
+			public String toString(){
+				return "查看结果";
+			}
+		},PAYMENT("payment"){
+			public String toString(){
+				return "立即支付";
+			}
+		};
 
 		public String value;
 		
-		private QUIZ_AVILABLE_ACTION(String value) {
+		private QUIZ_DOABLE_ACTION(String value) {
 			this.value = value;
 		}
 		

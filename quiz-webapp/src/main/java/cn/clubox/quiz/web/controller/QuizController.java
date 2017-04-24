@@ -1,10 +1,8 @@
 package cn.clubox.quiz.web.controller;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,14 +13,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.QuizManager;
-import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz;
+
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.api.model.QuizExtension;
+import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.impl.auth.DatabaseUserDetailsService.User;
 import cn.clubox.quiz.web.utils.QuizAnswerSheetProcessorFactory;
 
@@ -32,28 +31,23 @@ public class QuizController {
 	private static final Logger logger = LoggerFactory.getLogger(QuizController.class);
 	
 	@Autowired
-	private QuizAnswerSheetProcessorFactory quizAnswerSheetProcessorFactory;
-	
-	@Autowired
 	private QuizManager quizManager;
 	
-	private Map<String, Quiz> quizMap;
-	private Map<String, List<Question>> questionMap;
+	@Autowired
+	private QuizAnswerSheetProcessorFactory quizAnswerSheetProcessorFactory;
 	
-	@PostConstruct
-	public void init() throws Exception {
+	@GetMapping("quiz/refresh")
+	public String refreshQuiz(){
 		
-		quizMap = quizManager.retrieveAllQuiz();
-		questionMap = quizManager.retrieveAllQuizQuestion();
-		
+		logger.info("Refreshing quizs and questions ...... ");
+		return "redirect:/quiz/home";
 	}
 	
-	@GetMapping("quiz/home")
+	@GetMapping("quiz/index")
 	public String showAllQuiz(@AuthenticationPrincipal User user, Map<String, Object> model){
 		
 		int userId = user.getId();
-		List<Quiz> quizList = new ArrayList<>(quizMap.values());
-		List<QuizExtension> quizExtensionList = quizManager.avilableActionDecision(userId, quizList.toArray(new Quiz[quizList.size()]));
+		List<QuizExtension> quizExtensionList = quizManager.retrieveAllQuiz(userId, true, false, null);
 		
 		model.put("quizExtensionList", quizExtensionList);
 		return "index";
@@ -69,26 +63,14 @@ public class QuizController {
 			return "404";
 		}
 		
-		Quiz quiz = quizMap.get(quizType);
-		List<Question> questionList = questionMap.get(quizType);
-		
-		if(quiz == null || questionList == null){
-			logger.error("Quiz or quiz's questions could not be found!");
-			return "error";
+		//Need to check whether the user has payed for the quiz
+		if(quizManager.hasPrivilige(userId,quizType) == false){
+			"redirect:/quiz".concat(quizType).concat("/buynow");
 		}
 		
-		quiz.setQuestionList(questionList);
+		QuizExtension quizExtension = quizManager.retrieveQuizByType(userId, false, true, null, quizType);
 		
-		logger.debug("Quiz question size is ========== {}" + quiz.getQuestionList().size());
-		
-		List<QuizExtension> quizExtensionList = quizManager.avilableActionDecision(userId, quiz);
-		
-		if(quizExtensionList == null || quizExtensionList.isEmpty()){
-			logger.error("Avilable action of the quiz could not be decided!");
-			return "error";
-		}
-		
-		model.put("quiz", quiz);
+		model.put("quizExtension", quizExtension);
 //		model.put("zymAnswer", ZYM_ANSWER.values());
 		
 		return "zym";
@@ -99,8 +81,6 @@ public class QuizController {
 			@ModelAttribute QuizAnswerSheet quizAnswerSheet, Map<String, Object> model){
 		
 		quizAnswerSheet.setUserId(user.getId());
-		
-		logger.debug("Duration is {}", quizAnswerSheet.getDuration());
 		
 		if(QUIZ_TYPE.getByValue(quizType) == null){
 			logger.error("The quiz type {} is not exist", quizType);
@@ -115,28 +95,91 @@ public class QuizController {
 			return "error";
 		}
 		
-		processor.process(quizAnswerSheet);
+		int engagementId = processor.process(quizAnswerSheet);
 		
-		return "redirect:/quiz/result";
+		return "redirect:/quiz/".concat(quizType).concat("/result?engagementId=").concat(String.valueOf(engagementId));
 	}
 	
 	@GetMapping("quiz/{quizType}/buynow")
-	public String buyNow(){
+	public String buyNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
 		
-		return "buyNow";
+		logger.info("User {} is going to buy quiz {}", user.getId(), quizType);
+		
+		if(QUIZ_TYPE.getByValue(quizType) == null){
+			logger.error("The quiz type {} is not exist", quizType);
+			return "404";
+		}
+		
+		QuizExtension targetQuizExtension = quizManager.retrieveQuizByType(user.getId(), true, true,QUIZ_DOABLE_ACTION.PAYNOW, quizType);
+		List<QuizExtension> quizExtensionList = quizManager.retrieveAllQuiz(user.getId(),true, false, null);
+		
+		//To exclusive the target quiz
+		for(int i=0; i < quizExtensionList.size(); i++){
+			if(quizExtensionList.get(i).getQuiz().getId() == targetQuizExtension.getQuiz().getId()){
+				quizExtensionList.remove(i);
+			}
+		}
+		
+		model.put("quizExtension", targetQuizExtension);
+		model.put("quizExtensionList",quizExtensionList);
+		
+		return "buynow";
 	}
 	
-	@GetMapping("quiz/result")
-	public String showResult(){
+	@GetMapping("quiz/{quizType}/paynow")
+	public String payNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String,Object> model){
 		
-		return "result";
+		if(QUIZ_TYPE.getByValue(quizType) == null){
+			logger.error("The quiz type {} is not exist", quizType);
+			return "404";
+		}
+		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
+		
+//		quizExtension.setAvilableActionTitle(QUIZ_DOABLE_ACTION.PAYNOW);
+//		//The real action link should be Wechat payment service
+//		quizExtension.setAvilableActionLink("http://localhost:8080/quiz/".concat(quizType).concat("/paynow"));
+		
+		model.put("quizExtension", quizExtension);
+		return "paynow";
 	}
 	
-	@GetMapping("quiz/myQuiz")
-	public String myQuiz(){
+	@GetMapping("quiz/{quizType}/result")
+	public String showResult(@AuthenticationPrincipal User user, @PathVariable String quizType, 
+			@RequestParam(value="engagementId",required=false) Integer engagementId, Map<String, Object> model){
 		
+		Map<String,Integer> resultMap = new HashMap<>();
 		
-		return "myQuiz";
+		if(engagementId != null && engagementId != 0){
+			resultMap = quizManager.retrieveQuizEngagementResult(engagementId);
+		}else{
+			resultMap = quizManager.retrieveQuizEngagementResult(user.getId(), quizType);
+		}
+		
+		model.put("resultMap", resultMap);
+		return quizType.concat("_result");
 	}
-
+	
+	@GetMapping("quiz/private/engaged")
+	public String engagedQuiz(@AuthenticationPrincipal User user, Map<String,Object> model){
+		
+		int userId = user.getId();
+		
+		List<QuizExtension> engagedQuizList = quizManager.retrieveEngagedQuiz(userId, true, false);
+		
+		model.put("engagedQuizList", engagedQuizList);
+		return "private_quiz_engaged";
+	}
+	
+	@GetMapping("quiz/private/undone")
+	public String undoneQuiz(@AuthenticationPrincipal User user, Map<String,Object> model){
+		
+		int userId = user.getId();
+		
+		List<QuizExtension> undoneQuizList = quizManager.retrieveUndoneQuiz(userId, true, false);
+		
+		logger.debug("undoneQuizList size is {}", undoneQuizList.size());
+		
+		model.put("undoneQuizList", undoneQuizList);
+		return "private_quiz_undone";
+	}
 }
