@@ -25,6 +25,11 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.springframework.security.oauth</groupId>
+			<artifactId>spring-security-oauth2</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>org.jooq</groupId>
 			<artifactId>jooq</artifactId>
 		</dependency>
@@ -108,7 +113,7 @@
 							</dependency>
 						</dependencies>
 						<configuration>
-						<jdbc>
+							<jdbc>
 								<driver>com.mysql.cj.jdbc.Driver</driver>
 								<url>jdbc:mysql://192.168.99.100:3306/quiz?serverTimezone=UTC</url>
 								<user>root</user>

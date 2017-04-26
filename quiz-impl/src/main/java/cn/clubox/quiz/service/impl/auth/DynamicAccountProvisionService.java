@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.jooq.domain.tables.pojos.User;
 import cn.clubox.quiz.service.api.auth.AccountProvisionService;
+import cn.clubox.quiz.service.api.auth.WeChatUserInfo;
 import cn.clubox.quiz.service.impl.dao.UserDaoExt;
 
 @Service
@@ -26,7 +27,7 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 	private static short  PASSWORD_LENGTH = 6;
 
 	@Override
-	public void provisionAccount(String nickname, String portraitSrc, String type) {
+	public void provisionAccount(WeChatUserInfo userInfo) {
 		
 		String username = randomString(USERNAME_LENGTH);
 		String password = randomString(PASSWORD_LENGTH);
@@ -34,9 +35,9 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		
 		User user = new User();
 		user.setName(username);
-		user.setNickname(nickname);
+		user.setNickname(userInfo.getNickname());
 		user.setPassword(password);
-		user.setPortraitSrc(portraitSrc);
+		user.setPortraitSrc(userInfo.getHeadimgurl());
 		user.setStatus("Y");
 		
 		boolean isSuccess = false;
