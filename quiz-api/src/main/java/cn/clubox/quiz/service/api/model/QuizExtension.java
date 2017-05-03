@@ -64,7 +64,8 @@ public class QuizExtension {
 			public String toString(){
 				return "查看结果";
 			}
-		},PAYMENT("payment"){
+		},
+		PAYMENT("payment"){
 			public String toString(){
 				return "立即支付";
 			}

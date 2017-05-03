@@ -1,6 +1,8 @@
 package cn.clubox.quiz.service.impl.auth;
 
 import java.security.SecureRandom;
+import java.sql.Timestamp;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,9 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.jooq.domain.tables.pojos.User;
+import cn.clubox.quiz.jooq.domain.tables.pojos.UserFederation;
+import cn.clubox.quiz.jooq.domain.tables.pojos.UserSource;
 import cn.clubox.quiz.service.api.auth.AccountProvisionService;
 import cn.clubox.quiz.service.api.auth.WeChatUserInfo;
 import cn.clubox.quiz.service.impl.dao.UserDaoExt;
+import cn.clubox.quiz.service.impl.dao.UserFederationDaoExt;
+import cn.clubox.quiz.service.impl.dao.UserSourceDaoExt;
 
 @Service
 public class DynamicAccountProvisionService implements AccountProvisionService {
@@ -22,12 +28,19 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 	@Autowired
 	private UserDaoExt userDao;
 	
+	@Autowired
+	private UserFederationDaoExt userFederationDao;
+	
+	@Autowired
+	private UserSourceDaoExt userSourceDao;
+	
 	private static String USERNAME_PREFIX = "u-";
 	private static short  USERNAME_LENGTH = 12;
 	private static short  PASSWORD_LENGTH = 6;
+	private static short  RETRY_TIMES = 10;
 
 	@Override
-	public void provisionAccount(WeChatUserInfo userInfo) {
+	public boolean provisionAccount(WeChatUserInfo userInfo) {
 		
 		String username = randomString(USERNAME_LENGTH);
 		String password = randomString(PASSWORD_LENGTH);
@@ -40,19 +53,38 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		user.setPortraitSrc(userInfo.getHeadimgurl());
 		user.setStatus("Y");
 		
+		int userId = 0;
 		boolean isSuccess = false;
 		while(!isSuccess){
 			try{
-				int userId = userDao.insertWithReturning(user);
+				userId = userDao.insertWithReturning(user);
 				isSuccess = true;
 			}catch(Exception e){
-				
+				if(RETRY_TIMES <= 0){
+					logger.warn("The unique user name could not be generated after {} times retry. User provision failed!",RETRY_TIMES);
+					return false;
+				}
 				logger.warn("The username {} is already exist in DB", user.getName());
 				//New username should be generated while the previous username is already exist in DB
 				user.setName(USERNAME_PREFIX.concat(randomString(USERNAME_LENGTH)));
+				RETRY_TIMES --;
 			}
 		}
+		
 		//user_federation and user_source should be persisted as well
+		//UserFederation is going to be persisted in DB
+		UserFederation userFederation = new UserFederation();
+		userFederation.setUserId(userId);
+		userFederation.setFederationId(userInfo.getUnionid());
+		userFederation.setStatus("Y");
+		userFederation.setStored(new Timestamp(new Date().getTime()));
+		userFederationDao.insert(userFederation);
+
+		//UserSource is going to be persisted in DB
+		UserSource userSource = new UserSource();
+		userSourceDao.insert(userSource);
+		
+		return true;
 
 	}
 

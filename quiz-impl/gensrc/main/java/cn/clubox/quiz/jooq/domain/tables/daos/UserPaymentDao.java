@@ -7,6 +7,7 @@ package cn.clubox.quiz.jooq.domain.tables.daos;
 import cn.clubox.quiz.jooq.domain.tables.UserPayment;
 import cn.clubox.quiz.jooq.domain.tables.records.UserPaymentRecord;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -82,7 +83,7 @@ public class UserPaymentDao extends DAOImpl<UserPaymentRecord, cn.clubox.quiz.jo
     /**
      * Fetch records that have <code>amount IN (values)</code>
      */
-    public List<cn.clubox.quiz.jooq.domain.tables.pojos.UserPayment> fetchByAmount(Integer... values) {
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.UserPayment> fetchByAmount(BigDecimal... values) {
         return fetch(UserPayment.USER_PAYMENT.AMOUNT, values);
     }
 

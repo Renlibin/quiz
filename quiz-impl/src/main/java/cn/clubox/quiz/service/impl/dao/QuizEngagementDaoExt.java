@@ -4,7 +4,6 @@ import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 
-import static org.jooq.impl.DSL.maxDistinct;
 import org.jooq.DSLContext;
 import org.jooq.Record;
 import org.slf4j.Logger;

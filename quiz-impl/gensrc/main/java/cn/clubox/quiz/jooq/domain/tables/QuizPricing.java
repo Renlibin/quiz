@@ -8,6 +8,7 @@ import cn.clubox.quiz.jooq.domain.Keys;
 import cn.clubox.quiz.jooq.domain.Quiz;
 import cn.clubox.quiz.jooq.domain.tables.records.QuizPricingRecord;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizPricing extends TableImpl<QuizPricingRecord> {
 
-    private static final long serialVersionUID = -1949348547;
+    private static final long serialVersionUID = -1406095072;
 
     /**
      * The reference instance of <code>quiz.quiz_pricing</code>
@@ -65,7 +66,7 @@ public class QuizPricing extends TableImpl<QuizPricingRecord> {
     /**
      * The column <code>quiz.quiz_pricing.price</code>.
      */
-    public final TableField<QuizPricingRecord, Integer> PRICE = createField("price", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<QuizPricingRecord, BigDecimal> PRICE = createField("price", org.jooq.impl.SQLDataType.DECIMAL.precision(5, 2).nullable(false), this, "");
 
     /**
      * The column <code>quiz.quiz_pricing.status</code>.

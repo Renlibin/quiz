@@ -10,6 +10,7 @@ import cn.clubox.quiz.jooq.domain.tables.QuizEngagementResult;
 import cn.clubox.quiz.jooq.domain.tables.QuizPricing;
 import cn.clubox.quiz.jooq.domain.tables.QuizQuestion;
 import cn.clubox.quiz.jooq.domain.tables.User;
+import cn.clubox.quiz.jooq.domain.tables.UserFederation;
 import cn.clubox.quiz.jooq.domain.tables.UserPayment;
 import cn.clubox.quiz.jooq.domain.tables.UserSource;
 
@@ -58,6 +59,11 @@ public class Tables {
      * The table <code>quiz.user</code>.
      */
     public static final User USER = cn.clubox.quiz.jooq.domain.tables.User.USER;
+
+    /**
+     * The table <code>quiz.user_federation</code>.
+     */
+    public static final UserFederation USER_FEDERATION = cn.clubox.quiz.jooq.domain.tables.UserFederation.USER_FEDERATION;
 
     /**
      * The table <code>quiz.user_payment</code>.

@@ -73,6 +73,13 @@ public class UserDao extends DAOImpl<UserRecord, cn.clubox.quiz.jooq.domain.tabl
     }
 
     /**
+     * Fetch a unique record that has <code>name = value</code>
+     */
+    public cn.clubox.quiz.jooq.domain.tables.pojos.User fetchOneByName(String value) {
+        return fetchOne(User.USER.NAME, value);
+    }
+
+    /**
      * Fetch records that have <code>portrait_src IN (values)</code>
      */
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.User> fetchByPortraitSrc(String... values) {

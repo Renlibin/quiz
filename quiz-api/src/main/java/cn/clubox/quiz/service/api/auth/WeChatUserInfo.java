@@ -10,6 +10,7 @@ public class WeChatUserInfo implements Serializable {
 	private static final long serialVersionUID = -7128980529770586641L;
 	
 	private String openid;
+	private String unionid;
 	private String nickname;
 	private char   sex;
 	private String province;
@@ -22,6 +23,13 @@ public class WeChatUserInfo implements Serializable {
 	}
 	public void setOpenid(String openid) {
 		this.openid = openid;
+	}
+	
+	public String getUnionid() {
+		return unionid;
+	}
+	public void setUnionid(String unionid) {
+		this.unionid = unionid;
 	}
 	public String getNickname() {
 		return nickname;

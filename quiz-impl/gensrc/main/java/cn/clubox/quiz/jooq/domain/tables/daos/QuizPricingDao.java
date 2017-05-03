@@ -7,6 +7,7 @@ package cn.clubox.quiz.jooq.domain.tables.daos;
 import cn.clubox.quiz.jooq.domain.tables.QuizPricing;
 import cn.clubox.quiz.jooq.domain.tables.records.QuizPricingRecord;
 
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -75,7 +76,7 @@ public class QuizPricingDao extends DAOImpl<QuizPricingRecord, cn.clubox.quiz.jo
     /**
      * Fetch records that have <code>price IN (values)</code>
      */
-    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizPricing> fetchByPrice(Integer... values) {
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizPricing> fetchByPrice(BigDecimal... values) {
         return fetch(QuizPricing.QUIZ_PRICING.PRICE, values);
     }
 

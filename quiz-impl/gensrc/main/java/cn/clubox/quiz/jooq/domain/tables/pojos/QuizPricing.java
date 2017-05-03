@@ -5,6 +5,7 @@ package cn.clubox.quiz.jooq.domain.tables.pojos;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.annotation.Generated;
@@ -23,13 +24,13 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizPricing implements Serializable {
 
-    private static final long serialVersionUID = 709750405;
+    private static final long serialVersionUID = -580476018;
 
-    private Integer   id;
-    private Integer   quizId;
-    private Integer   price;
-    private String    status;
-    private Timestamp stored;
+    private Integer    id;
+    private Integer    quizId;
+    private BigDecimal price;
+    private String     status;
+    private Timestamp  stored;
 
     public QuizPricing() {}
 
@@ -42,11 +43,11 @@ public class QuizPricing implements Serializable {
     }
 
     public QuizPricing(
-        Integer   id,
-        Integer   quizId,
-        Integer   price,
-        String    status,
-        Timestamp stored
+        Integer    id,
+        Integer    quizId,
+        BigDecimal price,
+        String     status,
+        Timestamp  stored
     ) {
         this.id = id;
         this.quizId = quizId;
@@ -73,11 +74,11 @@ public class QuizPricing implements Serializable {
         return this;
     }
 
-    public Integer getPrice() {
+    public BigDecimal getPrice() {
         return this.price;
     }
 
-    public QuizPricing setPrice(Integer price) {
+    public QuizPricing setPrice(BigDecimal price) {
         this.price = price;
         return this;
     }

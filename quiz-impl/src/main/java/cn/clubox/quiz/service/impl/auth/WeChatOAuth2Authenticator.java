@@ -31,7 +31,7 @@ public class WeChatOAuth2Authenticator extends RestTemplate implements OAuth2Aut
 //	@Autowired
 	private String secret = "aa1986c9e5323833d4e23567ee2112ad";
 	
-	@Autowired
+//	@Autowired
 	private String redirectURI;
 
 	@Override

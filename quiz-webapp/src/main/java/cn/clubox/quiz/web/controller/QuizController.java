@@ -58,7 +58,7 @@ public class QuizController {
 		
 		int userId = user.getId();
 		
-		if(QUIZ_TYPE.getByValue(quizType) == null){
+		if(this.verifyQuizType(quizType) == false){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
@@ -71,9 +71,7 @@ public class QuizController {
 		QuizExtension quizExtension = quizManager.retrieveQuizByType(userId, false, true, null, quizType);
 		
 		model.put("quizExtension", quizExtension);
-//		model.put("zymAnswer", ZYM_ANSWER.values());
-		
-		return "zym";
+		return "quiz_engagement";
 	}
 	
 	@PostMapping("quiz/{quizType}/engagement")
@@ -82,7 +80,7 @@ public class QuizController {
 		
 		quizAnswerSheet.setUserId(user.getId());
 		
-		if(QUIZ_TYPE.getByValue(quizType) == null){
+		if(this.verifyQuizType(quizType) == false){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
@@ -105,7 +103,7 @@ public class QuizController {
 		
 		logger.info("User {} is going to buy quiz {}", user.getId(), quizType);
 		
-		if(QUIZ_TYPE.getByValue(quizType) == null){
+		if(this.verifyQuizType(quizType) == false){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
@@ -129,15 +127,11 @@ public class QuizController {
 	@GetMapping("quiz/{quizType}/paynow")
 	public String payNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String,Object> model){
 		
-		if(QUIZ_TYPE.getByValue(quizType) == null){
+		if(this.verifyQuizType(quizType) == false){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
 		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
-		
-//		quizExtension.setAvilableActionTitle(QUIZ_DOABLE_ACTION.PAYNOW);
-//		//The real action link should be Wechat payment service
-//		quizExtension.setAvilableActionLink("http://localhost:8080/quiz/".concat(quizType).concat("/paynow"));
 		
 		model.put("quizExtension", quizExtension);
 		return "paynow";
@@ -181,5 +175,12 @@ public class QuizController {
 		
 		model.put("undoneQuizList", undoneQuizList);
 		return "private_quiz_undone";
+	}
+	
+	private boolean verifyQuizType(String quizType){
+		if(QUIZ_TYPE.getByValue(quizType) != null){
+			return true;
+		}
+		return false;
 	}
 }

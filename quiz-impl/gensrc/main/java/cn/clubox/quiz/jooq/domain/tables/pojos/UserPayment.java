@@ -5,6 +5,7 @@ package cn.clubox.quiz.jooq.domain.tables.pojos;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.sql.Timestamp;
 
 import javax.annotation.Generated;
@@ -23,14 +24,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserPayment implements Serializable {
 
-    private static final long serialVersionUID = 1865730710;
+    private static final long serialVersionUID = 2016619611;
 
-    private Integer   id;
-    private Integer   userId;
-    private Integer   quizId;
-    private Integer   amount;
-    private Timestamp stored;
-    private String    status;
+    private Integer    id;
+    private Integer    userId;
+    private Integer    quizId;
+    private BigDecimal amount;
+    private Timestamp  stored;
+    private String     status;
 
     public UserPayment() {}
 
@@ -44,12 +45,12 @@ public class UserPayment implements Serializable {
     }
 
     public UserPayment(
-        Integer   id,
-        Integer   userId,
-        Integer   quizId,
-        Integer   amount,
-        Timestamp stored,
-        String    status
+        Integer    id,
+        Integer    userId,
+        Integer    quizId,
+        BigDecimal amount,
+        Timestamp  stored,
+        String     status
     ) {
         this.id = id;
         this.userId = userId;
@@ -86,11 +87,11 @@ public class UserPayment implements Serializable {
         return this;
     }
 
-    public Integer getAmount() {
+    public BigDecimal getAmount() {
         return this.amount;
     }
 
-    public UserPayment setAmount(Integer amount) {
+    public UserPayment setAmount(BigDecimal amount) {
         this.amount = amount;
         return this;
     }

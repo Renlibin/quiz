@@ -54,10 +54,10 @@ public class ZymQuizQuestionGenerator implements QuizQuestionGenerator{
 		
 		short orderNumber = 1;
 		for(OPTION_DEF optionDef : OPTION_DEF.values()){
-			Option option = new Option();
-			option.setOptionOrderNumber(orderNumber++);
-			option.setOptionText(optionDef.toString());
-			option.setOptionValue(optionDef.getValue());
+			Option option = new Option(String.valueOf(orderNumber++), optionDef.toString(), optionDef.getValue());
+//			option.setOptionOrderNumber(String.valueOf(orderNumber++));
+//			option.setOptionText(optionDef.toString());
+//			option.setOptionValue(optionDef.getValue());
 			
 			options.add(option);
 		}
