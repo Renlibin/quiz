@@ -4,6 +4,7 @@ import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.slf4j.Logger;
@@ -40,7 +41,13 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 	private static short  RETRY_TIMES = 10;
 
 	@Override
-	public boolean provisionAccount(WeChatUserInfo userInfo) {
+	public Integer provisionAccount(WeChatUserInfo userInfo) {
+		
+		List<UserFederation> userFederations = userFederationDao.fetchByFederationId(userInfo.getUnionid());
+		//The user's id will be returned directly if the user exist
+		if(userFederations != null && userFederations.isEmpty() ==false){
+			return userFederations.get(0).getUserId();
+		}
 		
 		String username = randomString(USERNAME_LENGTH);
 		String password = randomString(PASSWORD_LENGTH);
@@ -53,7 +60,7 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		user.setPortraitSrc(userInfo.getHeadimgurl());
 		user.setStatus("Y");
 		
-		int userId = 0;
+		Integer userId = 0;
 		boolean isSuccess = false;
 		while(!isSuccess){
 			try{
@@ -62,10 +69,10 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 			}catch(Exception e){
 				if(RETRY_TIMES <= 0){
 					logger.warn("The unique user name could not be generated after {} times retry. User provision failed!",RETRY_TIMES);
-					return false;
+					return null;
 				}
 				logger.warn("The username {} is already exist in DB", user.getName());
-				//New username should be generated while the previous username is already exist in DB
+				//New username should be regenerated while the username is already exist in DB
 				user.setName(USERNAME_PREFIX.concat(randomString(USERNAME_LENGTH)));
 				RETRY_TIMES --;
 			}
@@ -84,7 +91,7 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		UserSource userSource = new UserSource();
 		userSourceDao.insert(userSource);
 		
-		return true;
+		return userId;
 
 	}
 
@@ -126,6 +133,16 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		}
 		
 		System.out.print("Finished !");
+	}
+
+	@Override
+	public String retrieveUsernameById(Integer id) {
+		
+		User user = userDao.fetchOneById(id);
+		if(user != null){
+			return user.getName();
+		}
+		return null;
 	}
 
 }

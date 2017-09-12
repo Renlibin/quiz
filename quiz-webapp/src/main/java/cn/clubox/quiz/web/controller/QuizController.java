@@ -78,14 +78,20 @@ public class QuizController {
 	public String submitQuiz(@AuthenticationPrincipal User user, @PathVariable String quizType, 
 			@ModelAttribute QuizAnswerSheet quizAnswerSheet, Map<String, Object> model){
 		
-		quizAnswerSheet.setUserId(user.getId());
+		int userId = user.getId();
+		quizAnswerSheet.setUserId(userId);
 		
 		if(this.verifyQuizType(quizType) == false){
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
 		
-		QuizAnswerSheetProcessor processor = quizAnswerSheetProcessorFactory.getProcessor(quizType);
+		//Need to check whether the user has payed for the quiz
+		if(quizManager.hasPrivilige(userId,quizType) == false){
+			"redirect:/quiz".concat(quizType).concat("/buynow");
+		}
+		
+		QuizAnswerSheetProcessor<?> processor = quizAnswerSheetProcessorFactory.getProcessor(quizType);
 		
 		logger.info("Processor is {}", processor);
 		
@@ -157,9 +163,17 @@ public class QuizController {
 	public String engagedQuiz(@AuthenticationPrincipal User user, Map<String,Object> model){
 		
 		int userId = user.getId();
+		String nickname = user.getNickname();
+		String portraitSrc = user.getPortraitSrc();
 		
 		List<QuizExtension> engagedQuizList = quizManager.retrieveEngagedQuiz(userId, true, false);
 		
+		if(logger.isDebugEnabled()){
+			logger.debug("{} engaged {} quizs", nickname, engagedQuizList == null ? 0 :engagedQuizList.size());
+		}
+		
+		model.put("nickname",nickname);
+		model.put("portraitSrc",portraitSrc);
 		model.put("engagedQuizList", engagedQuizList);
 		return "private_quiz_engaged";
 	}
@@ -168,11 +182,14 @@ public class QuizController {
 	public String undoneQuiz(@AuthenticationPrincipal User user, Map<String,Object> model){
 		
 		int userId = user.getId();
-		
+		String nickname = user.getNickname();
+		String portraitSrc = user.getPortraitSrc();
 		List<QuizExtension> undoneQuizList = quizManager.retrieveUndoneQuiz(userId, true, false);
 		
 		logger.debug("undoneQuizList size is {}", undoneQuizList.size());
 		
+		model.put("nickname",nickname);
+		model.put("portraitSrc",portraitSrc);
 		model.put("undoneQuizList", undoneQuizList);
 		return "private_quiz_undone";
 	}

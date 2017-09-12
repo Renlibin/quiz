@@ -10,6 +10,7 @@ public class Quiz {
 	private String title;
 	private String description;
 	private BigDecimal price;
+	private BigDecimal originalPrice;
 	private String logoSrc;
 	private String quizType;
 	private List<Question> questionList;
@@ -24,6 +25,7 @@ public class Quiz {
 		this.title = builder.getTitle();
 		this.description = builder.getDescription();
 		this.price = builder.getPrice();
+		this.originalPrice = builder.getOriginalPrice();
 		this.logoSrc = builder.getLogoSrc();
 		this.quizType = builder.getQuizType();
 		this.questionList = builder.getQuestionList();
@@ -33,65 +35,37 @@ public class Quiz {
 		return id;
 	}
 
-//	public void setId(int id) {
-//		this.id = id;
-//	}
-
 	public String getName() {
 		return name;
 	}
-
-//	public void setName(String name) {
-//		this.name = name;
-//	}
 
 	public String getTitle() {
 		return title;
 	}
 
-//	public void setTitle(String title) {
-//		this.title = title;
-//	}
-
 	public String getDescription() {
 		return description;
 	}
 
-//	public void setDescription(String description) {
-//		this.description = description;
-//	}
-
 	public BigDecimal getPrice() {
 		return price;
 	}
-
-//	public void setPrice(BigDecimal price) {
-//		this.price = price;
-//	}
+	
+	public BigDecimal getOriginalPrice(){
+		return originalPrice;
+	}
 
 	public String getLogoSrc() {
 		return logoSrc;
 	}
 
-//	public void setLogoSrc(String logoSrc) {
-//		this.logoSrc = logoSrc;
-//	}
-
 	public String getQuizType() {
 		return quizType;
 	}
 
-//	public void setQuizType(String quizType) {
-//		this.quizType = quizType;
-//	}
-
 	public List<Question> getQuestionList() {
 		return questionList;
 	}
-
-//	public void setQuestionList(List<Question> questionList) {
-//		this.questionList = questionList;
-//	}
 	
 	public static class Builder {
 		
@@ -100,6 +74,7 @@ public class Quiz {
 		private String title;
 		private String description;
 		private BigDecimal price;
+		private BigDecimal originalPrice;
 		private String logoSrc;
 		private String quizType;
 		private List<Question> questionList;
@@ -126,6 +101,11 @@ public class Quiz {
 		
 		public Builder setPrice(BigDecimal price){
 			this.price = price;
+			return this;
+		}
+		
+		public Builder setOriginalPrice(BigDecimal originalPrice){
+			this.originalPrice = originalPrice;
 			return this;
 		}
 		
@@ -163,6 +143,10 @@ public class Quiz {
 		public BigDecimal getPrice() {
 			return price;
 		}
+		
+		public BigDecimal getOriginalPrice(){
+			return originalPrice;
+		}
 
 		public String getLogoSrc() {
 			return logoSrc;
@@ -182,7 +166,8 @@ public class Quiz {
 	}
 
 	public enum QUIZ_TYPE {
-		ZYM("zym"),ISEQ("iseq");
+		ZYM("zym"),ISEQ("iseq"),CONFIDENCE("confidence"),
+		SOCIALACC("socialacc"),CAREERCAPABILITY("careercapability");
 
 		public String value;
 

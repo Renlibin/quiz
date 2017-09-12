@@ -20,17 +20,18 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/", "/home", "/welcome2")
-			.permitAll()
-			.anyRequest()
-			.authenticated()
+			.antMatchers("/", "/home", "/welcome2").permitAll()
+			.anyRequest().authenticated()
 			.and()
-			.formLogin()
-			.loginPage("/login")
-			.permitAll()
+			.formLogin().loginPage("/login").permitAll()
+			.and().formLogin()
 			.and()
-			.logout()
-			.permitAll();
+			.logout().logoutSuccessUrl("/")
+            .logoutUrl("/logout")
+            .deleteCookies("JSESSIONID")
+            .permitAll()
+			.and()
+			.rememberMe().tokenValiditySeconds(3600);
 	}
 
 	@Autowired
@@ -40,7 +41,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
 		provider.setUserDetailsService(userSecurityService);
 		 
-		auth.inMemoryAuthentication().withUser("user").password("password").roles("USER");
+		auth.inMemoryAuthentication().withUser("user").password("password").roles("SUPERUSER");
 		auth.authenticationProvider(provider);
 	}
 }

@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizPricing extends TableImpl<QuizPricingRecord> {
 
-    private static final long serialVersionUID = -1406095072;
+    private static final long serialVersionUID = 2101070013;
 
     /**
      * The reference instance of <code>quiz.quiz_pricing</code>
@@ -77,6 +77,11 @@ public class QuizPricing extends TableImpl<QuizPricingRecord> {
      * The column <code>quiz.quiz_pricing.stored</code>.
      */
     public final TableField<QuizPricingRecord, Timestamp> STORED = createField("stored", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.quiz_pricing.original_price</code>.
+     */
+    public final TableField<QuizPricingRecord, BigDecimal> ORIGINAL_PRICE = createField("original_price", org.jooq.impl.SQLDataType.DECIMAL.precision(5, 2), this, "");
 
     /**
      * Create a <code>quiz.quiz_pricing</code> table reference

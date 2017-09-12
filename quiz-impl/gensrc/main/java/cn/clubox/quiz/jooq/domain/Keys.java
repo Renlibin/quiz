@@ -55,6 +55,7 @@ public class Keys {
     public static final Identity<QuizPricingRecord, Integer> IDENTITY_QUIZ_PRICING = Identities0.IDENTITY_QUIZ_PRICING;
     public static final Identity<QuizQuestionRecord, Integer> IDENTITY_QUIZ_QUESTION = Identities0.IDENTITY_QUIZ_QUESTION;
     public static final Identity<UserRecord, Integer> IDENTITY_USER = Identities0.IDENTITY_USER;
+    public static final Identity<UserFederationRecord, Integer> IDENTITY_USER_FEDERATION = Identities0.IDENTITY_USER_FEDERATION;
     public static final Identity<UserPaymentRecord, Integer> IDENTITY_USER_PAYMENT = Identities0.IDENTITY_USER_PAYMENT;
     public static final Identity<UserSourceRecord, Integer> IDENTITY_USER_SOURCE = Identities0.IDENTITY_USER_SOURCE;
 
@@ -98,6 +99,7 @@ public class Keys {
         public static Identity<QuizPricingRecord, Integer> IDENTITY_QUIZ_PRICING = createIdentity(QuizPricing.QUIZ_PRICING, QuizPricing.QUIZ_PRICING.ID);
         public static Identity<QuizQuestionRecord, Integer> IDENTITY_QUIZ_QUESTION = createIdentity(QuizQuestion.QUIZ_QUESTION, QuizQuestion.QUIZ_QUESTION.ID);
         public static Identity<UserRecord, Integer> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
+        public static Identity<UserFederationRecord, Integer> IDENTITY_USER_FEDERATION = createIdentity(UserFederation.USER_FEDERATION, UserFederation.USER_FEDERATION.ID);
         public static Identity<UserPaymentRecord, Integer> IDENTITY_USER_PAYMENT = createIdentity(UserPayment.USER_PAYMENT, UserPayment.USER_PAYMENT.ID);
         public static Identity<UserSourceRecord, Integer> IDENTITY_USER_SOURCE = createIdentity(UserSource.USER_SOURCE, UserSource.USER_SOURCE.ID);
     }

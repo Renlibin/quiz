@@ -43,11 +43,6 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 		Set<Role> roles = new HashSet<Role>();
 		roles.add(role);
 		
-//		User user = new User();
-//		user.setId(users.get(0).getId());
-//		user.setUsername(users.get(0).getName());
-//		user.setPassword(users.get(0).getPassword());
-		
 		Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
 		
 		for (Role r : roles) {
@@ -56,9 +51,10 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 		
 		User user = new User.Builder().id(users.get(0).getId()).username(users.get(0)
 				.getName()).password(users.get(0).getPassword()).nickname(users.get(0).getNickname())
+				.portraitSrc(users.get(0).getPortraitSrc())
 				.accountNonExpired(true).accountNonLocked(true).credentialsNonExpired(true)
 				.enabled(true).authorities(grantedAuthorities).build();
-
+		
 //		return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(),
 //				grantedAuthorities);
 		
@@ -76,6 +72,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 	    private final String username;
 	    private final String nickname;
 	    private final String password;
+	    private final String portraitSrc;
 		private final Set<GrantedAuthority> authorities;
 		private final boolean accountNonExpired;
 		private final boolean accountNonLocked;
@@ -87,6 +84,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 			this.username = builder.getUsername();
 			this.nickname = builder.getNickname();
 			this.password = builder.getPassword();
+			this.portraitSrc = builder.getPortraitSrc();
 			this.authorities = builder.getAuthorities();
 			this.accountNonExpired = builder.isAccountNonExpired();
 			this.accountNonLocked = builder.isAccountNonLocked();
@@ -110,6 +108,11 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 		public String getPassword() {
 			return this.password;
 		}
+		
+		public String getPortraitSrc() {
+			return portraitSrc;
+		}
+
 		@Override
 		public Collection<? extends GrantedAuthority> getAuthorities() {
 			return this.authorities;
@@ -141,6 +144,7 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 		    private String username;
 		    private String nickname;
 		    private String password;
+		    private String portraitSrc;
 			private Set<GrantedAuthority> authorities;
 			private boolean accountNonExpired;
 			private boolean accountNonLocked;
@@ -161,6 +165,10 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 
 			public String getPassword() {
 				return password;
+			}
+			
+			public String getPortraitSrc() {
+				return portraitSrc;
 			}
 
 			public Set<GrantedAuthority> getAuthorities() {
@@ -200,6 +208,11 @@ public class DatabaseUserDetailsService implements UserDetailsService {
 			
 			public Builder password(String password){
 				this.password = password;
+				return this;
+			}
+			
+			public Builder portraitSrc(String portraitSrc){
+				this.portraitSrc = portraitSrc;
 				return this;
 			}
 			

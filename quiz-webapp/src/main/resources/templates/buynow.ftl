@@ -14,7 +14,7 @@
 		<p style="font-size:16px;">
 			<span>￥${quizExtension.quiz.price?string("0.00")}</span>
 			<span style="font-size:12px;">  </span>
-		    <span style="font-size:12px;color:#999999;">￥88.00</span>
+		    <span style="font-size:12px;color:#999999;">￥${quizExtension.quiz.originalPrice?string("0.00")}</span>
 		</p>
 		
 		<p><input type="button" onclick="location.href='${quizExtension.doableActionLink}';" value="${quizExtension.doableActionTitle.toString()}" / ></p>

@@ -18,5 +18,4 @@
 	    <p><input type="button" onclick="location.href='${quizExtension.doableActionLink}';" value="${quizExtension.doableActionTitle.toString()}" / ></p>
 	    </br>
 	</body>
-
 </html>

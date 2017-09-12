@@ -24,13 +24,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizPricing implements Serializable {
 
-    private static final long serialVersionUID = -580476018;
+    private static final long serialVersionUID = 1097600826;
 
     private Integer    id;
     private Integer    quizId;
     private BigDecimal price;
     private String     status;
     private Timestamp  stored;
+    private BigDecimal originalPrice;
 
     public QuizPricing() {}
 
@@ -40,6 +41,7 @@ public class QuizPricing implements Serializable {
         this.price = value.price;
         this.status = value.status;
         this.stored = value.stored;
+        this.originalPrice = value.originalPrice;
     }
 
     public QuizPricing(
@@ -47,13 +49,15 @@ public class QuizPricing implements Serializable {
         Integer    quizId,
         BigDecimal price,
         String     status,
-        Timestamp  stored
+        Timestamp  stored,
+        BigDecimal originalPrice
     ) {
         this.id = id;
         this.quizId = quizId;
         this.price = price;
         this.status = status;
         this.stored = stored;
+        this.originalPrice = originalPrice;
     }
 
     public Integer getId() {
@@ -101,6 +105,15 @@ public class QuizPricing implements Serializable {
         return this;
     }
 
+    public BigDecimal getOriginalPrice() {
+        return this.originalPrice;
+    }
+
+    public QuizPricing setOriginalPrice(BigDecimal originalPrice) {
+        this.originalPrice = originalPrice;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("QuizPricing (");
@@ -110,6 +123,7 @@ public class QuizPricing implements Serializable {
         sb.append(", ").append(price);
         sb.append(", ").append(status);
         sb.append(", ").append(stored);
+        sb.append(", ").append(originalPrice);
 
         sb.append(")");
         return sb.toString();

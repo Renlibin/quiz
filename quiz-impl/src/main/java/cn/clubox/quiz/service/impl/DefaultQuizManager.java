@@ -219,13 +219,18 @@ public class DefaultQuizManager implements QuizManager {
 		
 		List<QuizExt> quizPojoList =quizDao.fetchAll();
 		
+		if(logger.isDebugEnabled()){
+			logger.debug("There are {} quizs will be initialized" , quizPojoList.size());
+		}
+		
 		Map<String,Quiz> quizMap = new TreeMap<String,Quiz>();
 		for(QuizExt quizPojo : quizPojoList){
 			QUIZ_TYPE quizType = QUIZ_TYPE.getByValue(quizPojo.getQuizType());
 			if(quizType != null){
 				Quiz quiz = new Quiz.Builder().setId(quizPojo.getId()).setName(quizPojo.getName())
 					.setTitle(quizPojo.getTitle()).setDescription(quizPojo.getDescription())
-					.setLogoSrc(quizPojo.getLogoSrc()).setPrice(quizPojo.getPrice().setScale(2, BigDecimal.ROUND_UP))
+					.setLogoSrc(quizPojo.getLogoSrc()).setPrice(quizPojo.getPrice() != null ? quizPojo.getPrice().setScale(2, BigDecimal.ROUND_UP) : BigDecimal.ZERO)
+					.setOriginalPrice(quizPojo.getOriginalPrice() != null ? quizPojo.getOriginalPrice().setScale(2, BigDecimal.ROUND_UP) : BigDecimal.ZERO)
 					.setQuizType(quizPojo.getQuizType()).setQuestionList(questionMap.get(quizType.value)).build();
 				
 				quizMap.put(quiz.getQuizType(), quiz);
@@ -285,7 +290,7 @@ public class DefaultQuizManager implements QuizManager {
 			if(engagedQuizIdList.contains(quizExtension.getQuiz().getId())){
 				quizExtension.setDoableActionTitle(QUIZ_DOABLE_ACTION.SHOWRESULT);
 				quizExtension.setDoableActionLink(this.generateActionLink(QUIZ_DOABLE_ACTION.SHOWRESULT, quizExtension.getQuiz().getQuizType()));
-			}else if(payedQuizIdList.contains(quizExtension.getQuiz().getId())){
+			}else if(quizExtension.getQuiz().getPrice().equals(BigDecimal.ZERO) || payedQuizIdList.contains(quizExtension.getQuiz().getId())){
 				quizExtension.setDoableActionTitle(QUIZ_DOABLE_ACTION.ENGAGEMENT);
 				quizExtension.setDoableActionLink(this.generateActionLink(QUIZ_DOABLE_ACTION.ENGAGEMENT, quizExtension.getQuiz().getQuizType()));
 			}else{

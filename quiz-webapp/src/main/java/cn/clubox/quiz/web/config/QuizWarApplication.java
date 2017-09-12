@@ -20,7 +20,8 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @SpringBootApplication
 //@PropertySource(value = { "WEB-INF/custom.properties" })
-@ComponentScan(" cn.clubox.quiz.service.impl,cn.clubox.quiz.service.impl.dao, cn.clubox.quiz.web.auth, cn.clubox.quiz.web.controller, "
+@ComponentScan(" cn.clubox.quiz.service.impl,cn.clubox.quiz.service.impl.dao, "
+		+ "cn.clubox.quiz.web.auth, cn.clubox.quiz.web.controller, "
 		+ "cn.clubox.quiz.web.utils")
 public class QuizWarApplication extends SpringBootServletInitializer {
 	

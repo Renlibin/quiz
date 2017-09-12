@@ -23,12 +23,13 @@ import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
+import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore;
 import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
 
 @Service
-public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
+public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<ZymScore> {
 
 	private static final Logger logger = LoggerFactory.getLogger(ZymQuizAnswerSheetProcessor.class);
 	
@@ -38,14 +39,14 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 	@Autowired
 	private QuizEngagementResultDaoExt quizEngagementResultDao;
 	
-	private List<ScoringRule> scoringRuleList = new ArrayList<ScoringRule>();
+	private List<ScoringRule<ZymScore>> scoringRuleList = new ArrayList<>();
 	
 	@PostConstruct
 	public void init(){
 		
 		logger.info("Initializing Score Rules");
 		
-		scoringRuleList.add(new ScoringRule() {
+		scoringRuleList.add(new ScoringRule<ZymScore>() {
 			
 			private Short[] questions = {1,9,17,25,33};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -63,7 +64,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			}
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {2,10,18,26,34};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -81,7 +82,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			}
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {3,11,19,27,35};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -97,7 +98,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 			
 			private Short[] questions = {4,12,20,28,36};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -114,7 +115,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {5,13,21,29,37};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -130,7 +131,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {6,14,22,30,38};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -146,7 +147,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			}
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {7,15,23,31,39};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -161,7 +162,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			}
 		});
 		
-		scoringRuleList.add(new ScoringRule(){
+		scoringRuleList.add(new ScoringRule<ZymScore>(){
 
 			private Short[] questions = {8,16,24,32,40};
 			private Set<Short> qs = new HashSet<Short>(Arrays.asList(questions));
@@ -184,17 +185,7 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 			logger.debug("Start to process ZYM quiz answer sheet");
 		}
 		
-		ZymScore zymScore = new ZymScore();
-		for(Question question : quizAnswerSheet.getQuestionList()){
-			
-			//Question id will be used to retrieve score of the question according to the selected option
-			for(ScoringRule scoringRule : scoringRuleList){
-				//The loop will be stopped if the question processed by one of the Scoring Rules
-				if(scoringRule.scoring(zymScore, question)){
-					break;
-				}
-			}
-		}
+		ZymScore zymScore = this.countTotalScore(quizAnswerSheet.getQuestionList());
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("The final score is {}", zymScore.toString());
@@ -206,6 +197,26 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		return quizEngagementId;
 		
 	}
+	
+	@Override
+	public ZymScore countTotalScore(List<Question> questions) {
+
+		ZymScore zymScore = new ZymScore();
+		if(questions == null || questions.isEmpty()){
+			return zymScore;
+		}
+		for(Question question : questions){
+			
+			//Question id will be used to retrieve score of the question according to the selected option
+			for(ScoringRule<ZymScore> scoringRule : scoringRuleList){
+				//The loop will be stopped if the question processed by one of the Scoring Rules
+				if(scoringRule.scoring(zymScore, question)){
+					break;
+				}
+			}
+		}
+		return zymScore;
+	}
 
 	@Override
 	public String getQuizName() {
@@ -213,9 +224,8 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		return QUIZ_TYPE.ZYM.value;
 	}
 	
-	/****** private methods ******/
-	
-	private int persistQuizEngagement(QuizAnswerSheet quizAnswerSheet){
+	@Override
+	public int persistQuizEngagement(QuizAnswerSheet quizAnswerSheet){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("Persisting Quiz Engagement");
@@ -233,7 +243,8 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		
 	}
 	
-	private void persistQuizEngagementResult(int quizEngagementId, ZymScore zymScore){
+	@Override
+	public void persistQuizEngagementResult(int quizEngagementId, ZymScore zymScore){
 		
 		List<QuizEngagementResult>quizEngagementResultList = new ArrayList<>();
 		
@@ -272,12 +283,6 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 		}
 		
 		quizEngagementResultDao.insertMultipleRecords(quizEngagementResultList);
-	}
-	
-	/****** Interface ******/
-	
-	public interface ScoringRule {
-		boolean scoring(ZymScore score, Question question);
 	}
 	
 	/****** Inner class ******/
@@ -359,4 +364,5 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor {
 					+ lsScore + "]";
 		}
 	}
+
 }

@@ -31,6 +31,7 @@ public class AuthenticationController {
 	@Autowired
 	private AccountProvisionService accountProvisionService;
 	
+	@Deprecated
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
 		
@@ -59,7 +60,8 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("/quiz/federation/callback")
-	public String callback(@RequestParam(value="code", required= false) String code, @RequestParam(value="state", required=true) String state){
+	public String callback(HttpServletRequest request, @RequestParam(value="code", required= false) String code,
+			@RequestParam(value="state", required=true) String state){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("The code and state are {} and {} respectivly",code, state);
@@ -78,8 +80,22 @@ public class AuthenticationController {
 		
 		WeChatUserInfo userInfo = oAuth2Authenticator.authenticate(code);
 		
-		accountProvisionService.provisionAccount(userInfo);
+		Integer userId = accountProvisionService.provisionAccount(userInfo);
 		
-		return "redirect:/login";
+		String username = accountProvisionService.retrieveUsernameById(userId);
+		
+//		return "redirect:/login";
+		if(username == null || username.isEmpty()){
+			//Exception should be handled
+		}
+		securityService.autoLogin(username);
+		
+		DefaultSavedRequest savedRequest = (DefaultSavedRequest)request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Redirect url is {}", savedRequest.getRedirectUrl());
+		}
+		
+		return "redirect:".concat(savedRequest.getRedirectUrl());
 	}
 }

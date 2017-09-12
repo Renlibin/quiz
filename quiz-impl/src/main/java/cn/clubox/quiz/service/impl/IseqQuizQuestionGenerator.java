@@ -48,28 +48,28 @@ public class IseqQuizQuestionGenerator implements QuizQuestionGenerator{
 		return quizQuestion;
 	}
 	
-	private List<Option> generateOption(short quizNumber){
+	private List<Option> generateOption(short questionNumber){
 		
 		List<Option> options = new ArrayList<Option>(5);
 		
 		short orderNumber = 65;
-		if(quizNumber <= 9){
+		if(questionNumber <= 9){
 			for(OPTION_ONE2NINE_DEF optionDef : OPTION_ONE2NINE_DEF.values()){
 				Option option = new Option(String.valueOf((char)orderNumber++)
-						,optionDef.getDisplayText(quizNumber),optionDef.getValue());
+						,optionDef.getDisplayText(questionNumber),optionDef.getValue());
 				
 				options.add(option);
 				
 			}
-		}else if(quizNumber > 9 && quizNumber  <= 25){
+		}else if(questionNumber > 9 && questionNumber  <= 25){
 			for(OPTION_TEN2TF_DEF optionDef : OPTION_TEN2TF_DEF.values()){
 				Option option = new Option(String.valueOf((char)orderNumber++)
-						,optionDef.getDisplayText(quizNumber),optionDef.getValue());
+						,optionDef.getDisplayText(questionNumber),optionDef.getValue());
 				
 				options.add(option);
 				
 			}
-		}else if(quizNumber > 25 && quizNumber <= 29){
+		}else if(questionNumber > 25 && questionNumber <= 29){
 			for(OPTION_TS2TN_DEF optionDef : OPTION_TS2TN_DEF.values()){
 				Option option = new Option(String.valueOf((char)orderNumber++)
 					,optionDef.toString(),optionDef.getValue()	

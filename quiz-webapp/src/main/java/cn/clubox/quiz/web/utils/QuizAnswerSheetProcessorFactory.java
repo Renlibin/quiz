@@ -19,25 +19,23 @@ public class QuizAnswerSheetProcessorFactory {
 	private static final Logger logger= LoggerFactory.getLogger(QuizAnswerSheetProcessorFactory.class);
 			
 	@Autowired
-	private List<QuizAnswerSheetProcessor> quizAnswerSheetProcessorList;
+	private List<QuizAnswerSheetProcessor<?>> quizAnswerSheetProcessorList;
 	
-	private Map<String, QuizAnswerSheetProcessor> quizAnswerSheetProcessorMap;
+	private Map<String, QuizAnswerSheetProcessor<?>> quizAnswerSheetProcessorMap;
 	
 	@PostConstruct
 	public void init() {
 		
-		System.out.println("Initializing QuizAnswerSheetProcessors ********* ");
-		
 		logger.info("Initializing QuizAnswerSheetProcessors");
 		
-		quizAnswerSheetProcessorMap = new HashMap<String, QuizAnswerSheetProcessor>();
+		quizAnswerSheetProcessorMap = new HashMap<String, QuizAnswerSheetProcessor<?>>();
 		
-		for(QuizAnswerSheetProcessor processor : quizAnswerSheetProcessorList){
+		for(QuizAnswerSheetProcessor<?> processor : quizAnswerSheetProcessorList){
 			quizAnswerSheetProcessorMap.put(processor.getQuizName(), processor);
 		}
 	}
 	
-	public QuizAnswerSheetProcessor getProcessor(String quiz){
+	public QuizAnswerSheetProcessor<?> getProcessor(String quiz){
 		
 		logger.debug("QuizAnswerSheetProcessor keys {}", quizAnswerSheetProcessorMap.keySet());
 		

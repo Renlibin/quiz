@@ -14,8 +14,8 @@
 	<name>quiz-webapp Maven Webapp</name>
 
 	<organization>
-		<name>Ahamojo</name>
-		<url>http://www.ahamojo.com</url>
+		<name>Clubox</name>
+		<url>http://www.clubox.cn</url>
 	</organization>
 	<dependencies>
 		<!-- Compile -->
@@ -99,6 +99,10 @@
 				</exclusion>
 			</exclusions>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+	        <groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-actuator</artifactId>		
 		</dependency>
 		<!-- Test -->
 		<dependency>

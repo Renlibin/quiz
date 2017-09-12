@@ -1,0 +1,26 @@
+.container {
+    display:table;
+    width:100%;
+    height:auto;
+    #background-color:#ccc;
+    #margin:10px 0px;
+}
+.container .text {
+    display:table-cell;
+    height:100%;
+    vertical-align:middle;
+}
+.container img {
+    display:block;
+    float:right;
+}
+.container .clear {
+    clear:both;
+}
+
+img
+{
+    max-width: 100%;
+    min-width: 300px;
+    height: auto;
+}

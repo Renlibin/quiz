@@ -93,4 +93,11 @@ public class QuizPricingDao extends DAOImpl<QuizPricingRecord, cn.clubox.quiz.jo
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizPricing> fetchByStored(Timestamp... values) {
         return fetch(QuizPricing.QUIZ_PRICING.STORED, values);
     }
+
+    /**
+     * Fetch records that have <code>original_price IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizPricing> fetchByOriginalPrice(BigDecimal... values) {
+        return fetch(QuizPricing.QUIZ_PRICING.ORIGINAL_PRICE, values);
+    }
 }

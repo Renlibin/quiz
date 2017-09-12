@@ -24,7 +24,8 @@ public class WeChatOAuth2Authenticator extends RestTemplate implements OAuth2Aut
 	
 	private static final String OPEN_ID = "openid";
 
-//	private static final String UNION_ID = "unionid";
+	private static final String UNION_ID = "unionid";
+	
 //	@Autowired
 	private String appid = "wxc83e8232a3a40f6c";
 	
