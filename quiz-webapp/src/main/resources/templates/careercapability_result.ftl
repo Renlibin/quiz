@@ -6,6 +6,8 @@
 	<body>
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 	    <div class="container">
+	      <#include "quiz_summary.ftl">
+	      
 	      <div class="block result">
 	        <p>以下是您九项职业能力的综合评定，供您参考：</p>
 			<p>语言能力（对文字的理解和使用，以及表达自己观点和向别人介绍信息的能力）：${resultMap.language}好</p>
@@ -17,10 +19,9 @@
 			<p>动手能力（拿取、放置、翻转物体时，手指核手腕精巧运动的能力）：${resultMap.work}好</p>
 			<p>社会交往能力（人际交往、互相帮助、协同工作建立良好人际关系的能力）：${resultMap.social}较好</p>
 			<p>组织管理能力（擅长组织和安排各种活动，协调活动中人际关系的能力）：${resultMap.organize}较好</p>	
-	        <div class="">
-				<a class="pure-button" href="#">返回首页</a>
-				<span class="pure-button try-again">重做一遍 </span>
-			</div>
+			<!--
+	        <#include "quiz_result_footer.ftl" >
+			-->
 	      </div>
 		</div>
 	</body>

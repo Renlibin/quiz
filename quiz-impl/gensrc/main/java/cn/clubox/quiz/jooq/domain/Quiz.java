@@ -8,6 +8,7 @@ import cn.clubox.quiz.jooq.domain.tables.QuizEngagement;
 import cn.clubox.quiz.jooq.domain.tables.QuizEngagementResult;
 import cn.clubox.quiz.jooq.domain.tables.QuizPricing;
 import cn.clubox.quiz.jooq.domain.tables.QuizQuestion;
+import cn.clubox.quiz.jooq.domain.tables.QuizQuestionOption;
 import cn.clubox.quiz.jooq.domain.tables.User;
 import cn.clubox.quiz.jooq.domain.tables.UserFederation;
 import cn.clubox.quiz.jooq.domain.tables.UserPayment;
@@ -37,7 +38,7 @@ import org.jooq.impl.SchemaImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz extends SchemaImpl {
 
-    private static final long serialVersionUID = 731068290;
+    private static final long serialVersionUID = 1147469944;
 
     /**
      * The reference instance of <code>quiz</code>
@@ -68,6 +69,11 @@ public class Quiz extends SchemaImpl {
      * The table <code>quiz.quiz_question</code>.
      */
     public final QuizQuestion QUIZ_QUESTION = cn.clubox.quiz.jooq.domain.tables.QuizQuestion.QUIZ_QUESTION;
+
+    /**
+     * The table <code>quiz.quiz_question_option</code>.
+     */
+    public final QuizQuestionOption QUIZ_QUESTION_OPTION = cn.clubox.quiz.jooq.domain.tables.QuizQuestionOption.QUIZ_QUESTION_OPTION;
 
     /**
      * The table <code>quiz.user</code>.
@@ -119,6 +125,7 @@ public class Quiz extends SchemaImpl {
             QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT,
             QuizPricing.QUIZ_PRICING,
             QuizQuestion.QUIZ_QUESTION,
+            QuizQuestionOption.QUIZ_QUESTION_OPTION,
             User.USER,
             UserFederation.USER_FEDERATION,
             UserPayment.USER_PAYMENT,

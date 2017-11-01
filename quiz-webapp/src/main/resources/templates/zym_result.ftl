@@ -6,6 +6,7 @@
 	<body>
 	    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/> 
 	    <div class="container">
+	      <#include "quiz_summary.ftl"/>
 	      <div class="block result">
 	        <p>结果显示：</p>
 			<p>“职业锚”是在职业生涯规划领域具有“教父”级地位的概念，是由美国E.H.施恩教授提出的。这一概念最初产生于美国麻省理工学院斯隆研究院的专门小组，是从斯隆研究院毕业生的纵向研究中演绎成的。 
@@ -28,10 +29,9 @@
 			<p>（Pure Challenge）：挑战型的人喜欢解决看上去无法解决的问题，战胜强硬的对手，克服无法克服的困难障碍等。对他们而言，参加工作或职业的原因是工作允许他们去战胜各种不可能。新奇、变化和困难是他们的终极目标。如果事情非常容易，它马上变得非常令人厌烦。</p>
 			生活型 ${resultMap.ls}分
 			<p>（Lifestyle）：生活型的人是喜欢允许他们平衡并结合个人的需要、家庭的需要和职业的需要的工作环境。他们 希望将生活的各个主要方面整合为一个整体。正因为如此，他们需要一个能够提供足够的弹性让他们实现这一目标的职业环境。甚至可以牺牲他们职业的一些方面， 如：提升带来的职业转换，他们将成功定义得比职业成功更广泛。他们认为自己在如何去生活，在那里居住，以及如何处理家庭事情，及在组织中的发展道路是与众不同的。</p>
-	        <div class="">
-				<a class="pure-button" href="#">返回首页</a>
-				<span class="pure-button try-again">重做一遍 </span>
-			</div>
+	        <!--
+	        <#include "quiz_result_footer.ftl" >
+	        -->
 	      </div>
 		</div>
 	</body>

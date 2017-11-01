@@ -8,6 +8,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.annotation.PostConstruct;
@@ -19,17 +20,16 @@ import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement;
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
-import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
+import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor.ScoringRule;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
-import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore;
 import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
 
 @Service
-public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<ZymScore> {
+public class ZymQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetProcessor {
 
 	private static final Logger logger = LoggerFactory.getLogger(ZymQuizAnswerSheetProcessor.class);
 	
@@ -62,6 +62,13 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 				}
 				return false;
 			}
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.TF.value;
+				}
+				return null;
+			}
 		});
 		
 		scoringRuleList.add(new ScoringRule<ZymScore>(){
@@ -80,6 +87,13 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 				}
 				return false;
 			}
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.GM.value;
+				}
+				return null;
+			}
 		});
 		
 		scoringRuleList.add(new ScoringRule<ZymScore>(){
@@ -94,6 +108,14 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 					return true;
 				}
 				return false;
+			}
+			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.AU.value;
+				}
+				return null;
 			}
 			
 		});
@@ -113,6 +135,13 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 				return false;
 			}
 			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.SE.value;
+				}
+				return null;
+			}
 		});
 		
 		scoringRuleList.add(new ScoringRule<ZymScore>(){
@@ -127,6 +156,14 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 					score.setEcScore((short)(score.getEcScore() + question.getSelectedOptionKey()));
 				}
 				return false;
+			}
+			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.EC.value;
+				}
+				return null;
 			}
 			
 		});
@@ -145,6 +182,14 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 				}
 				return false;
 			}
+			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.SV.value;
+				}
+				return null;
+			}
 		});
 		
 		scoringRuleList.add(new ScoringRule<ZymScore>(){
@@ -159,6 +204,14 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 					return true;
 				}
 				return false;
+			}
+			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.CH.value;
+				}
+				return null;
 			}
 		});
 		
@@ -175,48 +228,57 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 				}
 				return false;
 			}
+			
+			@Override
+			public String getResultOption(Question question){
+				if(qs.contains(question.getSequenceNumber())){
+					return SCORE_OPTION.LS.value;
+				}
+				return null;
+			}
 		});
 	}
 	
-	@Override
-	public int process(QuizAnswerSheet quizAnswerSheet) {	
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("Start to process ZYM quiz answer sheet");
-		}
-		
-		ZymScore zymScore = this.countTotalScore(quizAnswerSheet.getQuestionList());
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("The final score is {}", zymScore.toString());
-		}
-		
-		int quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
-		this.persistQuizEngagementResult(quizEngagementId, zymScore);
-		
-		return quizEngagementId;
-		
-	}
+//	@Override
+//	public int process(QuizAnswerSheet quizAnswerSheet) {	
+//		
+//		if(logger.isDebugEnabled()){
+//			logger.debug("Start to process ZYM quiz answer sheet");
+//		}
+//		
+////		ZymScore zymScore = this.countTotalScore(quizAnswerSheet.getQuestionList());
+//		
+//		int quizEngagementId = quizAnswerSheet.getEngagementId();
+//		
+//		if(quizEngagementId == 0){
+//		    quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
+//		}
+//		
+//		this.persistQuizEngagementResult(quizEngagementId, quizAnswerSheet.getQuestionList());
+//		
+//		return quizEngagementId;
+//		
+//	}
 	
-	@Override
-	public ZymScore countTotalScore(List<Question> questions) {
-
-		ZymScore zymScore = new ZymScore();
-		if(questions == null || questions.isEmpty()){
-			return zymScore;
-		}
-		for(Question question : questions){
-			
-			//Question id will be used to retrieve score of the question according to the selected option
-			for(ScoringRule<ZymScore> scoringRule : scoringRuleList){
-				//The loop will be stopped if the question processed by one of the Scoring Rules
-				if(scoringRule.scoring(zymScore, question)){
-					break;
-				}
-			}
-		}
-		return zymScore;
-	}
+//	@Override
+//	public ZymScore countTotalScore(List<Question> questions) {
+//
+//		ZymScore zymScore = new ZymScore();
+//		if(questions == null || questions.isEmpty()){
+//			return zymScore;
+//		}
+//		for(Question question : questions){
+//			
+//			//Question id will be used to retrieve score of the question according to the selected option
+//			for(ScoringRule<ZymScore> scoringRule : scoringRuleList){
+//				//The loop will be stopped if the question processed by one of the Scoring Rules
+//				if(scoringRule.scoring(zymScore, question)){
+//					break;
+//				}
+//			}
+//		}
+//		return zymScore;
+//	}
 
 	@Override
 	public String getQuizName() {
@@ -224,66 +286,66 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 		return QUIZ_TYPE.ZYM.value;
 	}
 	
-	@Override
-	public int persistQuizEngagement(QuizAnswerSheet quizAnswerSheet){
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("Persisting Quiz Engagement");
-		}
-		
-		QuizEngagement quizEngagement = new QuizEngagement();
-		quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
-		quizEngagement.setUserId(quizAnswerSheet.getUserId());
-		quizEngagement.setDuration(quizAnswerSheet.getDuration());
-		quizEngagement.setStored(new Timestamp(new Date().getTime()));
-		
-		int quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
-		
-		return quizEngagementId;
-		
-	}
+//	@Override
+//	public int persistQuizEngagement(QuizAnswerSheet quizAnswerSheet){
+//		
+//		if(logger.isDebugEnabled()){
+//			logger.debug("Persisting Quiz Engagement");
+//		}
+//		
+//		QuizEngagement quizEngagement = new QuizEngagement();
+//		quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
+//		quizEngagement.setUserId(quizAnswerSheet.getUserId());
+//		quizEngagement.setDuration(quizAnswerSheet.getDuration());
+//		quizEngagement.setStored(new Timestamp(new Date().getTime()));
+//		
+//		int quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
+//		
+//		return quizEngagementId;
+//		
+//	}
 	
-	@Override
-	public void persistQuizEngagementResult(int quizEngagementId, ZymScore zymScore){
-		
-		List<QuizEngagementResult>quizEngagementResultList = new ArrayList<>();
-		
-		for(SCORE_OPTION sopt : ZymScore.SCORE_OPTION.values()){
-			
-			short value = 0;
-			String resultOption = sopt.value;
-			
-			//TO generate get method 
-			String methodName = "get".concat(resultOption.substring(0, 1).toUpperCase().concat(resultOption.substring(1)).concat("Score"));
-			
-			try {
-				Method method = zymScore.getClass().getMethod(methodName);
-				
-				if(logger.isDebugEnabled()){
-					logger.debug("The method {} is going to be invoked", methodName);
-				}
-				
-				value = (short)method.invoke(zymScore);
-				
-			} catch (NoSuchMethodException | SecurityException |  IllegalAccessException | InvocationTargetException e) {
-				logger.error("Error message {}", e.getMessage());
-			}
-			
-			QuizEngagementResult qer = new QuizEngagementResult();
-			qer.setQuizEngagementId(quizEngagementId);
-			qer.setResultOption(resultOption);
-			qer.setScore((int)value); /** Score of QuizEngagementResult should be changed to short */
-			qer.setStored(new Timestamp(new Date().getTime()));
-			
-			quizEngagementResultList.add(qer);
-		}
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("Size of QuizEngagementResult is {}", quizEngagementResultList.size());
-		}
-		
-		quizEngagementResultDao.insertMultipleRecords(quizEngagementResultList);
-	}
+//	@Override
+//	public void persistQuizEngagementResult(int quizEngagementId, ZymScore zymScore){
+//		
+//		List<QuizEngagementResult>quizEngagementResultList = new ArrayList<>();
+//		
+//		for(SCORE_OPTION sopt : ZymScore.SCORE_OPTION.values()){
+//			
+//			short value = 0;
+//			String resultOption = sopt.value;
+//			
+//			//TO generate get method 
+//			String methodName = "get".concat(resultOption.substring(0, 1).toUpperCase().concat(resultOption.substring(1)).concat("Score"));
+//			
+//			try {
+//				Method method = zymScore.getClass().getMethod(methodName);
+//				
+//				if(logger.isDebugEnabled()){
+//					logger.debug("The method {} is going to be invoked", methodName);
+//				}
+//				
+//				value = (short)method.invoke(zymScore);
+//				
+//			} catch (NoSuchMethodException | SecurityException |  IllegalAccessException | InvocationTargetException e) {
+//				logger.error("Error message {}", e.getMessage());
+//			}
+//			
+//			QuizEngagementResult qer = new QuizEngagementResult();
+//			qer.setQuizEngagementId(quizEngagementId);
+//			qer.setResultOption(resultOption);
+//			qer.setScore(value); /** Score of QuizEngagementResult should be changed to short */
+//			qer.setStored(new Timestamp(new Date().getTime()));
+//			
+//			quizEngagementResultList.add(qer);
+//		}
+//		
+//		if(logger.isDebugEnabled()){
+//			logger.debug("Size of QuizEngagementResult is {}", quizEngagementResultList.size());
+//		}
+//		
+//		quizEngagementResultDao.insertOrUpdateMultipleRecords(quizEngagementResultList);
+//	}
 	
 	/****** Inner class ******/
 	
@@ -363,6 +425,38 @@ public class ZymQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Zym
 					+ seScore + ", ecScore=" + ecScore + ", svScore=" + svScore + ", chScore=" + chScore + ", lsScore="
 					+ lsScore + "]";
 		}
+	}
+
+//	@Override
+//	public void persistQuizEngagementResult(int quizEngagementId, List<? extends Question> questions) {
+//
+//		List<QuizEngagementResult> quizEngagementResults = new ArrayList<>();
+//		for(Question question : questions){
+//			QuizEngagementResult qer = new QuizEngagementResult();
+//			if(question.getEngagementResultId() != 0){
+//				qer.setId(question.getEngagementResultId());
+//			}
+//			qer.setQuizEngagementId(quizEngagementId);
+//			qer.setResultOption(getResultOption(question));
+//			qer.setScore(question.getSelectedOptionKey()); /** Score of QuizEngagementResult should be changed to short */
+//			
+//			quizEngagementResults.add(qer);
+//		}
+//		
+//		quizEngagementResultDao.insertOrUpdateMultipleRecords(quizEngagementResults);
+//		
+//	}
+	
+	@Override
+	public String getResultOption(Question question){
+		String resultOption = null;
+		for(ScoringRule<ZymScore> scoringRule : scoringRuleList){
+			resultOption = scoringRule.getResultOption(question);
+			if(Objects.isNull(resultOption) == false){
+				return resultOption;
+			}
+		}
+		return null;
 	}
 
 }

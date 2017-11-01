@@ -1,21 +1,29 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-   
+
+	<head>
+	    <#include "header.ftl">
+	</head>
 	<body>
-	    <p>
-			<span><a href="http://localhost:8080/quiz/${quizExtension.quiz.quizType}/buynow">< 返回</a></span>
-		</p>
-	    <#if quizExtension.quiz.logoSrc??>
-	    	<img src="${quizExtension.quiz.logoSrc}" /> </br>
-	    </#if>
-	    <p><span style="font-size:20px">${quizExtension.quiz.name}</span></p>
-	    <p><span style="font-size:14px;color:#999999;">${quizExtension.quiz.title}</span></p>
-	    <p style="font-size:16px;">
-			<span>优惠价：￥${quizExtension.quiz.price?string("0.00")}</span>
-			<span style="font-size:12px;"> </span>
-		</p>
-	    <p><input type="button" onclick="location.href='${quizExtension.doableActionLink}';" value="${quizExtension.doableActionTitle.toString()}" / ></p>
-	    </br>
+	    <div id="container">
+			<div class="topbar">
+				<a href="${rc.contextPath}/quiz/${quizExtension.quiz.quizType}/buynow">< 返回</a>
+			</div>
+		    <#if quizExtension.quiz.logoSrc??>
+		    	<div class="banner">
+					<img src="${quizExtension.quiz.logoSrc}" alt="" srcset="">
+				</div>
+		    </#if>
+		    
+		    <div class="summary">
+				<div class="title">${quizExtension.quiz.name}</div>
+				<p class="subtitle"> ${quizExtension.quiz.title} </p>
+				<div class="price">
+					优惠价：￥${quizExtension.quiz.price?string("0.00")}
+				</div>
+				<div>
+					<a class="pure-button pure-button-primary" href="${rc.contextPath}/${quizExtension.doableActionLink}">${quizExtension.doableActionTitle.toString()}</a>
+				</div>
+			</div>
+		</div>
 	</body>
 </html>

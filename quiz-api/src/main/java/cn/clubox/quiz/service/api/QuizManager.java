@@ -3,15 +3,13 @@ package cn.clubox.quiz.service.api;
 import java.util.List;
 import java.util.Map;
 
+import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
+import cn.clubox.quiz.service.api.util.PagedModel;
 
 public interface QuizManager {
-
-//	public Map<String,Quiz> retrieveAllQuiz();
-//	
-//	public Map<String, List<Question>> retrieveAllQuizQuestion();
 	
 	public List<Integer> retrieveUndoneQuizId(int userId);
 	
@@ -23,24 +21,20 @@ public interface QuizManager {
 	
 	public Quiz retrieveQuiz(String username, String quizType);
 	
-//	public List<QuizExtension> doableActionDecision(int userId, Quiz ... quizs);
-	
-//	public int countQuizParticipant(int quizId);
-	
-	/**
-	 * Depending on the type of quiz, the result could be one or multiple entries
-	 * @param engagementId
-	 * @return
-	 */
-	public Map<String,Integer> retrieveQuizEngagementResult(int engagementId);
-	
-	/**
-	 * Depending on the type of quiz, the result could be one or multiple entries
-	 * @param userId
-	 * @param quizType
-	 * @return
-	 */
-	public Map<String,Integer> retrieveQuizEngagementResult(int userId, String quizType);
+//	/**
+//	 * Depending on the type of quiz, the result could be one or multiple entries
+//	 * @param engagementId
+//	 * @return
+//	 */
+//	public Map<String,Short> retrieveQuizEngagementResult(int engagementId);
+//	
+//	/**
+//	 * Depending on the type of quiz, the result could be one or multiple entries
+//	 * @param userId
+//	 * @param quizType
+//	 * @return
+//	 */
+//	public Map<String,Short> retrieveQuizEngagementResult(int userId, String quizType);
 	
 	public boolean hasPrivilige(int userId, String quizType);
 	
@@ -49,5 +43,7 @@ public interface QuizManager {
 	
 	public QuizExtension retrieveQuizByType(int userId,boolean avilableActionDecision,
 			boolean countQuizParticipant, QUIZ_DOABLE_ACTION doableAction, String quizType);
+	
+	public PagedModel<? extends Question> retrievePagedQuestionModel(String quizType, Integer engagementId, int page, int pageSize);
 
 }

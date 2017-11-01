@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -23,6 +25,7 @@ import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
+import cn.clubox.quiz.service.api.util.PagedModel;
 import cn.clubox.quiz.service.impl.dao.QuizDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizDaoExt.QuizExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
@@ -34,7 +37,7 @@ public class DefaultQuizManager implements QuizManager {
 	
 	private static final Logger logger = LoggerFactory.getLogger(DefaultQuizManager.class);
 	
-	private static final String QUIZ_URL_PREFIX = "http://localhost:8080/quiz/";
+	private static final String QUIZ_URL_PREFIX = "quiz/";
 	
 	@Autowired
 	private QuizDaoExt quizDao;
@@ -53,29 +56,17 @@ public class DefaultQuizManager implements QuizManager {
 	
 	private Map<String, Quiz> quizMap;
 	
+	private Map<String, List<Question>> questionMap;
+	
 	@PostConstruct
 	public void init() {
-		Map<String, List<Question>> questionMap = this.questionInitialization();
+		questionMap = this.questionInitialization();
 		quizMap = this.quizInitialization(questionMap);
 	}
 	
 	@Override
 	public Quiz retrieveQuiz(String username, String quizType) {
 		return null;
-	}
-
-	@Override
-	public Map<String,Integer> retrieveQuizEngagementResult(int engagementId) {
-		
-		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchByQuizEngagementId(engagementId);
-		
-		Map<String,Integer> resultMap = new HashMap<String,Integer>(quizEngagementResultList.size());
-		
-		for(QuizEngagementResult result : quizEngagementResultList){
-			resultMap.put(result.getResultOption(), result.getScore());
-		}
-		
-		return resultMap;
 	}
 
 	@Override
@@ -95,17 +86,42 @@ public class DefaultQuizManager implements QuizManager {
 		
 	}
 	
-	@Override
-	public Map<String, Integer> retrieveQuizEngagementResult(int userId, String quizType) {
-
-		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchQuizEngagementByUserIdAndQuizType(userId, quizType);
-		Map<String,Integer> resultMap = new HashMap<String,Integer>(quizEngagementResultList.size());
-		
-		for(QuizEngagementResult result : quizEngagementResultList){
-			resultMap.put(result.getResultOption(), result.getScore());
-		}
-		return resultMap;
-	}
+//	@Override
+//	public Map<String,Short> retrieveQuizEngagementResult(int engagementId) {
+//		
+//		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchByQuizEngagementId(engagementId);
+//		
+//		Map<String,Short> resultMap = new HashMap<>(quizEngagementResultList.size());
+//		
+//		for(QuizEngagementResult result : quizEngagementResultList){
+//			Short tempScore = resultMap.get(result.getResultOption());
+//			if(tempScore != null){
+//				resultMap.put(result.getResultOption(), (short)(tempScore + result.getScore()));
+//			}else{
+//				resultMap.put(result.getResultOption(), result.getScore());
+//			}
+//		}
+//		
+//		return resultMap;
+//	}
+//	
+//	@Override
+//	public Map<String, Short> retrieveQuizEngagementResult(int userId, String quizType) {
+//
+//		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchQuizEngagementByUserIdAndQuizType(userId, quizType);
+//		
+//		Map<String,Short> resultMap = new HashMap<>(quizEngagementResultList.size());
+//		
+//		for(QuizEngagementResult result : quizEngagementResultList){
+//			Short tempScore = resultMap.get(result.getResultOption());
+//			if(tempScore != null){
+//				resultMap.put(result.getResultOption(), (short)(tempScore + result.getScore()));
+//			}else{
+//				resultMap.put(result.getResultOption(), result.getScore());
+//			}
+//		}
+//		return resultMap;
+//	}
 
 	@Override
 	public boolean hasPrivilige(int userId, String quizType) {
@@ -307,6 +323,57 @@ public class DefaultQuizManager implements QuizManager {
 	}
 	
 	private String generateActionLink(QUIZ_DOABLE_ACTION doableAction, String quizType){
+//		return quizType.concat("/").concat(doableAction.value);
 		return QUIZ_URL_PREFIX.concat(quizType).concat("/").concat(doableAction.value);
+	}
+
+	@Override
+	public PagedModel<? extends Question> retrievePagedQuestionModel(String quizType, Integer engagementId, int page, int pageSize) {
+
+		if(logger.isDebugEnabled()){
+			logger.debug("Paged question list are going to be retrieved according to page {} and size {}", page, pageSize);
+		}
+		
+		List<Question> questions = questionMap.get(quizType);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Original question size is {}", questions.size());
+		}
+		PagedModel<Question> pageModel = new PagedModel<>();
+		pageModel.setNrOfElements(questions.size());
+		pageModel.setPage(page);
+		
+		int endIndex = (page * pageSize) < questions.size() ? (page * pageSize) : questions.size();
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Paged question end index is {}",endIndex);
+		}
+		List<Question> pagedQuestions = questions.subList((page -1) * pageSize, endIndex);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Engagement id is {}", engagementId);
+		}
+		if(logger.isDebugEnabled()){
+			logger.debug("Paged question size is {}", pagedQuestions.size());
+		}
+		if(Objects.isNull(engagementId) == false){
+			//To retrieve engagement result according to engagement id
+			List<QuizEngagementResult> engagementResults = quizEngagementResultDao.fetchQuizEngagementResultByIdAndRang(engagementId, (page-1) * pageSize, endIndex);
+			if(engagementResults != null && engagementResults.isEmpty() == false){
+				
+				pagedQuestions.stream().filter(q -> engagementResults.stream().anyMatch(r -> {
+						if(r.getQuestionId() == q.getSequenceNumber()){
+							q.setEngagementResultId(r.getId());
+							q.setSelectedOptionValue(r.getScore());
+							return true;
+						}
+						return false;
+					})).collect(Collectors.toList());
+			}
+		}
+		
+		pageModel.setSource(pagedQuestions);
+	
+		return pageModel;
 	}
 }

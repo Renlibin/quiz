@@ -92,4 +92,18 @@ public class QuizEngagementDao extends DAOImpl<QuizEngagementRecord, cn.clubox.q
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement> fetchByStored(Timestamp... values) {
         return fetch(QuizEngagement.QUIZ_ENGAGEMENT.STORED, values);
     }
+
+    /**
+     * Fetch records that have <code>status IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement> fetchByStatus(String... values) {
+        return fetch(QuizEngagement.QUIZ_ENGAGEMENT.STATUS, values);
+    }
+
+    /**
+     * Fetch records that have <code>updated IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement> fetchByUpdated(Timestamp... values) {
+        return fetch(QuizEngagement.QUIZ_ENGAGEMENT.UPDATED, values);
+    }
 }

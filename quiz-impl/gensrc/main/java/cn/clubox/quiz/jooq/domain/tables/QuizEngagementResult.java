@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> {
 
-    private static final long serialVersionUID = -1308636676;
+    private static final long serialVersionUID = 1506487373;
 
     /**
      * The reference instance of <code>quiz.quiz_engagement_result</code>
@@ -65,7 +65,7 @@ public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> 
     /**
      * The column <code>quiz.quiz_engagement_result.score</code>.
      */
-    public final TableField<QuizEngagementResultRecord, Integer> SCORE = createField("score", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<QuizEngagementResultRecord, Short> SCORE = createField("score", org.jooq.impl.SQLDataType.SMALLINT.nullable(false), this, "");
 
     /**
      * The column <code>quiz.quiz_engagement_result.result_option</code>.
@@ -76,6 +76,11 @@ public class QuizEngagementResult extends TableImpl<QuizEngagementResultRecord> 
      * The column <code>quiz.quiz_engagement_result.stored</code>.
      */
     public final TableField<QuizEngagementResultRecord, Timestamp> STORED = createField("stored", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.quiz_engagement_result.question_id</code>.
+     */
+    public final TableField<QuizEngagementResultRecord, Short> QUESTION_ID = createField("question_id", org.jooq.impl.SQLDataType.SMALLINT, this, "");
 
     /**
      * Create a <code>quiz.quiz_engagement_result</code> table reference

@@ -75,7 +75,7 @@ public class QuizEngagementResultDao extends DAOImpl<QuizEngagementResultRecord,
     /**
      * Fetch records that have <code>score IN (values)</code>
      */
-    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult> fetchByScore(Integer... values) {
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult> fetchByScore(Short... values) {
         return fetch(QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.SCORE, values);
     }
 
@@ -91,5 +91,12 @@ public class QuizEngagementResultDao extends DAOImpl<QuizEngagementResultRecord,
      */
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult> fetchByStored(Timestamp... values) {
         return fetch(QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.STORED, values);
+    }
+
+    /**
+     * Fetch records that have <code>question_id IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult> fetchByQuestionId(Short... values) {
+        return fetch(QuizEngagementResult.QUIZ_ENGAGEMENT_RESULT.QUESTION_ID, values);
     }
 }

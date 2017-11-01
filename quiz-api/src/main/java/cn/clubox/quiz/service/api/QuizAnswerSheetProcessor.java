@@ -34,19 +34,28 @@ public interface QuizAnswerSheetProcessor<T> {
 	 * @param quizEngagementId
 	 * @param score
 	 */
-	public void  persistQuizEngagementResult(int quizEngagementId, T score);
+//	@Deprecated
+//	public void  persistQuizEngagementResult(int quizEngagementId, T score);
+	
+	public void  persistQuizEngagementResult(int quizEngagementId, List<? extends Question> questions);
 	
 	/**
 	 * 
 	 * @param questions
 	 * @return
 	 */
-	public T countTotalScore(List<Question> questions);
+//	@Deprecated
+//	public T countTotalScore(List<Question> questions);
 	
 	/****** Interface ******/
 	
 	public interface ScoringRule<T> {
+		@Deprecated
 		boolean scoring(T score, Question question);
+		
+		String getResultOption(Question question);
 	}
+	
+	public String getResultOption(Question question);
 	
 }

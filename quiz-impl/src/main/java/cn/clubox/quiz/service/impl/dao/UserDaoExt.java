@@ -15,6 +15,8 @@ import org.springframework.stereotype.Repository;
 import cn.clubox.quiz.jooq.domain.tables.daos.UserDao;
 import cn.clubox.quiz.jooq.domain.tables.pojos.User;
 
+import static cn.clubox.quiz.jooq.domain.tables.User.USER;
+
 @Repository
 public class UserDaoExt extends UserDao {
 	
@@ -32,15 +34,13 @@ public class UserDaoExt extends UserDao {
 		
 		logger.info("New user {} is going to be persisted");
 		
-		cn.clubox.quiz.jooq.domain.tables.User userTable = cn.clubox.quiz.jooq.domain.tables.User.USER;
-		
-		Record record =context.insertInto(userTable, userTable.NAME, userTable.NICKNAME, 
-				userTable.PASSWORD, userTable.PORTRAIT_SRC, userTable.STATUS,
-				userTable.STORED, userTable.UPDATED).values(user.getName(),user.getNickname()
+		Record record =context.insertInto(USER, USER.NAME, USER.NICKNAME, 
+				USER.PASSWORD, USER.PORTRAIT_SRC, USER.STATUS,
+				USER.STORED, USER.UPDATED).values(user.getName(),user.getNickname()
 				,user.getPassword(), user.getPortraitSrc(),user.getStatus(),
 				new Timestamp(new Date().getTime()), new Timestamp(new Date().getTime()))
-				.returning(userTable.ID).fetchOne();
+				.returning(USER.ID).fetchOne();
 		
-		return record.getValue(userTable.ID);
+		return record.getValue(USER.ID);
 	}
 }

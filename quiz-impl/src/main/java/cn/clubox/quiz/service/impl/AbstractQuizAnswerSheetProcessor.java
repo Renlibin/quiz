@@ -1,6 +1,7 @@
 package cn.clubox.quiz.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -13,10 +14,11 @@ import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
+import cn.clubox.quiz.service.api.util.QuizEngagementStatus;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
 
-public abstract class AbstractQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Integer> {
+public abstract class AbstractQuizAnswerSheetProcessor implements QuizAnswerSheetProcessor<Short> {
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractQuizAnswerSheetProcessor.class);
 	
@@ -35,27 +37,39 @@ public abstract class AbstractQuizAnswerSheetProcessor implements QuizAnswerShee
 			logger.debug("Start to process quiz {} answer sheet",quizAnswerSheet.getQuizId());
 		}
 		
-		int totalScore = this.countTotalScore(quizAnswerSheet.getQuestionList());
-		int quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
-		this.persistQuizEngagementResult(quizEngagementId, totalScore);
+//		short totalScore = this.countTotalScore(quizAnswerSheet.getQuestionList());
+		
+		int quizEngagementId = quizAnswerSheet.getEngagementId();
+		if(logger.isDebugEnabled()){
+			logger.debug("Engagement id is {}", quizEngagementId);
+		}
+		if( quizEngagementId == 0 || quizAnswerSheet.isLastPage()){
+			quizEngagementId = this.persistQuizEngagement(quizAnswerSheet);
+		}
+		
+		this.persistQuizEngagementResult(quizEngagementId, quizAnswerSheet.getQuestionList());
 		return quizEngagementId;
 	}
 	
-	@Override
-	public Integer countTotalScore(List<Question> questions){
-		
-		Integer totalScore = 0;
-		
-		if(questions == null || questions.isEmpty()){
-			return totalScore;
-		}
-		for(Question question : questions){
-			
-			totalScore = totalScore + question.getSelectedOptionKey();
-			
-		}
-		return totalScore;
-	}
+//	@Override
+//	public Short countTotalScore(List<Question> questions){
+//		
+//		short totalScore = 0;
+//		
+//		if(questions == null || questions.isEmpty()){
+//			return totalScore;
+//		}
+//		for(Question question : questions){
+//			
+//			if(logger.isDebugEnabled()){
+//				logger.debug("Selected option key of quiz {} is {}", this.getQuizName(), question.getSelectedOptionKey());
+//			}
+//			
+//			totalScore = (short)(totalScore + question.getSelectedOptionKey());
+//			
+//		}
+//		return totalScore;
+//	}
 	
 	
 	@Override
@@ -65,31 +79,60 @@ public abstract class AbstractQuizAnswerSheetProcessor implements QuizAnswerShee
 			logger.debug("Persisting Quiz Engagement");
 		}
 		
-		QuizEngagement quizEngagement = new QuizEngagement();
-		quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
-		quizEngagement.setUserId(quizAnswerSheet.getUserId());
-		quizEngagement.setDuration(quizAnswerSheet.getDuration());
-		quizEngagement.setStored(new Timestamp(new Date().getTime()));
+		int quizEngagementId;
 		
-		int quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
-		
+		if(quizAnswerSheet.isLastPage()){
+			quizEngagementId = quizAnswerSheet.getEngagementId();
+			quizEngagementDao.updateQuizEngagementStatus(quizEngagementId, QuizEngagementStatus.COMPLETE);
+		}else{
+			QuizEngagement quizEngagement = new QuizEngagement();
+			quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
+			quizEngagement.setUserId(quizAnswerSheet.getUserId());
+			quizEngagement.setDuration(quizAnswerSheet.getDuration());
+			quizEngagement.setStatus(QuizEngagementStatus.UNCOMPLETED.getValue());
+			quizEngagement.setStored(new Timestamp(new Date().getTime()));
+			quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
+		}
 		return quizEngagementId;
 		
 	}
 	
+//	@Override
+//	public void persistQuizEngagementResult(int quizEngagementId, Short score){
+//		
+//		if(logger.isDebugEnabled()){
+//			logger.debug("Persisting Quiz Engagement Result");
+//		}
+//		
+//		QuizEngagementResult qer = new QuizEngagementResult();
+//		qer.setQuizEngagementId(quizEngagementId);
+//		qer.setResultOption("all");
+//		qer.setScore(score); /** Score of QuizEngagementResult should be changed to short */
+//		qer.setStored(new Timestamp(new Date().getTime()));
+//		
+//		quizEngagementResultDao.insert(qer);
+//	}
+	
 	@Override
-	public void persistQuizEngagementResult(int quizEngagementId, Integer score){
+	public void  persistQuizEngagementResult(int quizEngagementId, List<? extends Question> questions){
 		
-		if(logger.isDebugEnabled()){
-			logger.debug("Persisting Quiz Engagement Result");
+		List<QuizEngagementResult> quizEngagementResults = new ArrayList<>();
+		for(Question question : questions){
+			QuizEngagementResult qer = new QuizEngagementResult();
+			if(question.getEngagementResultId() != 0){
+				qer.setId(question.getEngagementResultId());
+			}
+			qer.setQuizEngagementId(quizEngagementId);
+			qer.setQuestionId(question.getSequenceNumber());
+			qer.setResultOption(this.getResultOption(question));
+			qer.setScore(question.getSelectedOptionKey());
+			qer.setStored(new Timestamp(new Date().getTime()));
+			quizEngagementResults.add(qer);
 		}
 		
-		QuizEngagementResult qer = new QuizEngagementResult();
-		qer.setQuizEngagementId(quizEngagementId);
-		qer.setResultOption("all");
-		qer.setScore(score); /** Score of QuizEngagementResult should be changed to short */
-		qer.setStored(new Timestamp(new Date().getTime()));
-		
-		quizEngagementResultDao.insert(qer);
+		quizEngagementResultDao.insertOrUpdateMultipleRecords(quizEngagementResults);
 	}
+	
+	
+	public abstract String getResultOption(Question question);
 }

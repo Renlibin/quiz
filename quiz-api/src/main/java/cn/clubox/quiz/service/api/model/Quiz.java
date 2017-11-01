@@ -3,6 +3,8 @@ package cn.clubox.quiz.service.api.model;
 import java.math.BigDecimal;
 import java.util.List;
 
+import cn.clubox.quiz.service.api.util.PagedListHolder;
+
 public class Quiz {
 
 	private int id;
@@ -14,6 +16,8 @@ public class Quiz {
 	private String logoSrc;
 	private String quizType;
 	private List<Question> questionList;
+	
+	private PagedListHolder<? extends Question> pagedListHolder;
 	
 	public Quiz(){
 
@@ -67,6 +71,14 @@ public class Quiz {
 		return questionList;
 	}
 	
+	public PagedListHolder<? extends Question> getPagedListHolder() {
+		return pagedListHolder;
+	}
+	
+	public void setPagedListHolder(PagedListHolder<? extends Question> pagedQuestionHolder) {
+		this.pagedListHolder = pagedQuestionHolder;
+	}
+
 	public static class Builder {
 		
 		private int id;
@@ -78,6 +90,7 @@ public class Quiz {
 		private String logoSrc;
 		private String quizType;
 		private List<Question> questionList;
+//		private PagedListHolder<? extends Question> pagedQuestionHolder;
 		
 		public Builder setId(int id){
 			this.id = id;
@@ -167,7 +180,7 @@ public class Quiz {
 
 	public enum QUIZ_TYPE {
 		ZYM("zym"),ISEQ("iseq"),CONFIDENCE("confidence"),
-		SOCIALACC("socialacc"),CAREERCAPABILITY("careercapability");
+		SOCIALACC("socialacc"),CAREERCAPABILITY("careercapability"),MBTI("mbti");
 
 		public String value;
 

@@ -6,6 +6,10 @@ public class QuizAnswerSheet {
 
 	private int    userId;
 	private int    quizId;
+	private int    engagementId;
+	private int    page;
+	private int    pageSize;
+	private boolean lastPage;
 	private String duration;
 	private List<Question> questionList;
 	
@@ -33,5 +37,28 @@ public class QuizAnswerSheet {
 	public void setQuestionList(List<Question> questionList) {
 		this.questionList = questionList;
 	}
-	
+	public int getEngagementId() {
+		return engagementId;
+	}
+	public void setEngagementId(int engagementId) {
+		this.engagementId = engagementId;
+	}
+	public int getPage() {
+		return page;
+	}
+	public void setPage(int page) {
+		this.page = page;
+	}
+	public int getPageSize() {
+		return pageSize;
+	}
+	public void setPageSize(int pageSize) {
+		this.pageSize = pageSize;
+	}
+	public boolean isLastPage() {
+		return lastPage;
+	}
+	public void setLastPage(boolean lastPage) {
+		this.lastPage = lastPage;
+	}
 }

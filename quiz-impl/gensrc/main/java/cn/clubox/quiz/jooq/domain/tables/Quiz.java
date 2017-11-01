@@ -35,7 +35,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz extends TableImpl<QuizRecord> {
 
-    private static final long serialVersionUID = 1587366181;
+    private static final long serialVersionUID = -1649126552;
 
     /**
      * The reference instance of <code>quiz.quiz</code>
@@ -63,7 +63,7 @@ public class Quiz extends TableImpl<QuizRecord> {
     /**
      * The column <code>quiz.quiz.description</code>.
      */
-    public final TableField<QuizRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR.length(200).nullable(false), this, "");
+    public final TableField<QuizRecord, String> DESCRIPTION = createField("description", org.jooq.impl.SQLDataType.VARCHAR.length(500).nullable(false), this, "");
 
     /**
      * The column <code>quiz.quiz.status</code>.

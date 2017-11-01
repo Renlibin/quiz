@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-	<!-- html xmlns:th="http://www.thymeleaf.org" -->
 	<head>
 	    <#include "header.ftl">
 	</head>
@@ -12,7 +11,7 @@
 			</div>
 			<div class="tab">
 				<a class="active" href="#">未完成</a>
-				<a class="" href="http://localhost:8080/quiz/private/engaged">已完成</a>
+				<a class="" href="${rc.contextPath}/quiz/private/engaged">已完成</a>
 			</div>
 		</div>
 		
@@ -29,7 +28,7 @@
 					        <div class="u-title">${quizExtension.quiz.name}</div>
 					      	<div class="u-sub-title">${quizExtension.quiz.title}</div>
 					        <div class="u-price">
-							  <a class="pure-button" href="${quizExtension.doableActionLink}">${quizExtension.doableActionTitle.toString()}</a>
+							  <a class="pure-button" href="${rc.contextPath}/${quizExtension.doableActionLink}">${quizExtension.doableActionTitle.toString()}</a>
 							  ￥${quizExtension.quiz.originalPrice?string("0.00")}
 							  <del class="list-price"> $88.00 </del>
 						    </div>
@@ -39,8 +38,8 @@
 			      </#if>
 	          </ul>
 	          <div class="footer">
-				<a href="http://localhost:8080/quiz/index">全部评测</a>
-				<a href="http://localhost:8080/quiz/private/undone">我的评测</a>
+				<a href="${rc.contextPath}/quiz/index">全部评测</a>
+				<a href="${rc.contextPath}/quiz/private/undone">我的评测</a>
 			  </div>
 	        </div>
 		</div>

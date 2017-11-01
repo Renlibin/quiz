@@ -74,7 +74,6 @@ public class AuthenticationController {
 		
 		//state should be verified
 		if(OAuth2Authenticator.STATE.equals(state) == false){
-			
 			return "redirect:/provison_failed";
 		}
 		

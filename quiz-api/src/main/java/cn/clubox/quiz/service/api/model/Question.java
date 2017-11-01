@@ -4,27 +4,33 @@ import java.util.List;
 
 public class Question {
 
-	private int  id;  
+	private int  id;
+	private int  engagementResultId;
 	private short  sequenceNumber;
 	private String title;
 	private String image;
     private List<Option> optionList;
     private short selectedOptionKey;
+    private short selectedOptionValue = -100;
     
     public Question(){
 
     }
     
     private Question(Builder builder){
-    	this.id = builder.getId();
     	this.sequenceNumber = builder.getSequenceNumber();
     	this.title = builder.getTitle();
     	this.image = builder.getImage();
     	this.optionList = builder.getOptionList();
+    	this.id = builder.getId();
     }
     
-	public int getId() {
-		return id;
+	public int getEngagementResultId() {
+		return engagementResultId;
+	}
+
+	public void setEngagementResultId(int engagementResultId) {
+		this.engagementResultId = engagementResultId;
 	}
 
 	public short getSequenceNumber() {
@@ -35,27 +41,22 @@ public class Question {
 		this.sequenceNumber = sequenceNumber;
 	}
 
-	//	public void setId(short id) {
-//		this.sequenceNumber = id;
-//	}
+    public int getId(){
+    	return id;
+    }
+    
 	public String getTitle() {
 		return title;
 	}
-//	public void setTitle(String title) {
-//		this.title = title;
-//	}
+
 	public String getImage() {
 		return image;
 	}
-//	public void setImage(String image) {
-//		this.image = image;
-//	}
+
 	public List<Option> getOptionList() {
 		return optionList;
 	}
-//	public void setOptionList(List<Option> optionList) {
-//		this.optionList = optionList;
-//	}
+
 	public short getSelectedOptionKey() {
 		return selectedOptionKey;
 	}
@@ -63,6 +64,14 @@ public class Question {
 		this.selectedOptionKey = selectedOptionKey;
 	}
 	
+	public short getSelectedOptionValue() {
+		return selectedOptionValue;
+	}
+	
+	public void setSelectedOptionValue(short selectedOptionValue) {
+		this.selectedOptionValue = selectedOptionValue;
+	}
+
 	public static class Builder{
 		private int   id;
 		private short sequenceNumber;
@@ -70,7 +79,7 @@ public class Question {
 		private String image;
 		private List<Option> optionList;
 		
-		public Builder id(int id){
+		public Builder  id(int id){
 			this.id = id;
 			return this;
 		}
@@ -122,7 +131,10 @@ public class Question {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", sequenceNumber=" + sequenceNumber + ", title=" + title + ", image=" + image
-				+ ", optionList=" + optionList + ", selectedOptionKey=" + selectedOptionKey + "]";
+		return "Question [getEngagementResultId()=" + getEngagementResultId() + ", getSequenceNumber()="
+				+ getSequenceNumber() + ", getId()=" + getId() + ", getTitle()=" + getTitle() + ", getImage()="
+				+ getImage() + ", getOptionList()=" + getOptionList() + ", getSelectedOptionKey()="
+				+ getSelectedOptionKey() + ", getSelectedOptionValue()=" + getSelectedOptionValue() + "]";
 	}
+	
 }

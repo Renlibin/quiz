@@ -37,7 +37,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizEngagement extends TableImpl<QuizEngagementRecord> {
 
-    private static final long serialVersionUID = -1636385118;
+    private static final long serialVersionUID = -1526696591;
 
     /**
      * The reference instance of <code>quiz.quiz_engagement</code>
@@ -76,6 +76,16 @@ public class QuizEngagement extends TableImpl<QuizEngagementRecord> {
      * The column <code>quiz.quiz_engagement.stored</code>.
      */
     public final TableField<QuizEngagementRecord, Timestamp> STORED = createField("stored", org.jooq.impl.SQLDataType.TIMESTAMP.nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.quiz_engagement.status</code>.
+     */
+    public final TableField<QuizEngagementRecord, String> STATUS = createField("status", org.jooq.impl.SQLDataType.CHAR.length(1).nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.quiz_engagement.updated</code>.
+     */
+    public final TableField<QuizEngagementRecord, Timestamp> UPDATED = createField("updated", org.jooq.impl.SQLDataType.TIMESTAMP, this, "");
 
     /**
      * Create a <code>quiz.quiz_engagement</code> table reference

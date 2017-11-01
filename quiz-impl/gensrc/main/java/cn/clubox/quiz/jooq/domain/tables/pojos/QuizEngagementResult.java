@@ -23,13 +23,14 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizEngagementResult implements Serializable {
 
-    private static final long serialVersionUID = 723534673;
+    private static final long serialVersionUID = 1076814968;
 
     private Integer   id;
     private Integer   quizEngagementId;
-    private Integer   score;
+    private Short     score;
     private String    resultOption;
     private Timestamp stored;
+    private Short     questionId;
 
     public QuizEngagementResult() {}
 
@@ -39,20 +40,23 @@ public class QuizEngagementResult implements Serializable {
         this.score = value.score;
         this.resultOption = value.resultOption;
         this.stored = value.stored;
+        this.questionId = value.questionId;
     }
 
     public QuizEngagementResult(
         Integer   id,
         Integer   quizEngagementId,
-        Integer   score,
+        Short     score,
         String    resultOption,
-        Timestamp stored
+        Timestamp stored,
+        Short     questionId
     ) {
         this.id = id;
         this.quizEngagementId = quizEngagementId;
         this.score = score;
         this.resultOption = resultOption;
         this.stored = stored;
+        this.questionId = questionId;
     }
 
     public Integer getId() {
@@ -73,11 +77,11 @@ public class QuizEngagementResult implements Serializable {
         return this;
     }
 
-    public Integer getScore() {
+    public Short getScore() {
         return this.score;
     }
 
-    public QuizEngagementResult setScore(Integer score) {
+    public QuizEngagementResult setScore(Short score) {
         this.score = score;
         return this;
     }
@@ -100,6 +104,15 @@ public class QuizEngagementResult implements Serializable {
         return this;
     }
 
+    public Short getQuestionId() {
+        return this.questionId;
+    }
+
+    public QuizEngagementResult setQuestionId(Short questionId) {
+        this.questionId = questionId;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("QuizEngagementResult (");
@@ -109,6 +122,7 @@ public class QuizEngagementResult implements Serializable {
         sb.append(", ").append(score);
         sb.append(", ").append(resultOption);
         sb.append(", ").append(stored);
+        sb.append(", ").append(questionId);
 
         sb.append(")");
         return sb.toString();

@@ -1,6 +1,6 @@
 package cn.clubox.quiz.web.controller;
 
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.QuizManager;
-
+import cn.clubox.quiz.service.api.QuizResultGenerator;
+import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
+import cn.clubox.quiz.service.api.util.PagedListHolder;
+import cn.clubox.quiz.service.api.util.PagedModel;
 import cn.clubox.quiz.service.impl.auth.DatabaseUserDetailsService.User;
 import cn.clubox.quiz.web.utils.QuizAnswerSheetProcessorFactory;
 
@@ -32,6 +35,9 @@ public class QuizController {
 	
 	@Autowired
 	private QuizManager quizManager;
+	
+	@Autowired
+	private List<QuizResultGenerator> quizResultGenerators;
 	
 	@Autowired
 	private QuizAnswerSheetProcessorFactory quizAnswerSheetProcessorFactory;
@@ -54,7 +60,10 @@ public class QuizController {
 	}
 	
 	@GetMapping("quiz/{quizType}/engagement")
-	public String showQuiz(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
+	public String showQuiz(@AuthenticationPrincipal User user, @PathVariable String quizType,
+			@RequestParam(value="engagementId", required=false) Integer engagementId,
+			@RequestParam(value="page", required=false) Integer page,
+			@RequestParam(value="pageSize", required=false) Integer pageSize, Map<String, Object> model){
 		
 		int userId = user.getId();
 		
@@ -69,7 +78,25 @@ public class QuizController {
 		}
 		
 		QuizExtension quizExtension = quizManager.retrieveQuizByType(userId, false, true, null, quizType);
+		//To retrieve paged questions according to page number and page size
+		PagedModel<? extends Question> pagedQuestionModel = quizManager.retrievePagedQuestionModel(
+				quizType,engagementId,page == null ? 1 : page, pageSize == null ? PagedListHolder.DEFAULT_PAGE_SIZE : pageSize);
 		
+		PagedListHolder<? extends Question> pagedQuestionHolder = new PagedListHolder<>(pagedQuestionModel.getSource());
+		pagedQuestionHolder.setPage(pagedQuestionModel.getPage());
+		pagedQuestionHolder.setPageSize(pageSize != null ? pageSize : PagedListHolder.DEFAULT_PAGE_SIZE);
+		pagedQuestionHolder.setNrOfElements(pagedQuestionModel.getNrOfElements());
+		quizExtension.getQuiz().setPagedListHolder(pagedQuestionHolder);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Is the last page {}",pagedQuestionHolder.isLastPage());
+		}
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("Paged question size is {}", quizExtension.getQuiz().getPagedListHolder().getSource().size());
+		}
+		
+		model.put("engagementId", engagementId);
 		model.put("quizExtension", quizExtension);
 		return "quiz_engagement";
 	}
@@ -100,6 +127,12 @@ public class QuizController {
 		}
 		
 		int engagementId = processor.process(quizAnswerSheet);
+		
+		if(quizAnswerSheet.isLastPage() == false){
+			return "redirect:/quiz/".concat(quizType).concat("/engagement?engagementId=")
+					.concat(String.valueOf(engagementId).concat("&page=").concat(String.valueOf(quizAnswerSheet.getPage() + 1))
+							.concat("&pageSize=").concat(String.valueOf(quizAnswerSheet.getPageSize())));
+		}
 		
 		return "redirect:/quiz/".concat(quizType).concat("/result?engagementId=").concat(String.valueOf(engagementId));
 	}
@@ -147,15 +180,20 @@ public class QuizController {
 	public String showResult(@AuthenticationPrincipal User user, @PathVariable String quizType, 
 			@RequestParam(value="engagementId",required=false) Integer engagementId, Map<String, Object> model){
 		
-		Map<String,Integer> resultMap = new HashMap<>();
+		Map<String,Short> resultMap = new LinkedHashMap<>();
 		
-		if(engagementId != null && engagementId != 0){
-			resultMap = quizManager.retrieveQuizEngagementResult(engagementId);
-		}else{
-			resultMap = quizManager.retrieveQuizEngagementResult(user.getId(), quizType);
+		for(QuizResultGenerator generator : quizResultGenerators){
+			resultMap = generator.retrieveQuizEngagementResult(engagementId, user.getId(), quizType);
+			if(resultMap != null && resultMap.isEmpty() == false){
+				break;
+			}
 		}
 		
+		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), false, true, null, quizType);
+		
 		model.put("resultMap", resultMap);
+		model.put("quizExtension", quizExtension);
+		
 		return quizType.concat("_result");
 	}
 	
@@ -186,7 +224,9 @@ public class QuizController {
 		String portraitSrc = user.getPortraitSrc();
 		List<QuizExtension> undoneQuizList = quizManager.retrieveUndoneQuiz(userId, true, false);
 		
-		logger.debug("undoneQuizList size is {}", undoneQuizList.size());
+		if(logger.isDebugEnabled()){
+			logger.debug("undoneQuizList size is {}", undoneQuizList.size());
+		}
 		
 		model.put("nickname",nickname);
 		model.put("portraitSrc",portraitSrc);

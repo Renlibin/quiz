@@ -27,13 +27,13 @@ public class WeChatOAuth2Authenticator extends RestTemplate implements OAuth2Aut
 	private static final String UNION_ID = "unionid";
 	
 //	@Autowired
-	private String appid = "wxc83e8232a3a40f6c";
+	private String appid = "wx89032658cbf55f3c";
 	
 //	@Autowired
-	private String secret = "aa1986c9e5323833d4e23567ee2112ad";
+	private String secret = "307824a578ea635fe6237d24997980da";
 	
 //	@Autowired
-	private String redirectURI;
+	private String redirectURI = "http://www.rankbox.wang/rb/quiz/federation/callback";
 
 	@Override
 	public WeChatUserInfo authenticate(String code) {
