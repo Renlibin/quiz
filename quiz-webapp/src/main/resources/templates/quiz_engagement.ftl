@@ -7,35 +7,38 @@
 			   color: #999999;
 			}
 		</style>
-		<script type="text/javascript" src="http://101.201.43.85/static/js/jquery-3.1.0.min_0886ab3.js" ></script>
-		
+		<script type="text/javascript" src="http://www.rankbox.wang/static/js/jquery-3.1.0.min_0886ab3.js" ></script>
+				
+		<div class="dialog">
+        	<div class="dialog-body">
+	            <p>重新答题将清除当前测评结果，您确定吗？</p >
+	            <div class="navi">
+	                <a href=" " class="pure-button pure-button-primary">确定</a >
+	                <span class="pure-button">取消</span>
+	            </div>
+	        </div>
+	    </div>
+
 		<script type="text/javascript">
-			function submitQuestion(e){
-			    var questionContainer = document.querySelector('.question');
-			    var mask = document.querySelector('#dialog-mask');
+            function submitQuestion(e){
+            	var questionContainer = document.querySelector('.question');
+                var mask = document.querySelector('#dialog-mask');
                 var dialog = document.querySelector('dialog');
                 if(!questionContainer.querySelector('input:checked')){
                     e.preventDefault();
                     mask.style.display = 'block'
-                    dialog.show();
+                    dialog.style.display = 'block'
                     setTimeout(function(){
                         mask.style.display = 'none'
-                        dialog.close()
+                        dialog.style.display = 'none'
                     }, 1000)
-                    return false;
+                }else{
+                	document.getElementById('quizEngagementForm').submit()
                 }
-			    
-				e.preventDefault();
-				//console.log($('div.options:not(:has(:radio:checked))'))
-			    if ($('div.options:not(:has(:radio:checked))').length) {
-	   			    alert("At least one group is blank");
-	   			    
-				}else{
-					document.getElementById('quizEngagementForm').submit()
-				}
-			}
-		</script>
-
+                e.preventDefault();
+            }
+        </script>
+                
 	    <#include "header.ftl">
 	</head>
 	<body>

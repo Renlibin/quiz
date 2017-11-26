@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserPayment implements Serializable {
 
-    private static final long serialVersionUID = 2016619611;
+    private static final long serialVersionUID = 1938133990;
 
     private Integer    id;
     private Integer    userId;
@@ -32,6 +32,7 @@ public class UserPayment implements Serializable {
     private BigDecimal amount;
     private Timestamp  stored;
     private String     status;
+    private String     tradeNo;
 
     public UserPayment() {}
 
@@ -42,6 +43,7 @@ public class UserPayment implements Serializable {
         this.amount = value.amount;
         this.stored = value.stored;
         this.status = value.status;
+        this.tradeNo = value.tradeNo;
     }
 
     public UserPayment(
@@ -50,7 +52,8 @@ public class UserPayment implements Serializable {
         Integer    quizId,
         BigDecimal amount,
         Timestamp  stored,
-        String     status
+        String     status,
+        String     tradeNo
     ) {
         this.id = id;
         this.userId = userId;
@@ -58,6 +61,7 @@ public class UserPayment implements Serializable {
         this.amount = amount;
         this.stored = stored;
         this.status = status;
+        this.tradeNo = tradeNo;
     }
 
     public Integer getId() {
@@ -114,6 +118,15 @@ public class UserPayment implements Serializable {
         return this;
     }
 
+    public String getTradeNo() {
+        return this.tradeNo;
+    }
+
+    public UserPayment setTradeNo(String tradeNo) {
+        this.tradeNo = tradeNo;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserPayment (");
@@ -124,6 +137,7 @@ public class UserPayment implements Serializable {
         sb.append(", ").append(amount);
         sb.append(", ").append(stored);
         sb.append(", ").append(status);
+        sb.append(", ").append(tradeNo);
 
         sb.append(")");
         return sb.toString();

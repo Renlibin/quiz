@@ -37,7 +37,7 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 	
 	private static String USERNAME_PREFIX = "u-";
 	private static short  USERNAME_LENGTH = 12;
-	private static short  PASSWORD_LENGTH = 6;
+	private static short  PASSWORD_LENGTH = 8;
 	private static short  RETRY_TIMES = 10;
 
 	@Override
@@ -59,6 +59,8 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		user.setPassword(password);
 		user.setPortraitSrc(userInfo.getHeadimgurl());
 		user.setStatus("Y");
+		
+		logger.info("User {}'s open id is {}", userInfo.getNickname(), userInfo.getOpenid());
 		
 		Integer userId = 0;
 		boolean isSuccess = false;
@@ -88,8 +90,12 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 		userFederationDao.insert(userFederation);
 
 		//UserSource is going to be persisted in DB
-		UserSource userSource = new UserSource();
-		userSourceDao.insert(userSource);
+//		UserSource userSource = new UserSource();
+//		userSource.setUserId(userId);
+//		userSource.setIpAddress("");
+//		userSource.setSource("");
+//		userSource.setChannel("");
+//		userSourceDao.insert(userSource);
 		
 		return userId;
 
@@ -143,6 +149,19 @@ public class DynamicAccountProvisionService implements AccountProvisionService {
 			return user.getName();
 		}
 		return null;
+	}
+
+	@Override
+	public Integer retrieveUserIdByFederationId(String federationId) {
+		
+		Integer userId = userFederationDao.fetchUserIdByFederationId(federationId);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("The user {} has been retrieved from DB via federation id {}", userId, federationId);
+		}
+		
+		return userId;
+		
 	}
 
 }

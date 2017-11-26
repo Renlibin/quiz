@@ -1,5 +1,7 @@
 package cn.clubox.quiz.service.impl.dao;
 
+import javax.annotation.PostConstruct;
+
 import org.jooq.DSLContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ public class UserSourceDaoExt extends UserSourceDao {
 	@Autowired
 	private DSLContext context;
 	
+	@PostConstruct
 	public void config(){
 		super.setConfiguration(context.configuration());
 	}

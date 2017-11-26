@@ -7,7 +7,7 @@
 	    <div class="container">
 	      <div class="block">
 	      	<div class="banner">
-	      		<img src="http://101.201.43.85/static/image/evaluation.jpg">
+	      		<img src="http://www.rankbox.wang/static/image/evaluation.jpg">
 	      	</div>
 	        <ul class="u-list">
 	        <#list quizExtensionList as quizExtension>

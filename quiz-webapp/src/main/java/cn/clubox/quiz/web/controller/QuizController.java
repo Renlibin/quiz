@@ -137,44 +137,44 @@ public class QuizController {
 		return "redirect:/quiz/".concat(quizType).concat("/result?engagementId=").concat(String.valueOf(engagementId));
 	}
 	
-	@GetMapping("quiz/{quizType}/buynow")
-	public String buyNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
-		
-		logger.info("User {} is going to buy quiz {}", user.getId(), quizType);
-		
-		if(this.verifyQuizType(quizType) == false){
-			logger.error("The quiz type {} is not exist", quizType);
-			return "404";
-		}
-		
-		QuizExtension targetQuizExtension = quizManager.retrieveQuizByType(user.getId(), true, true,QUIZ_DOABLE_ACTION.PAYNOW, quizType);
-		List<QuizExtension> quizExtensionList = quizManager.retrieveAllQuiz(user.getId(),true, false, null);
-		
-		//To exclusive the target quiz
-		for(int i=0; i < quizExtensionList.size(); i++){
-			if(quizExtensionList.get(i).getQuiz().getId() == targetQuizExtension.getQuiz().getId()){
-				quizExtensionList.remove(i);
-			}
-		}
-		
-		model.put("quizExtension", targetQuizExtension);
-		model.put("quizExtensionList",quizExtensionList);
-		
-		return "buynow";
-	}
-	
-	@GetMapping("quiz/{quizType}/paynow")
-	public String payNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String,Object> model){
-		
-		if(this.verifyQuizType(quizType) == false){
-			logger.error("The quiz type {} is not exist", quizType);
-			return "404";
-		}
-		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
-		
-		model.put("quizExtension", quizExtension);
-		return "paynow";
-	}
+//	@GetMapping("quiz/{quizType}/buynow")
+//	public String buyNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
+//		
+//		logger.info("User {} is going to buy quiz {}", user.getId(), quizType);
+//		
+//		if(this.verifyQuizType(quizType) == false){
+//			logger.error("The quiz type {} is not exist", quizType);
+//			return "404";
+//		}
+//		
+//		QuizExtension targetQuizExtension = quizManager.retrieveQuizByType(user.getId(), true, true,QUIZ_DOABLE_ACTION.PAYNOW, quizType);
+//		List<QuizExtension> quizExtensionList = quizManager.retrieveAllQuiz(user.getId(),true, false, null);
+//		
+//		//To exclusive the target quiz
+//		for(int i=0; i < quizExtensionList.size(); i++){
+//			if(quizExtensionList.get(i).getQuiz().getId() == targetQuizExtension.getQuiz().getId()){
+//				quizExtensionList.remove(i);
+//			}
+//		}
+//		
+//		model.put("quizExtension", targetQuizExtension);
+//		model.put("quizExtensionList",quizExtensionList);
+//		
+//		return "buynow";
+//	}
+//	
+//	@GetMapping("quiz/{quizType}/paynow")
+//	public String payNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String,Object> model){
+//		
+//		if(this.verifyQuizType(quizType) == false){
+//			logger.error("The quiz type {} is not exist", quizType);
+//			return "404";
+//		}
+//		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
+//		
+//		model.put("quizExtension", quizExtension);
+//		return "paynow";
+//	}
 	
 	@GetMapping("quiz/{quizType}/result")
 	public String showResult(@AuthenticationPrincipal User user, @PathVariable String quizType, 

@@ -1,7 +1,6 @@
 package cn.clubox.quiz.service.api;
 
 import java.util.List;
-import java.util.Map;
 
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz;

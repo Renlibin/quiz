@@ -67,5 +67,12 @@ public class WeChatUserInfo implements Serializable {
 	public void setHeadimgurl(String headimgurl) {
 		this.headimgurl = headimgurl;
 	}
-
+	
+	@Override
+	public String toString() {
+		return "WeChatUserInfo [getOpenid()=" + getOpenid() + ", getUnionid()=" + getUnionid() + ", getNickname()="
+				+ getNickname() + ", getSex()=" + getSex() + ", getProvince()=" + getProvince() + ", getCity()="
+				+ getCity() + ", getCountry()=" + getCountry() + ", getHeadimgurl()=" + getHeadimgurl() + "]";
+	}
+	
 }

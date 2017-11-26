@@ -38,7 +38,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserPayment extends TableImpl<UserPaymentRecord> {
 
-    private static final long serialVersionUID = 298719521;
+    private static final long serialVersionUID = 1737737012;
 
     /**
      * The reference instance of <code>quiz.user_payment</code>
@@ -82,6 +82,11 @@ public class UserPayment extends TableImpl<UserPaymentRecord> {
      * The column <code>quiz.user_payment.status</code>.
      */
     public final TableField<UserPaymentRecord, String> STATUS = createField("status", org.jooq.impl.SQLDataType.CHAR.length(1).nullable(false), this, "");
+
+    /**
+     * The column <code>quiz.user_payment.trade_no</code>.
+     */
+    public final TableField<UserPaymentRecord, String> TRADE_NO = createField("trade_no", org.jooq.impl.SQLDataType.VARCHAR.length(45).nullable(false), this, "");
 
     /**
      * Create a <code>quiz.user_payment</code> table reference

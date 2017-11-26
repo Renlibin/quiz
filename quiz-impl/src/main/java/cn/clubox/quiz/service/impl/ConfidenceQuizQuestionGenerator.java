@@ -83,7 +83,7 @@ public class ConfidenceQuizQuestionGenerator implements QuizQuestionGenerator {
        ABSOLUTELYYES(4){
     	   @Override   
     	   public String toString(){
-    	       return "完全不是";
+    	       return "完全是";
     	   }
        };
        int value;

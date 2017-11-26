@@ -6,4 +6,6 @@ public interface AccountProvisionService {
 	
 	public String retrieveUsernameById(Integer userId);
 	
+	public Integer retrieveUserIdByFederationId(String federationId);
+	
 }

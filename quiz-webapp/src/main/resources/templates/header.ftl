@@ -6,6 +6,6 @@
 <meta name="author" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta http-equiv="X-UA-Compatible" content="ie=edge">
-<link rel="shortcut icon" href="http://101.201.43.85/static/image/u0.png">
-<link rel="stylesheet" href="http://101.201.43.85/static/css/pure-min.css">
-<link rel="stylesheet" href="http://101.201.43.85/static/css/style.css">
+<link rel="shortcut icon" href="http://www.rankbox.wang/static/image/u0.png">
+<link rel="stylesheet" href="http://www.rankbox.wang/static/css/pure-min.css?v=1">
+<link rel="stylesheet" href="http://www.rankbox.wang/static/css/style.css?v=1">

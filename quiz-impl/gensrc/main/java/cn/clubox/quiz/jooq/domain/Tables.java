@@ -10,6 +10,7 @@ import cn.clubox.quiz.jooq.domain.tables.QuizEngagementResult;
 import cn.clubox.quiz.jooq.domain.tables.QuizPricing;
 import cn.clubox.quiz.jooq.domain.tables.QuizQuestion;
 import cn.clubox.quiz.jooq.domain.tables.QuizQuestionOption;
+import cn.clubox.quiz.jooq.domain.tables.QuizTradeNoCounter;
 import cn.clubox.quiz.jooq.domain.tables.User;
 import cn.clubox.quiz.jooq.domain.tables.UserFederation;
 import cn.clubox.quiz.jooq.domain.tables.UserPayment;
@@ -60,6 +61,11 @@ public class Tables {
      * The table <code>quiz.quiz_question_option</code>.
      */
     public static final QuizQuestionOption QUIZ_QUESTION_OPTION = cn.clubox.quiz.jooq.domain.tables.QuizQuestionOption.QUIZ_QUESTION_OPTION;
+
+    /**
+     * The table <code>quiz.quiz_trade_no_counter</code>.
+     */
+    public static final QuizTradeNoCounter QUIZ_TRADE_NO_COUNTER = cn.clubox.quiz.jooq.domain.tables.QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER;
 
     /**
      * The table <code>quiz.user</code>.

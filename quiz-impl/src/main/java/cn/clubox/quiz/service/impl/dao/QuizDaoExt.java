@@ -1,5 +1,8 @@
 package cn.clubox.quiz.service.impl.dao;
 
+import static cn.clubox.quiz.jooq.domain.tables.Quiz.QUIZ_;
+import static cn.clubox.quiz.jooq.domain.tables.QuizPricing.QUIZ_PRICING;
+
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.List;
@@ -8,16 +11,14 @@ import javax.annotation.PostConstruct;
 
 import org.jooq.DSLContext;
 import org.jooq.JoinType;
-import org.jooq.Operator;
 import org.jooq.SelectQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import static cn.clubox.quiz.jooq.domain.tables.Quiz.QUIZ_;
-import static cn.clubox.quiz.jooq.domain.tables.QuizPricing.QUIZ_PRICING;
 import cn.clubox.quiz.jooq.domain.tables.daos.QuizDao;
+import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
 
 @Repository ("quizDao")
 public class QuizDaoExt extends QuizDao{
@@ -45,6 +46,12 @@ public class QuizDaoExt extends QuizDao{
 		List<QuizExt> quizExtList = query.fetchInto(QuizExt.class);
 		
 		return quizExtList;
+	}
+	
+	public QuizExt fetchingQuizByType(String quizType){
+		
+		return context.selectFrom(QUIZ_).where(QUIZ_.QUIZ_TYPE.eq(quizType))
+			.fetchOneInto(QuizExt.class);
 	}
 	
 	public static class QuizExt {

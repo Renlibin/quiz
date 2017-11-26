@@ -1,21 +1,22 @@
 package cn.clubox.quiz.web.controller;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.web.savedrequest.DefaultSavedRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
 
 import cn.clubox.quiz.service.api.auth.AccountProvisionService;
 import cn.clubox.quiz.service.api.auth.OAuth2Authenticator;
 import cn.clubox.quiz.service.api.auth.SecurityService;
 import cn.clubox.quiz.service.api.auth.WeChatUserInfo;
+import cn.clubox.quiz.web.utils.OAuthConfig;
 
 @Controller
 public class AuthenticationController {
@@ -31,6 +32,8 @@ public class AuthenticationController {
 	@Autowired
 	private AccountProvisionService accountProvisionService;
 	
+	private String redirectUri = "http://www.rankbox.wang/rb/quiz/federation/callback";
+	
 	@Deprecated
 	@GetMapping("/login")
 	public String login(HttpServletRequest request) {
@@ -39,7 +42,7 @@ public class AuthenticationController {
 		//return "redirect:/quiz/federation/auth";
 		
 		//If user is in user_federation table
-		securityService.autoLogin("mike");
+		securityService.autoLogin("u-ZufHm66TcTVk");
 		DefaultSavedRequest savedRequest = (DefaultSavedRequest)request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 		
 		if(logger.isDebugEnabled()){
@@ -51,12 +54,18 @@ public class AuthenticationController {
 	
 	
 	@GetMapping("/quiz/federation/auth")
-	@ResponseStatus(value = HttpStatus.OK)
-	public void auth(){
+	public String auth(){
 		
 		logger.info("Firing OAuth2 authorization process");
 		
-		oAuth2Authenticator.acquireAuthorizationCode();
+		try {
+			String codeAcquireUri = oAuth2Authenticator.acquireAuthorizationCode(OAuthConfig.KF_APPID,OAuthConfig.LOGIN_SCOPE,redirectUri);
+			return "redirect:".concat(codeAcquireUri);
+		} catch (UnsupportedEncodingException e) {
+			logger.error("Could not acquire authorization code due to exception ", e.getMessage());
+		}
+		
+		return "redirect:/login";
 	}
 	
 	@GetMapping("/quiz/federation/callback")
@@ -77,13 +86,10 @@ public class AuthenticationController {
 			return "redirect:/provison_failed";
 		}
 		
-		WeChatUserInfo userInfo = oAuth2Authenticator.authenticate(code);
-		
+		WeChatUserInfo userInfo = oAuth2Authenticator.authenticate(code,OAuthConfig.KF_APPID, OAuthConfig.KF_SECRET);
 		Integer userId = accountProvisionService.provisionAccount(userInfo);
-		
 		String username = accountProvisionService.retrieveUsernameById(userId);
 		
-//		return "redirect:/login";
 		if(username == null || username.isEmpty()){
 			//Exception should be handled
 		}
