@@ -14,7 +14,7 @@ import cn.clubox.quiz.jooq.domain.tables.records.QuizQuestionRecord;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator;
 import cn.clubox.quiz.service.api.model.Option;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.impl.dao.QuizQuestionDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizQuestionOptionDaoExt;
 
@@ -37,7 +37,7 @@ public class MbtiQuizQuestionGenerator implements QuizQuestionGenerator{
 		logger.info("Generating quiz MBTI's questions");
 		
 		int quizId = 0;
-		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QUIZ_TYPE.MBTI.value);
+		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QuizType.MBTI.value);
 		List<Question> questionList = new ArrayList<Question>();
 		
 		for(QuizQuestionRecord record : results){
@@ -59,7 +59,7 @@ public class MbtiQuizQuestionGenerator implements QuizQuestionGenerator{
 			questionList.add(question);
 		}
 		
-		QuizQuestion quizQuestion = new QuizQuestion(quizId,QUIZ_TYPE.MBTI.value, questionList);
+		QuizQuestion quizQuestion = new QuizQuestion(quizId,QuizType.MBTI.value, questionList);
 		
 		return quizQuestion;
 	}

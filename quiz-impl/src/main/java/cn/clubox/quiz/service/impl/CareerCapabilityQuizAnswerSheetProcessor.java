@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.impl.CareerCapabilityQuizAnswerSheetProcessor.CareerCapabilityScore.SCORE_OPTION;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
@@ -18,7 +18,7 @@ public class CareerCapabilityQuizAnswerSheetProcessor extends AbstractQuizAnswer
 	
 	@Override
 	public String getQuizName() {
-		return QUIZ_TYPE.CAREERCAPABILITY.value;
+		return QuizType.CAREERCAPABILITY.value;
 	}
 	
 	private boolean isBetween(short x, int lower, int upper) {

@@ -22,7 +22,7 @@ import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement;
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor.ScoringRule;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.impl.ZymQuizAnswerSheetProcessor.ZymScore.SCORE_OPTION;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
@@ -283,7 +283,7 @@ public class ZymQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetProcesso
 	@Override
 	public String getQuizName() {
 		
-		return QUIZ_TYPE.ZYM.value;
+		return QuizType.ZYM.value;
 	}
 	
 //	@Override

@@ -23,7 +23,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class Quiz implements Serializable {
 
-    private static final long serialVersionUID = -690032069;
+    private static final long serialVersionUID = 1654111300;
 
     private Integer   id;
     private String    title;
@@ -33,6 +33,7 @@ public class Quiz implements Serializable {
     private String    quizType;
     private String    logoSrc;
     private String    name;
+    private String    quizSrc;
 
     public Quiz() {}
 
@@ -45,6 +46,7 @@ public class Quiz implements Serializable {
         this.quizType = value.quizType;
         this.logoSrc = value.logoSrc;
         this.name = value.name;
+        this.quizSrc = value.quizSrc;
     }
 
     public Quiz(
@@ -55,7 +57,8 @@ public class Quiz implements Serializable {
         Timestamp stored,
         String    quizType,
         String    logoSrc,
-        String    name
+        String    name,
+        String    quizSrc
     ) {
         this.id = id;
         this.title = title;
@@ -65,6 +68,7 @@ public class Quiz implements Serializable {
         this.quizType = quizType;
         this.logoSrc = logoSrc;
         this.name = name;
+        this.quizSrc = quizSrc;
     }
 
     public Integer getId() {
@@ -139,6 +143,15 @@ public class Quiz implements Serializable {
         return this;
     }
 
+    public String getQuizSrc() {
+        return this.quizSrc;
+    }
+
+    public Quiz setQuizSrc(String quizSrc) {
+        this.quizSrc = quizSrc;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Quiz (");
@@ -151,6 +164,7 @@ public class Quiz implements Serializable {
         sb.append(", ").append(quizType);
         sb.append(", ").append(logoSrc);
         sb.append(", ").append(name);
+        sb.append(", ").append(quizSrc);
 
         sb.append(")");
         return sb.toString();

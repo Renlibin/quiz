@@ -178,19 +178,19 @@ public class Quiz {
 		}
 	}
 
-	public enum QUIZ_TYPE {
+	public enum QuizType {
 		ZYM("zym"),ISEQ("iseq"),CONFIDENCE("confidence"),
 		SOCIALACC("socialacc"),CAREERCAPABILITY("careercapability"),MBTI("mbti");
 
 		public String value;
 
-		private QUIZ_TYPE(String value) {
+		private QuizType(String value) {
 			this.value = value;
 		}
 
-		public static QUIZ_TYPE getByValue(String value) {
+		public static QuizType getByValue(String value) {
 
-			for (QUIZ_TYPE type : QUIZ_TYPE.values()) {
+			for (QuizType type : QuizType.values()) {
 				if (type.value.equals(value)) {
 					return type;
 				}

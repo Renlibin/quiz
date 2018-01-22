@@ -18,12 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import cn.clubox.quiz.jooq.domain.tables.daos.QuizDao;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.util.Status;
 
 @Repository ("quizDao")
 public class QuizDaoExt extends QuizDao{
 	
 	private static final Logger logger = LoggerFactory.getLogger(QuizDaoExt.class);
+	
+	private static final String EXTERNAL_QUIZ = "external_quiz";
 
 	@Autowired
 	private DSLContext context;
@@ -42,7 +44,8 @@ public class QuizDaoExt extends QuizDao{
 				QUIZ_.QUIZ_TYPE,QUIZ_.LOGO_SRC,QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE);
 		query.addFrom(QUIZ_);
 		query.addJoin(QUIZ_PRICING,JoinType.LEFT_OUTER_JOIN,QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID));
-		query.addConditions(QUIZ_.STATUS.eq("Y"));
+		query.addConditions(QUIZ_.STATUS.equal(Status.NORMAL.getValue()));
+		query.addConditions(QUIZ_.QUIZ_TYPE.notEqual(EXTERNAL_QUIZ));
 		List<QuizExt> quizExtList = query.fetchInto(QuizExt.class);
 		
 		return quizExtList;
@@ -50,8 +53,19 @@ public class QuizDaoExt extends QuizDao{
 	
 	public QuizExt fetchingQuizByType(String quizType){
 		
-		return context.selectFrom(QUIZ_).where(QUIZ_.QUIZ_TYPE.eq(quizType))
+		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_TYPE,QUIZ_.LOGO_SRC,
+				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).
+				from(QUIZ_.innerJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
+				.where(QUIZ_.QUIZ_TYPE.equal(quizType).and(QUIZ_.STATUS.equal(Status.NORMAL.getValue())))
 			.fetchOneInto(QuizExt.class);
+	}
+	
+	public QuizExt fetchingQuizIdBySrc(String quizSrc){
+		
+		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_SRC,QUIZ_.LOGO_SRC,
+				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).from(QUIZ_.innerJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
+				.where(QUIZ_.QUIZ_SRC.equal(quizSrc).and(QUIZ_.STATUS.equal(Status.NORMAL.getValue())))
+		    .fetchOneInto(QuizExt.class);
 	}
 	
 	public static class QuizExt {
@@ -63,6 +77,7 @@ public class QuizDaoExt extends QuizDao{
 	    private Timestamp stored;
 	    private String    quizType;
 	    private String    logoSrc;
+	    private String    quizSrc;
 	    private String    name;
 	    private BigDecimal price;
 	    private BigDecimal originalPrice;
@@ -109,6 +124,12 @@ public class QuizDaoExt extends QuizDao{
 		public void setLogoSrc(String logoSrc) {
 			this.logoSrc = logoSrc;
 		}
+		public String getQuizSrc() {
+			return quizSrc;
+		}
+		public void setQuizSrc(String quizSrc) {
+			this.quizSrc = quizSrc;
+		}
 		public String getName() {
 			return name;
 		}
@@ -126,6 +147,12 @@ public class QuizDaoExt extends QuizDao{
 		}
 		public void setOriginalPrice(BigDecimal originalPrice) {
 			this.originalPrice = originalPrice;
+		}
+		@Override
+		public String toString() {
+			return "QuizExt [id=" + id + ", title=" + title + ", description=" + description + ", status=" + status
+					+ ", stored=" + stored + ", quizType=" + quizType + ", logoSrc=" + logoSrc + ", quizSrc=" + quizSrc
+					+ ", name=" + name + ", price=" + price + ", originalPrice=" + originalPrice + "]";
 		}
 	}
 }

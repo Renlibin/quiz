@@ -24,7 +24,7 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class UserPayment implements Serializable {
 
-    private static final long serialVersionUID = 1938133990;
+    private static final long serialVersionUID = -1482359985;
 
     private Integer    id;
     private Integer    userId;
@@ -33,6 +33,7 @@ public class UserPayment implements Serializable {
     private Timestamp  stored;
     private String     status;
     private String     tradeNo;
+    private String     outTransactionId;
 
     public UserPayment() {}
 
@@ -44,6 +45,7 @@ public class UserPayment implements Serializable {
         this.stored = value.stored;
         this.status = value.status;
         this.tradeNo = value.tradeNo;
+        this.outTransactionId = value.outTransactionId;
     }
 
     public UserPayment(
@@ -53,7 +55,8 @@ public class UserPayment implements Serializable {
         BigDecimal amount,
         Timestamp  stored,
         String     status,
-        String     tradeNo
+        String     tradeNo,
+        String     outTransactionId
     ) {
         this.id = id;
         this.userId = userId;
@@ -62,6 +65,7 @@ public class UserPayment implements Serializable {
         this.stored = stored;
         this.status = status;
         this.tradeNo = tradeNo;
+        this.outTransactionId = outTransactionId;
     }
 
     public Integer getId() {
@@ -127,6 +131,15 @@ public class UserPayment implements Serializable {
         return this;
     }
 
+    public String getOutTransactionId() {
+        return this.outTransactionId;
+    }
+
+    public UserPayment setOutTransactionId(String outTransactionId) {
+        this.outTransactionId = outTransactionId;
+        return this;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("UserPayment (");
@@ -138,6 +151,7 @@ public class UserPayment implements Serializable {
         sb.append(", ").append(stored);
         sb.append(", ").append(status);
         sb.append(", ").append(tradeNo);
+        sb.append(", ").append(outTransactionId);
 
         sb.append(")");
         return sb.toString();

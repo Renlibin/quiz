@@ -34,7 +34,7 @@ import org.jooq.impl.TableImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizTradeNoCounter extends TableImpl<QuizTradeNoCounterRecord> {
 
-    private static final long serialVersionUID = 812157145;
+    private static final long serialVersionUID = -450496157;
 
     /**
      * The reference instance of <code>quiz.quiz_trade_no_counter</code>
@@ -55,9 +55,9 @@ public class QuizTradeNoCounter extends TableImpl<QuizTradeNoCounterRecord> {
     public final TableField<QuizTradeNoCounterRecord, Integer> ID = createField("id", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>quiz.quiz_trade_no_counter.trade_no</code>.
+     * The column <code>quiz.quiz_trade_no_counter.counter</code>.
      */
-    public final TableField<QuizTradeNoCounterRecord, Integer> TRADE_NO = createField("trade_no", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<QuizTradeNoCounterRecord, Integer> COUNTER = createField("counter", org.jooq.impl.SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
      * Create a <code>quiz.quiz_trade_no_counter</code> table reference

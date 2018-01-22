@@ -48,7 +48,7 @@
 		  </div>
 		  <#if quizExtension.quiz.logoSrc??>
 	        <div class="banner">
-	    	    <img src="${quizExtension.quiz.logoSrc}" />
+	    	    <img src="http://www.rankbox.wang/static/image/${quizExtension.quiz.logoSrc}-rectangle.png" />
 	    	</div>
 		  </#if>
 	      <div class="summary">
@@ -120,7 +120,6 @@
 		            }
 		
 		        });
-		        
 	    	})()
    		</script>
         <div id="dialog-mask"></div>

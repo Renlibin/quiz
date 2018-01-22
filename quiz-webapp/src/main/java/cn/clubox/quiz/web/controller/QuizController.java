@@ -19,10 +19,9 @@ import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.QuizManager;
 import cn.clubox.quiz.service.api.QuizResultGenerator;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
 import cn.clubox.quiz.service.api.model.QuizExtension;
-import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.api.util.PagedListHolder;
 import cn.clubox.quiz.service.api.util.PagedModel;
 import cn.clubox.quiz.service.impl.auth.DatabaseUserDetailsService.User;
@@ -235,7 +234,7 @@ public class QuizController {
 	}
 	
 	private boolean verifyQuizType(String quizType){
-		if(QUIZ_TYPE.getByValue(quizType) != null){
+		if(QuizType.getByValue(quizType) != null){
 			return true;
 		}
 		return false;

@@ -3,7 +3,6 @@ package cn.clubox.quiz.service.api;
 import java.util.List;
 
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.api.util.PagedModel;
@@ -18,7 +17,7 @@ public interface QuizManager {
 	
 	public List<QuizExtension> retrieveEngagedQuiz(int userId, boolean setDoableAction, boolean countQuizParticipant);
 	
-	public Quiz retrieveQuiz(String username, String quizType);
+	public Integer retrieveQuizIdBySrc(String quizSrc);
 	
 //	/**
 //	 * Depending on the type of quiz, the result could be one or multiple entries

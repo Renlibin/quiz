@@ -28,7 +28,7 @@ import org.jooq.impl.UpdatableRecordImpl;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCounterRecord> implements Record2<Integer, Integer> {
 
-    private static final long serialVersionUID = 19620612;
+    private static final long serialVersionUID = 2145822584;
 
     /**
      * Setter for <code>quiz.quiz_trade_no_counter.id</code>.
@@ -46,17 +46,17 @@ public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCou
     }
 
     /**
-     * Setter for <code>quiz.quiz_trade_no_counter.trade_no</code>.
+     * Setter for <code>quiz.quiz_trade_no_counter.counter</code>.
      */
-    public QuizTradeNoCounterRecord setTradeNo(Integer value) {
+    public QuizTradeNoCounterRecord setCounter(Integer value) {
         set(1, value);
         return this;
     }
 
     /**
-     * Getter for <code>quiz.quiz_trade_no_counter.trade_no</code>.
+     * Getter for <code>quiz.quiz_trade_no_counter.counter</code>.
      */
-    public Integer getTradeNo() {
+    public Integer getCounter() {
         return (Integer) get(1);
     }
 
@@ -105,7 +105,7 @@ public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCou
      */
     @Override
     public Field<Integer> field2() {
-        return QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER.TRADE_NO;
+        return QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER.COUNTER;
     }
 
     /**
@@ -121,7 +121,7 @@ public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCou
      */
     @Override
     public Integer value2() {
-        return getTradeNo();
+        return getCounter();
     }
 
     /**
@@ -138,7 +138,7 @@ public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCou
      */
     @Override
     public QuizTradeNoCounterRecord value2(Integer value) {
-        setTradeNo(value);
+        setCounter(value);
         return this;
     }
 
@@ -166,10 +166,10 @@ public class QuizTradeNoCounterRecord extends UpdatableRecordImpl<QuizTradeNoCou
     /**
      * Create a detached, initialised QuizTradeNoCounterRecord
      */
-    public QuizTradeNoCounterRecord(Integer id, Integer tradeNo) {
+    public QuizTradeNoCounterRecord(Integer id, Integer counter) {
         super(QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER);
 
         set(0, id);
-        set(1, tradeNo);
+        set(1, counter);
     }
 }

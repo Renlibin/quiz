@@ -14,7 +14,7 @@ import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizAnswerSheetProcessor;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.QuizAnswerSheet;
-import cn.clubox.quiz.service.api.util.QuizEngagementStatus;
+import cn.clubox.quiz.service.api.util.Status;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementDaoExt;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
 
@@ -83,13 +83,13 @@ public abstract class AbstractQuizAnswerSheetProcessor implements QuizAnswerShee
 		
 		if(quizAnswerSheet.isLastPage()){
 			quizEngagementId = quizAnswerSheet.getEngagementId();
-			quizEngagementDao.updateQuizEngagementStatus(quizEngagementId, QuizEngagementStatus.COMPLETE);
+			quizEngagementDao.updateQuizEngagementStatus(quizEngagementId, Status.COMPLETE);
 		}else{
 			QuizEngagement quizEngagement = new QuizEngagement();
 			quizEngagement.setQuizId(quizAnswerSheet.getQuizId());
 			quizEngagement.setUserId(quizAnswerSheet.getUserId());
 			quizEngagement.setDuration(quizAnswerSheet.getDuration());
-			quizEngagement.setStatus(QuizEngagementStatus.UNCOMPLETED.getValue());
+			quizEngagement.setStatus(Status.UNCOMPLETED.getValue());
 			quizEngagement.setStored(new Timestamp(new Date().getTime()));
 			quizEngagementId = quizEngagementDao.insertWithReturning(quizEngagement);
 		}

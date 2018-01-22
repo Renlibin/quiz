@@ -15,7 +15,7 @@ import org.springframework.stereotype.Repository;
 
 import cn.clubox.quiz.jooq.domain.tables.daos.QuizEngagementDao;
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagement;
-import cn.clubox.quiz.service.api.util.QuizEngagementStatus;
+import cn.clubox.quiz.service.api.util.Status;
 
 @Repository("quizEngagementDao")
 public class QuizEngagementDaoExt extends QuizEngagementDao{
@@ -44,12 +44,12 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 	public List<Integer> fetchEngagedQuizId (int userId){
 		
 		List<Integer> quizIdList = context.selectDistinct(QUIZ_ENGAGEMENT.QUIZ_ID).from(QUIZ_ENGAGEMENT)
-			.where(QUIZ_ENGAGEMENT.USER_ID.eq(userId).and(QUIZ_ENGAGEMENT.STATUS.eq(QuizEngagementStatus.COMPLETE.getValue()))).fetchInto(Integer.class);
+			.where(QUIZ_ENGAGEMENT.USER_ID.eq(userId).and(QUIZ_ENGAGEMENT.STATUS.eq(Status.COMPLETE.getValue()))).fetchInto(Integer.class);
 		
 		return quizIdList;
 	}
 	
-	public void updateQuizEngagementStatus(int engagementId, QuizEngagementStatus status){
+	public void updateQuizEngagementStatus(int engagementId, Status status){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("Quiz engagement's status is going to be updated to {}", status.getValue());
@@ -70,7 +70,7 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 		
 		
 		List<Integer> quizIdList = context.selectDistinct(QUIZ_ENGAGEMENT.QUIZ_ID).from(QUIZ_ENGAGEMENT)
-				.where(QUIZ_ENGAGEMENT.USER_ID.eq(userId).and(QUIZ_ENGAGEMENT.STATUS.eq(QuizEngagementStatus.COMPLETE.getValue()))).fetchInto(Integer.class);
+				.where(QUIZ_ENGAGEMENT.USER_ID.eq(userId).and(QUIZ_ENGAGEMENT.STATUS.eq(Status.COMPLETE.getValue()))).fetchInto(Integer.class);
 		
 		return quizIdList;
 	}
@@ -78,7 +78,7 @@ public class QuizEngagementDaoExt extends QuizEngagementDao{
 	public int countTotalParticipant(int quizId){
 		
 		return context.selectDistinct(QUIZ_ENGAGEMENT.USER_ID).from(QUIZ_ENGAGEMENT)
-			.where(QUIZ_ENGAGEMENT.QUIZ_ID.eq(quizId).and(QUIZ_ENGAGEMENT.STATUS.eq(QuizEngagementStatus.COMPLETE.getValue()))).fetch().size();
+			.where(QUIZ_ENGAGEMENT.QUIZ_ID.eq(quizId).and(QUIZ_ENGAGEMENT.STATUS.eq(Status.COMPLETE.getValue()))).fetch().size();
 	}
 	
 }

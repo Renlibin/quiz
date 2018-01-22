@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 
 @Service
 public class ConfidenceQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetProcessor {
@@ -15,9 +15,9 @@ public class ConfidenceQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetP
 	@Override
 	public String getQuizName() {
 		if(logger.isDebugEnabled()){
-			logger.debug("Quiz name is {}", QUIZ_TYPE.CONFIDENCE.value);
+			logger.debug("Quiz name is {}", QuizType.CONFIDENCE.value);
 		}
-		return QUIZ_TYPE.CONFIDENCE.value;
+		return QuizType.CONFIDENCE.value;
 	}
 
 	@Override

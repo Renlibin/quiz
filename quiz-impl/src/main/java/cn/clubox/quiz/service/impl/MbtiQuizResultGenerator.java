@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizResultGenerator;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.impl.dao.QuizEngagementResultDaoExt;
 
 @Service
@@ -26,7 +26,7 @@ public class MbtiQuizResultGenerator implements QuizResultGenerator {
 	@Override
 	public Map<String,Short> retrieveQuizEngagementResult(Integer engagementId, Integer userId, String quizType) {
 		
-		if(QUIZ_TYPE.MBTI.value.equals(quizType) == false){
+		if(QuizType.MBTI.value.equals(quizType) == false){
 			//MbtiQuizResultGenerator only handle MBTI quiz
 			return new HashMap<>(0);
 		}

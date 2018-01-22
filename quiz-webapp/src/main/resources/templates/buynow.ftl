@@ -9,7 +9,7 @@
 			</div>
 		    <#if quizExtension.quiz.logoSrc??>
 		        <div class="banner">
-					<img src="${quizExtension.quiz.logoSrc}" alt="" srcset="">
+					<img src="http://www.rankbox.wang/static/image/${quizExtension.quiz.logoSrc}-rectangle.png" alt="" srcset="">
 				</div>
 		    </#if>
 		    <div class="summary">
@@ -30,7 +30,6 @@
 				<div class="block desc">
 					<div class="block-title"> 详细介绍 </div>
 					<p> ${quizExtension.quiz.description} </p>
-					<p> “职业锚”就是指当一个人不得不做出选择的时候，无论如何都不会放弃的职业中的那种至关重要的东西或价值观，即人们选择和发展自己的职业时所围绕的中心。 </p>
 				</div>
 			</div>
 			
@@ -43,7 +42,7 @@
 					<#list quizExtensionList as altQuiz>
 						<li class="u-item">
 						    <#if altQuiz.quiz.logoSrc??>
-						    	<img class="u-logo" src="${altQuiz.quiz.logoSrc}" alt="">
+						    	<img class="u-logo" src="http://www.rankbox.wang/static/image/${altQuiz.quiz.logoSrc}-square.png" alt="">
 						    </#if>
 							<div class="u-content">
 								<div class="u-title">${altQuiz.quiz.name}</div>

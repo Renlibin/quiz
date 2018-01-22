@@ -22,7 +22,7 @@ import cn.clubox.quiz.service.api.QuizQuestionGenerator;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator.QuizQuestion;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.api.util.PagedModel;
@@ -65,8 +65,10 @@ public class DefaultQuizManager implements QuizManager {
 	}
 	
 	@Override
-	public Quiz retrieveQuiz(String username, String quizType) {
-		return null;
+	public Integer retrieveQuizIdBySrc(String quizSrc) {
+		
+		QuizExt quiz = quizDao.fetchingQuizIdBySrc(quizSrc);
+		return quiz != null ? quiz.getId() : null;
 	}
 
 	@Override
@@ -241,7 +243,7 @@ public class DefaultQuizManager implements QuizManager {
 		
 		Map<String,Quiz> quizMap = new TreeMap<String,Quiz>();
 		for(QuizExt quizPojo : quizPojoList){
-			QUIZ_TYPE quizType = QUIZ_TYPE.getByValue(quizPojo.getQuizType());
+			QuizType quizType = QuizType.getByValue(quizPojo.getQuizType());
 			if(quizType != null){
 				Quiz quiz = new Quiz.Builder().setId(quizPojo.getId()).setName(quizPojo.getName())
 					.setTitle(quizPojo.getTitle()).setDescription(quizPojo.getDescription())

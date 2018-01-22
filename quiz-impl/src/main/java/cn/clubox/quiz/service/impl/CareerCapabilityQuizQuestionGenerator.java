@@ -12,7 +12,7 @@ import cn.clubox.quiz.jooq.domain.tables.records.QuizQuestionRecord;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator;
 import cn.clubox.quiz.service.api.model.Option;
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 import cn.clubox.quiz.service.impl.dao.QuizQuestionDaoExt;
 
 @Service
@@ -29,7 +29,7 @@ public class CareerCapabilityQuizQuestionGenerator implements QuizQuestionGenera
 		logger.info("Generating quiz CareerCapability question");
 		
 		int quizId = 0;
-		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QUIZ_TYPE.CAREERCAPABILITY.value);
+		List<QuizQuestionRecord> results = quizQuestionDao.fetchQuizQuestionByQuizType(QuizType.CAREERCAPABILITY.value);
 		List<Question> questionList = new ArrayList<Question>();
 		List<Option> options = this.generateOption();
 		
@@ -44,7 +44,7 @@ public class CareerCapabilityQuizQuestionGenerator implements QuizQuestionGenera
 			questionList.add(question);
 		}
 		
-		QuizQuestion quizQuestion = new QuizQuestion(quizId,QUIZ_TYPE.CAREERCAPABILITY.value, questionList);
+		QuizQuestion quizQuestion = new QuizQuestion(quizId,QuizType.CAREERCAPABILITY.value, questionList);
 		return quizQuestion;
 	}
 	

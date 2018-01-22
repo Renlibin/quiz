@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import cn.clubox.quiz.service.api.model.Question;
-import cn.clubox.quiz.service.api.model.Quiz.QUIZ_TYPE;
+import cn.clubox.quiz.service.api.model.Quiz.QuizType;
 
 @Service
 public class MbtiQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetProcessor {
@@ -14,7 +14,7 @@ public class MbtiQuizAnswerSheetProcessor extends AbstractQuizAnswerSheetProcess
 
 	@Override
 	public String getQuizName() {
-		return QUIZ_TYPE.MBTI.value;
+		return QuizType.MBTI.value;
 	}
 	
 	/**

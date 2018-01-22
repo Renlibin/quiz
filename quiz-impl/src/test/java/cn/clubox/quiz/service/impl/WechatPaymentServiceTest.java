@@ -12,7 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import cn.clubox.quiz.service.impl.payment.WechatPaymentService;
 
 //@Ignore
-@SpringBootTest
+//@SpringBootTest
 public class WechatPaymentServiceTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(WechatPaymentServiceTest.class);
@@ -25,12 +25,12 @@ public class WechatPaymentServiceTest {
 		
 		try {
 			
-			Map<String,String> result = wechatPaymentService.prePayment("", "", BigDecimal.ZERO);
+//			Map<String,String> result = wechatPaymentService.prePayment("", "", BigDecimal.ZERO);
 			
-			for(String key : result.keySet()){
-				System.out.println(String.format("%s = %s",  key, result.get(key)));
-//				logger.info("{} = {}", key, result.get(key));
-			}
+//			for(String key : result.keySet()){
+//				System.out.println(String.format("%s = %s",  key, result.get(key)));
+////				logger.info("{} = {}", key, result.get(key));
+//			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

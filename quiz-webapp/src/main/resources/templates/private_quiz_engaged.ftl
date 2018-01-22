@@ -22,7 +22,7 @@
 			        <#list engagedQuizList as quizExtension>
 			            <li class="u-item">
 			              <#if quizExtension.quiz.logoSrc??>
-					    	<img src="${quizExtension.quiz.logoSrc}" class="u-logo">
+					    	<img src="http://www.rankbox.wang/static/image/${quizExtension.quiz.logoSrc}-square.png" class="u-logo">
 					      </#if>
 					      <div class="u-content">
 					        <div class="u-title">${quizExtension.quiz.name}</div>

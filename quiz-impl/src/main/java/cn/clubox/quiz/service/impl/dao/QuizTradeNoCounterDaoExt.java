@@ -5,8 +5,6 @@ import static cn.clubox.quiz.jooq.domain.tables.QuizTradeNoCounter.QUIZ_TRADE_NO
 import javax.annotation.PostConstruct;
 
 import org.jooq.DSLContext;
-import org.jooq.Field;
-import org.jooq.impl.DSL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,21 +25,20 @@ public class QuizTradeNoCounterDaoExt extends QuizTradeNoCounterDao {
 		super.setConfiguration(context.configuration());
 	}
 	
-	public Integer fetchingTradeNo(){
+	public Integer fetchAndIncrementTradeNo(){
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("Fetching the trade NO");
 		}
 		
-		Integer counter = context.select(QUIZ_TRADE_NO_COUNTER.TRADE_NO).from(QUIZ_TRADE_NO_COUNTER)
-			.where(QUIZ_TRADE_NO_COUNTER.ID.eq(1)).fetchOneInto(Integer.class);
+		Integer counter = context.select(QUIZ_TRADE_NO_COUNTER.COUNTER).from(QUIZ_TRADE_NO_COUNTER)
+			.orderBy(QUIZ_TRADE_NO_COUNTER.ID.desc()).limit(1).fetchOneInto(Integer.class);
 		
 		if(counter == null){
-			logger.error("");
+			logger.error("The counter is NULL !!!");
 		}
 
-		context.update(QUIZ_TRADE_NO_COUNTER).set(QUIZ_TRADE_NO_COUNTER.TRADE_NO,(counter + 1))
-			.where(QUIZ_TRADE_NO_COUNTER.ID.eq(1));
+		context.update(QUIZ_TRADE_NO_COUNTER).set(QUIZ_TRADE_NO_COUNTER.COUNTER,(++counter)).execute();
 		
 		return counter;
 	}

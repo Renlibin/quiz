@@ -22,24 +22,24 @@ import javax.annotation.Generated;
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
 public class QuizTradeNoCounter implements Serializable {
 
-    private static final long serialVersionUID = -1788496972;
+    private static final long serialVersionUID = 995426411;
 
     private Integer id;
-    private Integer tradeNo;
+    private Integer counter;
 
     public QuizTradeNoCounter() {}
 
     public QuizTradeNoCounter(QuizTradeNoCounter value) {
         this.id = value.id;
-        this.tradeNo = value.tradeNo;
+        this.counter = value.counter;
     }
 
     public QuizTradeNoCounter(
         Integer id,
-        Integer tradeNo
+        Integer counter
     ) {
         this.id = id;
-        this.tradeNo = tradeNo;
+        this.counter = counter;
     }
 
     public Integer getId() {
@@ -51,12 +51,12 @@ public class QuizTradeNoCounter implements Serializable {
         return this;
     }
 
-    public Integer getTradeNo() {
-        return this.tradeNo;
+    public Integer getCounter() {
+        return this.counter;
     }
 
-    public QuizTradeNoCounter setTradeNo(Integer tradeNo) {
-        this.tradeNo = tradeNo;
+    public QuizTradeNoCounter setCounter(Integer counter) {
+        this.counter = counter;
         return this;
     }
 
@@ -65,7 +65,7 @@ public class QuizTradeNoCounter implements Serializable {
         StringBuilder sb = new StringBuilder("QuizTradeNoCounter (");
 
         sb.append(id);
-        sb.append(", ").append(tradeNo);
+        sb.append(", ").append(counter);
 
         sb.append(")");
         return sb.toString();

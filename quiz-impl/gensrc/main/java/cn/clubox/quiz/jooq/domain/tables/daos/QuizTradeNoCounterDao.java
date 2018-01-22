@@ -65,9 +65,9 @@ public class QuizTradeNoCounterDao extends DAOImpl<QuizTradeNoCounterRecord, cn.
     }
 
     /**
-     * Fetch records that have <code>trade_no IN (values)</code>
+     * Fetch records that have <code>counter IN (values)</code>
      */
-    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizTradeNoCounter> fetchByTradeNo(Integer... values) {
-        return fetch(QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER.TRADE_NO, values);
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.QuizTradeNoCounter> fetchByCounter(Integer... values) {
+        return fetch(QuizTradeNoCounter.QUIZ_TRADE_NO_COUNTER.COUNTER, values);
     }
 }

@@ -107,4 +107,11 @@ public class UserPaymentDao extends DAOImpl<UserPaymentRecord, cn.clubox.quiz.jo
     public List<cn.clubox.quiz.jooq.domain.tables.pojos.UserPayment> fetchByTradeNo(String... values) {
         return fetch(UserPayment.USER_PAYMENT.TRADE_NO, values);
     }
+
+    /**
+     * Fetch records that have <code>out_transaction_id IN (values)</code>
+     */
+    public List<cn.clubox.quiz.jooq.domain.tables.pojos.UserPayment> fetchByOutTransactionId(String... values) {
+        return fetch(UserPayment.USER_PAYMENT.OUT_TRANSACTION_ID, values);
+    }
 }
