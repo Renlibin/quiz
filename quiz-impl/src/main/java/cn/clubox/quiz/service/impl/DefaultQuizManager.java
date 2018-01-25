@@ -20,6 +20,7 @@ import cn.clubox.quiz.jooq.domain.tables.pojos.QuizEngagementResult;
 import cn.clubox.quiz.service.api.QuizManager;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator;
 import cn.clubox.quiz.service.api.QuizQuestionGenerator.QuizQuestion;
+import cn.clubox.quiz.service.api.QuizUrlEncodeDecodeService;
 import cn.clubox.quiz.service.api.model.Question;
 import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.Quiz.QuizType;
@@ -54,9 +55,14 @@ public class DefaultQuizManager implements QuizManager {
 	@Autowired
 	private List<QuizQuestionGenerator> quizQuestionGeneratorList;
 	
+	@Autowired
+	private QuizUrlEncodeDecodeService quizUrlEncodeDecodeService;
+	
 	private Map<String, Quiz> quizMap;
 	
 	private Map<String, List<Question>> questionMap;
+	
+	
 	
 	@PostConstruct
 	public void init() {
@@ -67,7 +73,13 @@ public class DefaultQuizManager implements QuizManager {
 	@Override
 	public Integer retrieveQuizIdBySrc(String quizSrc) {
 		
-		QuizExt quiz = quizDao.fetchingQuizIdBySrc(quizSrc);
+		String decodedQuizSrc = quizUrlEncodeDecodeService.decode(quizSrc);
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("DefaultQuizManager.retrieveQuizIdBySrc -> Original quiz src is {}", quizSrc);
+		}
+		
+		QuizExt quiz = quizDao.fetchingQuizIdBySrc(decodedQuizSrc);
 		return quiz != null ? quiz.getId() : null;
 	}
 
@@ -87,43 +99,6 @@ public class DefaultQuizManager implements QuizManager {
 		return engagedQuizIdList;
 		
 	}
-	
-//	@Override
-//	public Map<String,Short> retrieveQuizEngagementResult(int engagementId) {
-//		
-//		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchByQuizEngagementId(engagementId);
-//		
-//		Map<String,Short> resultMap = new HashMap<>(quizEngagementResultList.size());
-//		
-//		for(QuizEngagementResult result : quizEngagementResultList){
-//			Short tempScore = resultMap.get(result.getResultOption());
-//			if(tempScore != null){
-//				resultMap.put(result.getResultOption(), (short)(tempScore + result.getScore()));
-//			}else{
-//				resultMap.put(result.getResultOption(), result.getScore());
-//			}
-//		}
-//		
-//		return resultMap;
-//	}
-//	
-//	@Override
-//	public Map<String, Short> retrieveQuizEngagementResult(int userId, String quizType) {
-//
-//		List<QuizEngagementResult> quizEngagementResultList = quizEngagementResultDao.fetchQuizEngagementByUserIdAndQuizType(userId, quizType);
-//		
-//		Map<String,Short> resultMap = new HashMap<>(quizEngagementResultList.size());
-//		
-//		for(QuizEngagementResult result : quizEngagementResultList){
-//			Short tempScore = resultMap.get(result.getResultOption());
-//			if(tempScore != null){
-//				resultMap.put(result.getResultOption(), (short)(tempScore + result.getScore()));
-//			}else{
-//				resultMap.put(result.getResultOption(), result.getScore());
-//			}
-//		}
-//		return resultMap;
-//	}
 
 	@Override
 	public boolean hasPrivilige(int userId, String quizType) {
@@ -231,6 +206,26 @@ public class DefaultQuizManager implements QuizManager {
 			
 		}
 		return engagedQuizList;
+	}
+	
+	
+	@Override
+	public List<Quiz> retrievePaidExternalQuiz(Integer userId) {
+		
+		List<Quiz> quizList = new ArrayList<>();
+		
+		List<QuizExt> quizs = quizDao.fetchingPaidExternalQuizByUserId(userId);
+		
+		if(Objects.nonNull(quizs) && quizs.isEmpty() == false){
+			for(QuizExt q : quizs){
+				Quiz quiz = new Quiz.Builder().setId(q.getId()).setName(q.getName())
+						.setTitle(q.getTitle()).setDescription(q.getDescription())
+						.setQuizSrc(quizUrlEncodeDecodeService.encode(q.getQuizSrc())).build();
+				
+				quizList.add(quiz);
+			}
+		}
+		return quizList;
 	}
 	
 	private Map<String,Quiz> quizInitialization(Map<String, List<Question>> questionMap) {
@@ -378,4 +373,5 @@ public class DefaultQuizManager implements QuizManager {
 	
 		return pageModel;
 	}
+
 }

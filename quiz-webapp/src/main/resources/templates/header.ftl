@@ -1,7 +1,7 @@
 
 <html lang="en">
 <meta charset="UTF-8">
-<title>瑞博测评</title>
+<title>睿博测评</title>
 <meta name="description" content="权威测评">
 <meta name="author" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">

@@ -2,6 +2,7 @@ package cn.clubox.quiz.service.impl.dao;
 
 import static cn.clubox.quiz.jooq.domain.tables.Quiz.QUIZ_;
 import static cn.clubox.quiz.jooq.domain.tables.QuizPricing.QUIZ_PRICING;
+import static cn.clubox.quiz.jooq.domain.tables.UserPayment.USER_PAYMENT;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -66,6 +67,15 @@ public class QuizDaoExt extends QuizDao{
 				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).from(QUIZ_.innerJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
 				.where(QUIZ_.QUIZ_SRC.equal(quizSrc).and(QUIZ_.STATUS.equal(Status.NORMAL.getValue())))
 		    .fetchOneInto(QuizExt.class);
+	}
+	
+	public List<QuizExt> fetchingPaidExternalQuizByUserId(Integer userId){
+		
+		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_SRC,QUIZ_.LOGO_SRC)
+			.from(QUIZ_.innerJoin(USER_PAYMENT).on(QUIZ_.ID.equal(USER_PAYMENT.QUIZ_ID)))
+			.where(USER_PAYMENT.USER_ID.equal(userId).and(QUIZ_.QUIZ_TYPE.equal("external")))
+			.orderBy(USER_PAYMENT.STORED.asc()).fetchInto(QuizExt.class);
+			
 	}
 	
 	public static class QuizExt {

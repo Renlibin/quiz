@@ -3,6 +3,7 @@ package cn.clubox.quiz.service.api;
 import java.util.List;
 
 import cn.clubox.quiz.service.api.model.Question;
+import cn.clubox.quiz.service.api.model.Quiz;
 import cn.clubox.quiz.service.api.model.QuizExtension;
 import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.api.util.PagedModel;
@@ -17,22 +18,9 @@ public interface QuizManager {
 	
 	public List<QuizExtension> retrieveEngagedQuiz(int userId, boolean setDoableAction, boolean countQuizParticipant);
 	
-	public Integer retrieveQuizIdBySrc(String quizSrc);
+	public List<Quiz> retrievePaidExternalQuiz(Integer userId);
 	
-//	/**
-//	 * Depending on the type of quiz, the result could be one or multiple entries
-//	 * @param engagementId
-//	 * @return
-//	 */
-//	public Map<String,Short> retrieveQuizEngagementResult(int engagementId);
-//	
-//	/**
-//	 * Depending on the type of quiz, the result could be one or multiple entries
-//	 * @param userId
-//	 * @param quizType
-//	 * @return
-//	 */
-//	public Map<String,Short> retrieveQuizEngagementResult(int userId, String quizType);
+	public Integer retrieveQuizIdBySrc(String quizSrc);
 	
 	public boolean hasPrivilige(int userId, String quizType);
 	

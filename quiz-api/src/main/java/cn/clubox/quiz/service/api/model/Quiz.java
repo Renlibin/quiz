@@ -14,6 +14,7 @@ public class Quiz {
 	private BigDecimal price;
 	private BigDecimal originalPrice;
 	private String logoSrc;
+	private String quizSrc;
 	private String quizType;
 	private List<Question> questionList;
 	
@@ -33,6 +34,7 @@ public class Quiz {
 		this.logoSrc = builder.getLogoSrc();
 		this.quizType = builder.getQuizType();
 		this.questionList = builder.getQuestionList();
+		this.quizSrc = builder.getQuizSrc();
 	}
 
 	public int getId() {
@@ -62,6 +64,10 @@ public class Quiz {
 	public String getLogoSrc() {
 		return logoSrc;
 	}
+	
+	public String getQuizSrc(){
+		return quizSrc;
+	}
 
 	public String getQuizType() {
 		return quizType;
@@ -88,6 +94,7 @@ public class Quiz {
 		private BigDecimal price;
 		private BigDecimal originalPrice;
 		private String logoSrc;
+		private String quizSrc;
 		private String quizType;
 		private List<Question> questionList;
 //		private PagedListHolder<? extends Question> pagedQuestionHolder;
@@ -127,6 +134,15 @@ public class Quiz {
 			return this;
 		}
 		
+		public String getQuizSrc() {
+			return quizSrc;
+		}
+
+		public Builder setQuizSrc(String quizSrc) {
+			this.quizSrc = quizSrc;
+			return this;
+		}
+
 		public Builder setQuizType(String quizType){
 			this.quizType = quizType;
 			return this;
