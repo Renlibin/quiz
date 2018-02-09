@@ -93,10 +93,10 @@ public class DefaultQuizUrlEncodeDecodeService implements QuizUrlEncodeDecodeSer
 	public static void main(String[] args){
 		DefaultQuizUrlEncodeDecodeService es = new DefaultQuizUrlEncodeDecodeService();
 		
-		String encodedUrl = es.encode("http://ce.rankbox.wang/handler/jqemed.ashx?activity=19102123");
+		String encodedUrl = es.encode("http://ce.rankbox.wang/handler/jqemed.ashx?activity=19023164&width=760&source=iframe");
 		System.out.println("Encoded url is " + encodedUrl);
-		String decodedUrl = es.decode(encodedUrl);
-		System.out.println("Decoded url is " + decodedUrl);
+//		String decodedUrl = es.decode("lTrduLGV2uJtQ2oILQKCsJROJJnmEUUymq4srGd18lbSF2yhb8YdvML1XmBKKoQru2fjWR5-8bxxcjf31Jk3vBaJhop2BuQvCN_OSIvJE2DEHvg5amTOGvsvxjjUw2EN_PbS0KgPsL8=");
+//		System.out.println("Decoded url is " + decodedUrl);
 	}
 
 }

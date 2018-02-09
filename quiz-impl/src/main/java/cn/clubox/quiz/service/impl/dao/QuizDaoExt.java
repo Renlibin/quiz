@@ -61,7 +61,7 @@ public class QuizDaoExt extends QuizDao{
 			.fetchOneInto(QuizExt.class);
 	}
 	
-	public QuizExt fetchingQuizIdBySrc(String quizSrc){
+	public QuizExt fetchingQuizBySrc(String quizSrc){
 		
 		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_SRC,QUIZ_.LOGO_SRC,
 				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).from(QUIZ_.innerJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
@@ -73,7 +73,8 @@ public class QuizDaoExt extends QuizDao{
 		
 		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_SRC,QUIZ_.LOGO_SRC)
 			.from(QUIZ_.innerJoin(USER_PAYMENT).on(QUIZ_.ID.equal(USER_PAYMENT.QUIZ_ID)))
-			.where(USER_PAYMENT.USER_ID.equal(userId).and(QUIZ_.QUIZ_TYPE.equal("external")))
+			.where(USER_PAYMENT.USER_ID.equal(userId).and(USER_PAYMENT.STATUS.equal(Status.COMPLETE.getValue()))
+					.and(QUIZ_.QUIZ_TYPE.equal("external")))
 			.orderBy(USER_PAYMENT.STORED.asc()).fetchInto(QuizExt.class);
 			
 	}

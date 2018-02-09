@@ -27,7 +27,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-			.antMatchers("/", "/home",
+			.antMatchers("/", "/home","/quiz/url/encode",
 					"/quiz/federation/callback").permitAll()
 //			.antMatchers(HttpMethod.POST, "/quiz/wxpay/notify").permitAll()
 //			.anyRequest().authenticated()

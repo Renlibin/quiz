@@ -1,6 +1,7 @@
 package cn.clubox.quiz.web.controller;
 
 import java.util.List;
+import java.util.Objects;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,6 +53,10 @@ public class QuizDecoratorController implements InitializingBean {
 			logger.debug("QuizDecoratorController.retrievingQuiz -> The quiz id is {}", quizId);
 		}
 		
+		if(Objects.isNull(quizId)){
+			return "404";
+		}
+		
 		if(paymentService.isPaid(userId, quizId) == false){
 			return "redirect:/quiz/payment/proxy?dest=".concat(dest);
 		}
@@ -59,8 +64,8 @@ public class QuizDecoratorController implements InitializingBean {
 //		if(dest != null){
 //			return "redirect:/quiz/payment/proxy?dest=".concat("http://ce.rankbox.wang/handler/jqemed.ashx?activity=19102123");
 //		}
-		
-		model.addAttribute("src",dest);
+		String decodedDest = quizManager.decodeQuizUrl(dest);
+		model.addAttribute("src",decodedDest);
 		return "quiz_decorator";
 	}
 	
@@ -85,6 +90,6 @@ public class QuizDecoratorController implements InitializingBean {
 		model.addAttribute("portraitSrc",portraitSrc);
 		model.addAttribute("myQuizList", engagedQuizList);
 		
-		return "my_quiz";
+		return "my_quiz_external";
 	}
 }

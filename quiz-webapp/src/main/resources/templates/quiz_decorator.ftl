@@ -1,10 +1,14 @@
 <html>
   <head>
-        <#include "header.ftl">
+        <#include "header_external.ftl">
   </head>
   <body>
-    <div>
-		<script type='text/javascript' src='http://ce.rankbox.wang/handler/jqemed.ashx?activity=19102123&width=760&source=iframe'></script>
+  	<div class="header">
+    	<a href="" class="logo"><img src="http://www.rankbox.wang/static/external/images/logo.png"></a>
     </div>
+    <div>
+		<script type='text/javascript' src='${src}'></script>
+    </div>
+    <#include "footer_external.ftl" />
   </body>
 </html>

@@ -31,5 +31,7 @@ public interface QuizManager {
 			boolean countQuizParticipant, QUIZ_DOABLE_ACTION doableAction, String quizType);
 	
 	public PagedModel<? extends Question> retrievePagedQuestionModel(String quizType, Integer engagementId, int page, int pageSize);
+	
+	public String decodeQuizUrl(String encodedQuizUrl);
 
 }

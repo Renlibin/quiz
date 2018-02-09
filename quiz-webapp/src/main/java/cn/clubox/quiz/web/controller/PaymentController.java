@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import cn.clubox.quiz.service.api.QuizManager;
 import cn.clubox.quiz.service.api.QuizOrder;
-import cn.clubox.quiz.service.api.auth.AccountProvisionService;
 import cn.clubox.quiz.service.api.auth.OAuth2AccessToken;
 import cn.clubox.quiz.service.api.auth.OAuth2Authenticator;
 import cn.clubox.quiz.service.api.model.Quiz.QuizType;
@@ -45,14 +44,12 @@ public class PaymentController {
 	private OAuth2Authenticator oAuth2Authenticator;
 	@Autowired
 	private QuizPaymentService paymentService;
-//	@Autowired
-//	private AccountProvisionService accountProvisionService;
 
-	private ThreadSafeLocalCache<Integer,QuizOrder> cache;
+//	private ThreadSafeLocalCache<Integer,QuizOrder> cache;
 	
-	{
-		cache = new ThreadSafeLocalCache<>();
-	}
+//	{
+//		cache = new ThreadSafeLocalCache<>();
+//	}
 	
 	@GetMapping("{quizType}/buynow")
 	public String buyNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){
@@ -82,12 +79,8 @@ public class PaymentController {
 	
 	@GetMapping("/prePayment")
 	public String prePayment(@AuthenticationPrincipal User user, @RequestParam("code") String code, 
-			@RequestParam("dest") String dest, Map<String,Object> model){
-		
-		if(logger.isDebugEnabled()){
-			logger.debug("The AuthenticationPrincipal user id is {}", user.getId());
-			logger.debug("The authorization code is {}", code);
-		}
+			@RequestParam(value="dest", required=false) String dest, @RequestParam(value="quizType", required=false) String quizType,
+			Map<String,Object> model){
 		
 		//获取用户和公众号相关的openid
 		OAuth2AccessToken token = oAuth2Authenticator.acquireAccessToken(code, OAuthConfig.GZ_APPPID,OAuthConfig.GZ_SECRET);
@@ -95,31 +88,20 @@ public class PaymentController {
 		if(logger.isDebugEnabled()){
 			logger.debug("The access token is {}", token.toString());
 		}
-		
-		//This step is not necessary
-		//Do not know why there is no union id in the token.
-		//Integer userId = accountProvisionService.retrieveUserIdByFederationId(token.getUnionid());
-		
 		Integer userId = user.getId();
-		
-		//Get quiz order which save at previous step
-		QuizOrder quizOrder = cache.get(userId);
+		QuizOrder quizOrder = new QuizOrder(userId,quizType,dest);
 		
 		if(logger.isDebugEnabled()){
 			logger.debug("The order is going to be done via quiz {} and openid {}", 
-					quizOrder.getQuizType() != null ? quizOrder.getQuizType() : quizOrder.getQuizSrc(), token.getOpenid());
+				quizOrder.getQuizType() != null ? quizOrder.getQuizType() : quizOrder.getQuizSrc(), token.getOpenid());
 		}
 		
 		Map<String, String> result = new HashMap<>();
 		try {
 			result = paymentService.prePayment(user.getId(),token.getOpenid(), quizOrder);
-			String quizEngagementUrl;
-			if(Objects.nonNull(dest)){
-				quizEngagementUrl = String.format("http://www.rankbox.wang/rb/quiz/proxy?dest=%s", quizOrder.getQuizSrc());
-			}else{
-				quizEngagementUrl = String.format("http://www.rankbox.wang/rb/quiz/%s/engagement",quizOrder.getQuizType());
-			}
+			String quizEngagementUrl = assemblyQuizEngagmentUrl(quizOrder);
 			result.put("quiz_engagement_url", quizEngagementUrl);
+			
 //			{nonce_str=FQzVsNgiiuOIDpcS, 
 //			device_info=WEB, 
 //			appid=wxcd11f3f8760e5e43, 
@@ -131,12 +113,7 @@ public class PaymentController {
 		} catch (Exception e) {
 			logger.error("Cound not do pre payment due to exception {}", e.getMessage());
 		}
-//		result.put("timestamp", String.valueOf(new Date().getTime()));
 		model.put("paymentParam", result);
-//		model.put("quizType", quizType);
-		
-		cache.remove(userId);
-		
 		return "paynow";
 	}
 	
@@ -147,15 +124,13 @@ public class PaymentController {
 			logger.error("The quiz type {} is not exist", quizType);
 			return "404";
 		}
-//		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
-//		model.put("quizExtension", quizExtension);
 
 		try {
 			//Put the quiz order into local cache
-			cache.put(user.getId(), new  QuizOrder(user.getId(),quizType,null));
+//			cache.put(user.getId(), new  QuizOrder(user.getId(),quizType,null));
 			
 			String codeAcquireUri = oAuth2Authenticator.acquireAuthorizationCode(OAuthConfig.GZ_APPPID,
-						OAuthConfig.BASE_SCOPE, "http://www.rankbox.wang/rb/quiz/prePayment");
+						OAuthConfig.BASE_SCOPE, "http://www.rankbox.wang/rb/quiz/prePayment?quizType=".concat(quizType));
 			return "redirect:".concat(codeAcquireUri);
 		} catch (UnsupportedEncodingException e) {
 			logger.error("Could not acquired authorization code due to exception {}", e.getMessage());
@@ -170,13 +145,13 @@ public class PaymentController {
 		if(logger.isDebugEnabled()){
 			logger.debug("PaymentController.paymentProxy ->  {}", dest);
 		}
-//		QuizExtension quizExtension = quizManager.retrieveQuizByType(user.getId(), true, false, QUIZ_DOABLE_ACTION.PAYMENT, quizType);
-//		model.put("quizExtension", quizExtension);
+		
+//		String decodedQuizUrl = quizManager.decodeQuizUrl(dest);
 
 		try {
 			//Put the quiz order into local cache
 			// ****** Here is hard coding which need to be replaced by suitable mean ******
-			cache.put(user.getId(), new  QuizOrder(user.getId(),null,dest));
+//			cache.put(user.getId(), new  QuizOrder(user.getId(),null,decodedQuizUrl));
 			
 			String codeAcquireUri = oAuth2Authenticator.acquireAuthorizationCode(OAuthConfig.GZ_APPPID,
 						OAuthConfig.BASE_SCOPE, "http://www.rankbox.wang/rb/quiz/prePayment?dest=".concat(dest));
@@ -219,5 +194,14 @@ public class PaymentController {
 			return true;
 		}
 		return false;
+	}
+	
+	private String assemblyQuizEngagmentUrl(QuizOrder quizOrder){
+		
+		if(Objects.nonNull(quizOrder.getQuizSrc())){
+			return String.format("http://www.rankbox.wang/rb/quiz/proxy?dest=%s", quizOrder.getQuizSrc());
+		}else{
+			return String.format("http://www.rankbox.wang/rb/quiz/%s/engagement",quizOrder.getQuizType());
+		}
 	}
 }

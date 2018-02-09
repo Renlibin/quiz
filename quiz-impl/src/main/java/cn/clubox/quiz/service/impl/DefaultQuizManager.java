@@ -79,7 +79,7 @@ public class DefaultQuizManager implements QuizManager {
 			logger.debug("DefaultQuizManager.retrieveQuizIdBySrc -> Original quiz src is {}", quizSrc);
 		}
 		
-		QuizExt quiz = quizDao.fetchingQuizIdBySrc(decodedQuizSrc);
+		QuizExt quiz = quizDao.fetchingQuizBySrc(decodedQuizSrc);
 		return quiz != null ? quiz.getId() : null;
 	}
 
@@ -372,6 +372,12 @@ public class DefaultQuizManager implements QuizManager {
 		pageModel.setSource(pagedQuestions);
 	
 		return pageModel;
+	}
+
+	@Override
+	public String decodeQuizUrl(String encodedQuizUrl) {
+		
+		return quizUrlEncodeDecodeService.decode(encodedQuizUrl);
 	}
 
 }

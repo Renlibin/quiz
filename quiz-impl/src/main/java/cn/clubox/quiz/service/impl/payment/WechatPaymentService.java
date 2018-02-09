@@ -22,7 +22,9 @@ import org.dom4j.Document;
 import org.dom4j.DocumentHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -32,6 +34,7 @@ import com.github.wxpay.sdk.WXPayConfig;
 
 import cn.clubox.quiz.jooq.domain.tables.pojos.UserPayment;
 import cn.clubox.quiz.service.api.QuizOrder;
+import cn.clubox.quiz.service.api.QuizUrlEncodeDecodeService;
 import cn.clubox.quiz.service.api.payment.QuizPaymentService;
 import cn.clubox.quiz.service.api.util.Status;
 import cn.clubox.quiz.service.impl.dao.QuizDaoExt;
@@ -40,7 +43,7 @@ import cn.clubox.quiz.service.impl.dao.QuizTradeNoCounterDaoExt;
 import cn.clubox.quiz.service.impl.dao.UserPaymentDaoExt;
 
 @Service
-public class WechatPaymentService implements QuizPaymentService {
+public class WechatPaymentService implements QuizPaymentService, InitializingBean {
 
 	private static Logger logger = LoggerFactory.getLogger(WechatPaymentService.class);
 
@@ -48,10 +51,23 @@ public class WechatPaymentService implements QuizPaymentService {
 	private QuizTradeNoCounterDaoExt quizTradeNoCounterDao;
 
 	@Autowired
+	private QuizUrlEncodeDecodeService quizUrlEncodeDecodeService;
+
+	@Autowired
 	private QuizDaoExt quizDao;
 
 	@Autowired
 	private UserPaymentDaoExt userPaymentDao;
+	
+	@Value("${payment.notify.url}")
+	private String notifyUrl;
+	
+	@Override
+	public void afterPropertiesSet() throws Exception {
+		
+		logger.info("WechatPaymentService.afterPropertiesSet -> notifyUrl {}", notifyUrl);
+		
+	}
 
 	private WXPay wxpay;
 
@@ -76,11 +92,14 @@ public class WechatPaymentService implements QuizPaymentService {
 	public Map<String, String> prePayment(Integer userId, String openId, QuizOrder quizOrder) throws Exception {
 
 		try {
+			if(logger.isDebugEnabled()){
+				logger.debug("WechatPaymentService.prePayment -> The quiz order is {}",quizOrder);
+			}
 			QuizExt quiz = null;
-			if(Objects.nonNull(quizOrder.getQuizType())){
+			if(quizOrder.getQuizType() != null && "external".equals(quizOrder.getQuizType()) == false){
 				quiz = quizDao.fetchingQuizByType(quizOrder.getQuizType());
 			}else{
-				quiz = quizDao.fetchingQuizIdBySrc(quizOrder.getQuizSrc());
+				quiz = quizDao.fetchingQuizBySrc(quizUrlEncodeDecodeService.decode(quizOrder.getQuizSrc()));
 			}
 			
 			if(logger.isDebugEnabled()){
@@ -340,6 +359,10 @@ public class WechatPaymentService implements QuizPaymentService {
 		// String s =
 		// DigestUtils.md5Hex("appId=wxcd11f3f8760e5e43&nonceStr=c9b44aaa-6f68-46a6-b5d5-9e90fc87&package=prepay_id=wx2017112521530910caeec27b0904586752&signType=MD5&timeStamp=1511617989149");
 		// System.out.println("Signed string is " + s.toUpperCase());
+		
+		if("abc".equals(null) == false){
+			
+		}
 
 		LocalDateTime now = LocalDateTime.now();
 		System.out.println("Before : " + now);
