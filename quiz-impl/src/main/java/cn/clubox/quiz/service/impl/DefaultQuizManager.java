@@ -71,16 +71,25 @@ public class DefaultQuizManager implements QuizManager {
 	}
 	
 	@Override
-	public Integer retrieveQuizIdBySrc(String quizSrc) {
+	public Quiz retrieveQuizBySrc(String quizSrc) {
 		
 		String decodedQuizSrc = quizUrlEncodeDecodeService.decode(quizSrc);
 		
 		if(logger.isDebugEnabled()){
-			logger.debug("DefaultQuizManager.retrieveQuizIdBySrc -> Original quiz src is {}", quizSrc);
+			logger.debug("DefaultQuizManager.retrieveQuizIdBySrc -> Original quiz src is {}", decodedQuizSrc);
 		}
 		
 		QuizExt quiz = quizDao.fetchingQuizBySrc(decodedQuizSrc);
-		return quiz != null ? quiz.getId() : null;
+		
+		if(logger.isDebugEnabled()){
+			logger.debug("DefaultQuizManager.retrieveQuizIdBySrc -> The quiz is {}",quiz);
+		}
+		
+		if(Objects.nonNull(quiz)){
+			return new Quiz.Builder().setId(quiz.getId()).setName(quiz.getName()).setPrice(quiz.getPrice() != null ? quiz.getPrice() : BigDecimal.ZERO).build();
+		}
+		
+		return null;
 	}
 
 	@Override

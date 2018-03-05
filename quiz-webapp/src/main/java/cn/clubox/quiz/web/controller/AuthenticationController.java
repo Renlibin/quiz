@@ -42,7 +42,7 @@ public class AuthenticationController {
 		//return "redirect:/quiz/federation/auth";
 		
 		//If user is in user_federation table
-		securityService.autoLogin("u-ZufHm66TcTVk");
+//		securityService.autoLogin("u-ukvsXPRm8pjv");
 		DefaultSavedRequest savedRequest = (DefaultSavedRequest)request.getSession().getAttribute("SPRING_SECURITY_SAVED_REQUEST");
 		
 		if(logger.isDebugEnabled()){
@@ -60,6 +60,7 @@ public class AuthenticationController {
 		
 		try {
 			String codeAcquireUri = oAuth2Authenticator.acquireAuthorizationCode(OAuthConfig.KF_APPID,OAuthConfig.LOGIN_SCOPE,redirectUri);
+//			String codeAcquireUri = oAuth2Authenticator.acquireAuthorizationCode(OAuthConfig.GZ_APPPID,OAuthConfig.BASE_SCOPE,redirectUri);
 			return "redirect:".concat(codeAcquireUri);
 		} catch (UnsupportedEncodingException e) {
 			logger.error("Could not acquire authorization code due to exception ", e.getMessage());
@@ -87,6 +88,7 @@ public class AuthenticationController {
 		}
 		
 		WeChatUserInfo userInfo = oAuth2Authenticator.authenticate(code,OAuthConfig.KF_APPID, OAuthConfig.KF_SECRET);
+//		WeChatUserInfo userInfo = oAuth2Authenticator.authenticate(code,OAuthConfig.GZ_APPPID, OAuthConfig.GZ_SECRET);
 		Integer userId = accountProvisionService.provisionAccount(userInfo);
 		String username = accountProvisionService.retrieveUsernameById(userId);
 		

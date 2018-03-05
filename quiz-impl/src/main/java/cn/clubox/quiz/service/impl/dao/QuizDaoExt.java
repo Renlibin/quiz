@@ -64,7 +64,7 @@ public class QuizDaoExt extends QuizDao{
 	public QuizExt fetchingQuizBySrc(String quizSrc){
 		
 		return context.select(QUIZ_.ID,QUIZ_.NAME,QUIZ_.TITLE,QUIZ_.DESCRIPTION,QUIZ_.QUIZ_SRC,QUIZ_.LOGO_SRC,
-				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).from(QUIZ_.innerJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
+				QUIZ_PRICING.PRICE,QUIZ_PRICING.ORIGINAL_PRICE).from(QUIZ_.leftOuterJoin(QUIZ_PRICING).on(QUIZ_.ID.equal(QUIZ_PRICING.QUIZ_ID)))
 				.where(QUIZ_.QUIZ_SRC.equal(quizSrc).and(QUIZ_.STATUS.equal(Status.NORMAL.getValue())))
 		    .fetchOneInto(QuizExt.class);
 	}

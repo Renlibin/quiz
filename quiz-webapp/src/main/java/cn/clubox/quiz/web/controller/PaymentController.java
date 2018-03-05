@@ -30,7 +30,6 @@ import cn.clubox.quiz.service.api.model.QuizExtension.QUIZ_DOABLE_ACTION;
 import cn.clubox.quiz.service.api.payment.QuizPaymentService;
 import cn.clubox.quiz.service.impl.auth.DatabaseUserDetailsService.User;
 import cn.clubox.quiz.web.utils.OAuthConfig;
-import cn.clubox.quiz.web.utils.ThreadSafeLocalCache;
 
 @Controller
 @RequestMapping("/quiz")
@@ -44,12 +43,6 @@ public class PaymentController {
 	private OAuth2Authenticator oAuth2Authenticator;
 	@Autowired
 	private QuizPaymentService paymentService;
-
-//	private ThreadSafeLocalCache<Integer,QuizOrder> cache;
-	
-//	{
-//		cache = new ThreadSafeLocalCache<>();
-//	}
 	
 	@GetMapping("{quizType}/buynow")
 	public String buyNow(@AuthenticationPrincipal User user, @PathVariable String quizType, Map<String, Object> model){

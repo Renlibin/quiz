@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -62,19 +63,40 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 	@Value("${payment.notify.url}")
 	private String notifyUrl;
 	
+	@Value("${spbill.create.ip}")
+	private String spbillCreateIp;
+	
+	@Value("${item.description}")
+	private String itemDescription;
+	
+	@Value("${payment.app.id}")
+	private String appId;
+	
+	@Value("${payment.mch.id}")
+	private String mchId;
+	
+	@Value("${payment.key}")
+	private String paymentKey;
+	
+	private WXPay wxpay;
+	
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		
-		logger.info("WechatPaymentService.afterPropertiesSet -> notifyUrl {}", notifyUrl);
-		
-	}
+		logger.info("WechatPaymentService.afterPropertiesSet -> itemDescription {}", itemDescription);
 
-	private WXPay wxpay;
-
-	{
+		if(Objects.isNull(notifyUrl) || Objects.isNull(spbillCreateIp) || Objects.isNull(itemDescription)
+				|| Objects.isNull(appId) || Objects.isNull(mchId) || Objects.isNull(paymentKey)){
+			throw new Exception("All propeties must not be null");
+		}
+		
 		MyConfig config;
 		try {
-			config = new MyConfig();
+			config = new MyConfig(appId,mchId,paymentKey);
+			
+			if(logger.isDebugEnabled()){
+				logger.debug("The MyConfig is {}", config);
+			}
+			
 			wxpay = new WXPay(config);
 		} catch (Exception e) {
 			logger.error("Could not initialize WXpay due to exception {}", e.getMessage());
@@ -83,9 +105,7 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 
 	@Override
 	public boolean isPaid(Integer userId, int quizId) {
-		
 		return userPaymentDao.isQuizPaid(userId, quizId);
-		
 	}
 
 	@Override
@@ -120,14 +140,14 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 
 			Map<String, String> data = new HashMap<String, String>();
 			data.put("openid", openId);
-			data.put("body", "瑞博测评-在线职业测评"); // 商品简单描述
+			data.put("body", itemDescription); // 商品简单描述
 			data.put("out_trade_no", tradeNo); // 商户系统内部订单号，要求32个字符内，只能是数字、大小写字母_-|*@
 												// ，且在同一个商户号下唯一
 			data.put("device_info", "WEB");
 			data.put("fee_type", "CNY");
 			data.put("total_fee", String.valueOf(fee)); // 订单总金额，单位为分
-			data.put("spbill_create_ip", "101.201.43.85"); // APP和网页支付提交用户端ip
-			data.put("notify_url", "http://www.rankbox.wang/rb/quiz/wxpay/notify"); // 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数
+			data.put("spbill_create_ip", spbillCreateIp); // APP和网页支付提交用户端ip
+			data.put("notify_url", notifyUrl); // 异步接收微信支付结果通知的回调地址，通知url必须为外网可访问的url，不能携带参数
 			data.put("trade_type", "JSAPI"); // JSAPI--公众号支付、NATIVE--原生扫码支付、APP--app支付
 			// data.put("product_id", "12"); trade_type 为 NATIVE 时必填
 
@@ -264,7 +284,7 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 			logger.debug("The sign string is {}", singStr);
 		}
 
-		String signTemp = singStr + "&key=ZhiyecepingZhiyeceping1234567890"; // 注：key为商户平台设置的密钥key
+		String signTemp = singStr.concat("&key=").concat(paymentKey); // 注：key为商户平台设置的密钥key
 
 		return DigestUtils.md5Hex(signTemp.getBytes("UTF-8")).toUpperCase();
 	}
@@ -318,6 +338,9 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 
 		// 撤销、退款申请API中调用
 		private byte[] certData;
+		private String appId;
+		private String mchId;
+		private String key;
 
 		public MyConfig() throws Exception {
 			// String certPath = "/path/to/apiclient_cert.p12";
@@ -327,17 +350,25 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 			// certStream.read(this.certData);
 			// certStream.close();
 		}
+		
+		public MyConfig(String appId, String mchId, String key) throws Exception {
+			this.appId = appId;
+			this.mchId = mchId;
+			this.key = key;
+		}
 
 		public String getAppID() {
-			return "wxcd11f3f8760e5e43";
+//			return "wxcd11f3f8760e5e43";
+			return appId;
 		}
 
 		public String getMchID() {
-			return "1483723782";
+//			return "1483723782";
+			return mchId;
 		}
 
 		public String getKey() {
-			return "ZhiyecepingZhiyeceping1234567890";
+			return key;
 		}
 
 		public InputStream getCertStream() {
@@ -352,6 +383,13 @@ public class WechatPaymentService implements QuizPaymentService, InitializingBea
 		public int getHttpReadTimeoutMs() {
 			return 10000;
 		}
+
+		@Override
+		public String toString() {
+			return "MyConfig [certData=" + Arrays.toString(certData) + ", appId=" + appId + ", mchId=" + mchId
+					+ ", key=" + key + "]";
+		}
+		
 	}
 
 	public static void main(String[] args) {

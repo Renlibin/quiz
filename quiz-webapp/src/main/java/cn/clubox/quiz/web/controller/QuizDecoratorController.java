@@ -1,5 +1,6 @@
 package cn.clubox.quiz.web.controller;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -47,23 +48,20 @@ public class QuizDecoratorController implements InitializingBean {
 		}
 		
 		Integer userId = user.getId();
-		Integer quizId = quizManager.retrieveQuizIdBySrc(dest);
+		Quiz quiz = quizManager.retrieveQuizBySrc(dest);
 		
 		if(logger.isDebugEnabled()){
-			logger.debug("QuizDecoratorController.retrievingQuiz -> The quiz id is {}", quizId);
+			logger.debug("QuizDecoratorController.retrievingQuiz -> The quiz is {}", quiz);
 		}
 		
-		if(Objects.isNull(quizId)){
+		if(Objects.isNull(quiz)){
 			return "404";
 		}
 		
-		if(paymentService.isPaid(userId, quizId) == false){
+		if(quiz.getPrice().equals(BigDecimal.ZERO) == false && paymentService.isPaid(userId, quiz.getId()) == false){
 			return "redirect:/quiz/payment/proxy?dest=".concat(dest);
 		}
 		
-//		if(dest != null){
-//			return "redirect:/quiz/payment/proxy?dest=".concat("http://ce.rankbox.wang/handler/jqemed.ashx?activity=19102123");
-//		}
 		String decodedDest = quizManager.decodeQuizUrl(dest);
 		model.addAttribute("src",decodedDest);
 		return "quiz_decorator";

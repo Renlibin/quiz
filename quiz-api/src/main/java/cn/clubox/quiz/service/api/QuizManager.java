@@ -20,7 +20,7 @@ public interface QuizManager {
 	
 	public List<Quiz> retrievePaidExternalQuiz(Integer userId);
 	
-	public Integer retrieveQuizIdBySrc(String quizSrc);
+	public Quiz retrieveQuizBySrc(String quizSrc);
 	
 	public boolean hasPrivilige(int userId, String quizType);
 	
